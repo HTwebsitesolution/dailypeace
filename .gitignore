@@ -1,0 +1,12 @@
+
+node_modules
+.expo
+dist
+build
+.expo-shared
+android
+ios
+.DS_Store
+.env
+.env.*
+.cache

@@ -1,0 +1,48 @@
+{
+  "need_id": "fear_anxiety",
+  "display_name": "Fear & Anxiety",
+  "policy": {
+    "min_verses": 3,
+    "max_verses": 6,
+    "allow_cross_gospel": true,
+    "translation": "KJV"
+  },
+  "candidates": [
+    {
+      "ref": "John 14:1",
+      "unit": "John 14:1",
+      "priority": 0.95,
+      "tones": [
+        "comfort",
+        "trust"
+      ]
+    },
+    {
+      "ref": "John 14:27",
+      "unit": "John 14:27",
+      "priority": 0.93,
+      "tones": [
+        "peace",
+        "reassurance"
+      ]
+    },
+    {
+      "ref": "Matthew 6:33",
+      "unit": "Matthew 6:31-34",
+      "priority": 0.9,
+      "tones": [
+        "seek",
+        "trust"
+      ]
+    },
+    {
+      "ref": "Luke 12:32",
+      "unit": "Luke 12:22-34",
+      "priority": 0.88,
+      "tones": [
+        "provision",
+        "trust"
+      ]
+    }
+  ]
+}
