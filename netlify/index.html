@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daily Peace API</title>
+    <meta charset="utf-8">
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px; 
+            margin: 50px auto; 
+            padding: 20px;
+            background: #0B1016;
+            color: #EAF2FF;
+        }
+        .endpoint { 
+            background: #141B23; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 8px;
+            border-left: 4px solid #2F80ED;
+        }
+        code { 
+            background: #1a1a1a; 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            color: #87CEEB;
+        }
+    </style>
+</head>
+<body>
+    <h1>🙏 Daily Peace API</h1>
+    <p>Netlify Functions backend for the Daily Peace mobile app.</p>
+    
+    <h2>Available Endpoints:</h2>
+    
+    <div class="endpoint">
+        <h3>POST /.netlify/functions/generate</h3>
+        <p>Generate AI-powered spiritual reflections based on user input and Scripture verses.</p>
+        <p><strong>Payload:</strong> <code>{ user_text, mode, verses }</code></p>
+    </div>
+    
+    <div class="endpoint">
+        <h3>POST /.netlify/functions/transcribe</h3>
+        <p>Transcribe audio recordings to text using OpenAI Whisper.</p>
+        <p><strong>Payload:</strong> <code>{ filename, base64, language }</code></p>
+    </div>
+    
+    <p><em>This API is designed for the Daily Peace mobile application.</em></p>
+</body>
+</html>
