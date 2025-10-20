@@ -1,0 +1,8 @@
+{
+  "name": "dailypeace-functions",
+  "version": "1.0.0",
+  "dependencies": {
+    "openai": "^4.0.0",
+    "@netlify/functions": "^2.0.0"
+  }
+}
