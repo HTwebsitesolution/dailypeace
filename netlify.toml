@@ -1,11 +1,21 @@
 
 [build]
-  publish = "netlify"
-  command = ""
+  publish = "web-dist"
+  command = "npx expo export --platform web --output-dir web-dist"
 
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 [[headers]]
   for = "/.netlify/functions/*"

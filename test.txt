@@ -1,0 +1,1 @@
+Hello from the root directory! This file should be served if the publish directory is correctly set to root.

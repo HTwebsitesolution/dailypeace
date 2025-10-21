@@ -1,7 +1,11 @@
 
+import { Platform } from "react-native";
 import { Asset } from "expo-asset";
 import * as FileSystem from "expo-file-system";
 import type { Mode, Verse } from "./types";
+
+// Import the JSON data directly for web platforms
+const kjvData = require("../assets/kjv.sample.json");
 
 function parseRef(ref: string){
   const m = ref.match(/^([1-3]?\s*[A-Za-z]+)\s+(\d+):(\d+)(?:-(\d+))?$/)!;
@@ -9,16 +13,35 @@ function parseRef(ref: string){
 }
 
 export async function loadKJVIndex(): Promise<Record<string,string>> {
-  const asset = Asset.fromModule(require("../assets/kjv.sample.jsonl"));
-  await asset.downloadAsync();
-  const uri = asset.localUri || asset.uri;
-  const text = await FileSystem.readAsStringAsync(uri!);
   const idx: Record<string,string> = {};
-  for (const line of text.split("\n").filter(Boolean)) {
-    const o = JSON.parse(line);
-    idx[`${o.book}|${o.chapter}|${o.verse}`] = o.text;
+  
+  // For web platform, use direct import
+  if (Platform.OS === 'web') {
+    for (const verse of kjvData) {
+      idx[`${verse.book}|${verse.chapter}|${verse.verse}`] = verse.text;
+    }
+    return idx;
   }
-  return idx;
+  
+  // For native platforms, use the original asset loading
+  try {
+    const asset = Asset.fromModule(require("../assets/kjv.sample.json"));
+    await asset.downloadAsync();
+    const uri = asset.localUri || asset.uri;
+    const text = await FileSystem.readAsStringAsync(uri!);
+    const data = JSON.parse(text);
+    for (const verse of data) {
+      idx[`${verse.book}|${verse.chapter}|${verse.verse}`] = verse.text;
+    }
+    return idx;
+  } catch (error) {
+    console.error('Error loading KJV data:', error);
+    // Fallback to imported data
+    for (const verse of kjvData) {
+      idx[`${verse.book}|${verse.chapter}|${verse.verse}`] = verse.text;
+    }
+    return idx;
+  }
 }
 
 function fetchText(refOrUnit: string, idx: Record<string,string>) {
