@@ -4,8 +4,8 @@ import { Asset } from "expo-asset";
 import * as FileSystem from "expo-file-system";
 import type { Mode, Verse } from "./types";
 
-// Import the JSON data directly for web platforms
-const kjvData = require("../assets/kjv.sample.json");
+// Import the full KJV JSON data
+const kjvData = require("../assets/kjv.json");
 
 function parseRef(ref: string){
   const m = ref.match(/^([1-3]?\s*[A-Za-z]+)\s+(\d+):(\d+)(?:-(\d+))?$/)!;
@@ -15,31 +15,24 @@ function parseRef(ref: string){
 export async function loadKJVIndex(): Promise<Record<string,string>> {
   const idx: Record<string,string> = {};
   
-  // For web platform, use direct import
-  if (Platform.OS === 'web') {
+  try {
+    // Use the imported full KJV data (works for all platforms)
     for (const verse of kjvData) {
       idx[`${verse.book}|${verse.chapter}|${verse.verse}`] = verse.text;
     }
-    return idx;
-  }
-  
-  // For native platforms, use the original asset loading
-  try {
-    const asset = Asset.fromModule(require("../assets/kjv.sample.json"));
-    await asset.downloadAsync();
-    const uri = asset.localUri || asset.uri;
-    const text = await FileSystem.readAsStringAsync(uri!);
-    const data = JSON.parse(text);
-    for (const verse of data) {
-      idx[`${verse.book}|${verse.chapter}|${verse.verse}`] = verse.text;
-    }
+    
+    console.log(`✅ Loaded ${Object.keys(idx).length} verses from full KJV Bible`);
     return idx;
   } catch (error) {
-    console.error('Error loading KJV data:', error);
-    // Fallback to imported data
-    for (const verse of kjvData) {
-      idx[`${verse.book}|${verse.chapter}|${verse.verse}`] = verse.text;
-    }
+    console.error('❌ Error loading KJV data:', error);
+    
+    // Fallback to a minimal set for development
+    idx["John|14|1"] = "Let not your heart be troubled: ye believe in God, believe also in me.";
+    idx["John|14|27"] = "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid.";
+    idx["Philippians|4|6"] = "Be careful for nothing; but in every thing by prayer and supplication with thanksgiving let your requests be made known unto God.";
+    idx["Philippians|4|7"] = "And the peace of God, which passeth all understanding, shall keep your hearts and minds through Christ Jesus.";
+    
+    console.log(`⚠️ Using fallback verses (${Object.keys(idx).length})`);
     return idx;
   }
 }
