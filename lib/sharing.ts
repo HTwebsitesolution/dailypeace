@@ -2,7 +2,7 @@
 import * as Sharing from 'expo-sharing';
 import { captureRef } from 'react-native-view-shot';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { analytics } from './analytics';
+import { track } from './analytics';
 
 export const sharing = {
   // Share a text reflection
@@ -14,13 +14,13 @@ export const sharing = {
 
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(shareText);
-        analytics.track('reflection_shared', { hasVerse: !!verse });
+        track('reflection_shared', { hasVerse: !!verse });
       } else {
         // Fallback for platforms without native sharing
         console.log('Sharing not available');
       }
     } catch (error) {
-      analytics.captureError(error as Error, { context: 'share_reflection' });
+      track('share_reflection_error', { error: (error as Error).message });
     }
   },
 
@@ -38,10 +38,10 @@ export const sharing = {
           mimeType: 'image/png',
           dialogTitle: 'Share your Daily Peace conversation',
         });
-        analytics.track('conversation_image_shared');
+        track('conversation_image_shared');
       }
     } catch (error) {
-      analytics.captureError(error as Error, { context: 'share_image' });
+      track('share_image_error', { error: (error as Error).message });
     }
   },
 
@@ -60,10 +60,10 @@ export const sharing = {
       const updatedFavorites = [newFavorite, ...favorites].slice(0, 50); // Keep max 50
       await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
       
-      analytics.track('reflection_favorited');
+      track('reflection_favorited');
       return newFavorite;
     } catch (error) {
-      analytics.captureError(error as Error, { context: 'save_favorite' });
+      track('save_favorite_error', { error: (error as Error).message });
       return null;
     }
   },
@@ -74,7 +74,7 @@ export const sharing = {
       const stored = await AsyncStorage.getItem('favorites');
       return stored ? JSON.parse(stored) : [];
     } catch (error) {
-      analytics.captureError(error as Error, { context: 'get_favorites' });
+      track('get_favorites_error', { error: (error as Error).message });
       return [];
     }
   },
@@ -86,9 +86,9 @@ export const sharing = {
       const updated = favorites.filter((f: any) => f.id !== id);
       await AsyncStorage.setItem('favorites', JSON.stringify(updated));
       
-      analytics.track('favorite_removed', { id });
+      track('favorite_removed', { id });
     } catch (error) {
-      analytics.captureError(error as Error, { context: 'remove_favorite' });
+      track('remove_favorite_error', { error: (error as Error).message });
     }
   }
 };

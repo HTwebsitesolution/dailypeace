@@ -2,7 +2,7 @@
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { analytics } from './analytics';
+import { track } from './analytics';
 
 // Configure notification behavior
 Notifications.setNotificationHandler({
@@ -26,7 +26,7 @@ export const notifications = {
       }
       
       if (finalStatus !== 'granted') {
-        analytics.track('notification_permission_denied');
+        track('notification_permission_denied');
         return null;
       }
 
@@ -42,10 +42,10 @@ export const notifications = {
       const token = await Notifications.getExpoPushTokenAsync();
       await AsyncStorage.setItem('push_token', token.data);
       
-      analytics.track('notification_permission_granted', { token: token.data });
+      track('notification_permission_granted', { token: token.data });
       return token.data;
     } catch (error) {
-      analytics.captureError(error as Error, { context: 'notification_init' });
+      track('notification_init_error', { error: (error as Error).message });
       return null;
     }
   },
@@ -77,9 +77,9 @@ export const notifications = {
         },
       });
 
-      analytics.track('daily_notification_scheduled');
+      track('daily_notification_scheduled');
     } catch (error) {
-      analytics.captureError(error as Error, { context: 'schedule_notification' });
+      track('schedule_notification_error', { error: (error as Error).message });
     }
   },
 
@@ -95,9 +95,9 @@ export const notifications = {
         trigger: delaySeconds > 0 ? { seconds: delaySeconds } : null,
       });
 
-      analytics.track('encouragement_sent', { title, delaySeconds });
+      track('encouragement_sent', { title, delaySeconds });
     } catch (error) {
-      analytics.captureError(error as Error, { context: 'send_encouragement' });
+      track('encouragement_error', { error: (error as Error).message });
     }
   }
 };
