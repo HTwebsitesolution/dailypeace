@@ -51,35 +51,71 @@ export const notifications = {
   },
 
   // Schedule daily verse notification
-  async scheduleDailyVerse() {
+  async scheduleDailyVerse(hour: number = 8, minute: number = 0) {
     try {
       await Notifications.cancelAllScheduledNotificationsAsync();
       
-      const verses = [
-        { text: "Let not your heart be troubled: ye believe in God, believe also in me.", ref: "John 14:1" },
-        { text: "Peace I leave with you, my peace I give unto you.", ref: "John 14:27" },
-        { text: "But seek ye first the kingdom of God, and his righteousness.", ref: "Matthew 6:33" },
-        { text: "Fear not, little flock; for it is your Father's good pleasure to give you the kingdom.", ref: "Luke 12:32" }
+      const inspiringMessages = [
+        { title: "Your Daily Peace 🌅", body: "Good morning! Take a moment to find peace in God's presence today." },
+        { title: "Morning Blessing ✨", body: "\"Peace I leave with you, my peace I give unto you.\" - John 14:27" },
+        { title: "Start with Peace 🙏", body: "\"Let not your heart be troubled: ye believe in God, believe also in me.\" - John 14:1" },
+        { title: "Divine Encouragement 💫", body: "\"But seek ye first the kingdom of God, and his righteousness.\" - Matthew 6:33" },
+        { title: "Fear Not 🕊️", body: "\"Fear not, little flock; for it is your Father's good pleasure to give you the kingdom.\" - Luke 12:32" },
+        { title: "Rest in Him ⭐", body: "\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\" - Matthew 11:28" },
+        { title: "Trust His Plan 🌟", body: "\"For I know the thoughts that I think toward you, saith the Lord, thoughts of peace.\" - Jeremiah 29:11" },
+        { title: "His Strength Today 💪", body: "\"I can do all things through Christ which strengtheneth me.\" - Philippians 4:13" },
+        { title: "Be Still & Know 🧘‍♀️", body: "\"Be still, and know that I am God.\" - Psalm 46:10" },
+        { title: "Renewed Each Morning 🌄", body: "\"His compassions fail not. They are new every morning.\" - Lamentations 3:22-23" }
       ];
 
-      const randomVerse = verses[Math.floor(Math.random() * verses.length)];
+      // Pick a different message each day using date as seed
+      const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
+      const message = inspiringMessages[dayOfYear % inspiringMessages.length];
 
       await Notifications.scheduleNotificationAsync({
         content: {
-          title: "Daily Peace 🙏",
-          body: `"${randomVerse.text}" - ${randomVerse.ref}`,
+          title: message.title,
+          body: message.body,
           sound: 'default',
+          data: { type: 'daily_peace', timestamp: Date.now() }
         },
         trigger: {
-          hour: 9,
-          minute: 0,
+          hour,
+          minute,
           repeats: true,
         },
       });
 
-      track('daily_notification_scheduled');
+      // Store the schedule settings
+      await AsyncStorage.setItem('daily_notification_time', JSON.stringify({ hour, minute, enabled: true }));
+      
+      track('daily_notification_scheduled', { hour, minute });
     } catch (error) {
       track('schedule_notification_error', { error: (error as Error).message });
+    }
+  },
+
+  // Get current notification schedule
+  async getNotificationSchedule() {
+    try {
+      const stored = await AsyncStorage.getItem('daily_notification_time');
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      return { hour: 8, minute: 0, enabled: false };
+    } catch {
+      return { hour: 8, minute: 0, enabled: false };
+    }
+  },
+
+  // Cancel daily notifications
+  async cancelDailyNotifications() {
+    try {
+      await Notifications.cancelAllScheduledNotificationsAsync();
+      await AsyncStorage.setItem('daily_notification_time', JSON.stringify({ hour: 8, minute: 0, enabled: false }));
+      track('daily_notifications_cancelled');
+    } catch (error) {
+      track('cancel_notifications_error', { error: (error as Error).message });
     }
   },
 
