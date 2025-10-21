@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Daily Peace API</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0B1016; --card:#141B23; --text:#EAF2FF; --muted:#9FB0C3; --blue:#2F80ED; }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 Inter,system-ui}
+    .wrap{max-width:840px;margin:60px auto;padding:0 20px}
+    .h{display:flex;gap:12px;align-items:center;margin-bottom:18px}
+    .card{background:var(--card);border-radius:16px;padding:18px 20px;margin:14px 0}
+    code{background:#0f1622;padding:2px 6px;border-radius:6px;font-family:Monaco,Consolas,monospace;font-size:14px}
+    a{color:var(--blue);text-decoration:none}
+    pre{background:#0f1622;padding:12px;border-radius:8px;overflow-x:auto;font-size:14px}
+    .status{display:inline-block;padding:4px 8px;border-radius:6px;font-size:12px;font-weight:600}
+    .status.live{background:#1e8e3e;color:#fff}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="h">
+      <div style="font-size:28px">🙏 Daily Peace API</div>
+      <div class="status live">LIVE</div>
+    </div>
+    <p style="color:var(--muted);font-size:18px">Backend services for the Daily Peace mobile app - AI-powered spiritual guidance through Scripture.</p>
+
+    <div class="card">
+      <h3>POST <code>/.netlify/functions/generate</code></h3>
+      <p>Generate personalized Scripture-grounded reflections using OpenAI GPT-4.</p>
+      <pre><code>{
+  "user_text": "I feel anxious about work",
+  "mode": "conversational", // conversational | biblical | reflective
+  "verses": [
+    {
+      "ref": "John 14:1", 
+      "text": "Let not your heart be troubled: ye believe in God, believe also in me."
+    },
+    {
+      "ref": "Philippians 4:6",
+      "text": "Be careful for nothing; but in every thing by prayer and supplication..."
+    }
+  ]
+}</code></pre>
+    </div>
+
+    <div class="card">
+      <h3>POST <code>/.netlify/functions/transcribe</code></h3>
+      <p>Transcribe voice recordings to text using OpenAI Whisper.</p>
+      <pre><code>{
+  "filename": "speech.m4a",
+  "base64": "UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA",
+  "language": "en"
+}</code></pre>
+    </div>
+
+    <div class="card">
+      <h3>🔧 Features</h3>
+      <ul>
+        <li><strong>17 Classification Categories:</strong> Intelligent need detection from user input</li>
+        <li><strong>27 KJV Scripture Verses:</strong> Comprehensive biblical guidance database</li>
+        <li><strong>Mode-Specific Prompts:</strong> Tailored responses for different conversation styles</li>
+        <li><strong>Privacy-First:</strong> Voice recordings processed and deleted immediately</li>
+        <li><strong>Analytics & Monitoring:</strong> PostHog tracking with Sentry error reporting</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>📱 Mobile App</h3>
+      <p>Download Daily Peace for iOS and Android to experience:</p>
+      <ul>
+        <li>AI-powered spiritual conversations</li>
+        <li>Voice input with instant transcription</li>
+        <li>Shareable Scripture cards</li>
+        <li>Daily peace notifications at 8:00 AM</li>
+        <li>Text-to-speech for accessibility</li>
+      </ul>
+    </div>
+
+    <div style="text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid var(--card)">
+      <p style="color:var(--muted)">© 2025 Daily Peace • <a href="https://dailypeace.life">dailypeace.life</a></p>
+      <p style="color:var(--muted);font-size:14px">Bringing peace through Scripture and technology</p>
+    </div>
+  </div>
+</body>
+</html>
