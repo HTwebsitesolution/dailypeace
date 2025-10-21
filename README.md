@@ -35,3 +35,4 @@ eas build --platform android --profile preview
 ## Notes
 - Starter includes one seed (`fear_anxiety.json`) and a tiny KJV sample. Add remaining 17 seeds + full KJV JSONL later.
 - All AI calls happen **server-side**. Never put your OpenAI key in the app.
+# Deploy trigger 10/21/2025 15:52:14
