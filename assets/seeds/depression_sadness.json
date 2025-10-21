@@ -1,0 +1,36 @@
+{
+  "need_id": "depression_sadness",
+  "display_name": "Depression & Sadness", 
+  "policy": {
+    "min_verses": 2,
+    "max_verses": 5,
+    "allow_cross_gospel": true,
+    "translation": "KJV"
+  },
+  "candidates": [
+    {
+      "ref": "Psalm 34:18",
+      "unit": "Psalm 34:17-19", 
+      "priority": 0.95,
+      "tones": ["comfort", "nearness", "healing"]
+    },
+    {
+      "ref": "Isaiah 41:10",
+      "unit": "Isaiah 41:10",
+      "priority": 0.93,
+      "tones": ["strength", "presence", "support"]
+    },
+    {
+      "ref": "Psalm 23:4",
+      "unit": "Psalm 23:1-6",
+      "priority": 0.90,
+      "tones": ["comfort", "guidance", "protection"]
+    },
+    {
+      "ref": "Romans 8:28",
+      "unit": "Romans 8:28-29",
+      "priority": 0.88,
+      "tones": ["hope", "purpose", "goodness"]
+    }
+  ]
+}

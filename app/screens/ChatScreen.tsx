@@ -41,8 +41,8 @@ export default function ChatScreen() {
   async function onSend(userText: string) {
     if (!userText.trim() || busy) return;
     
-    // Analytics: Track user input
-    const needIds = classifyNeeds(userText);
+    // Analytics: Track user input with enhanced classification
+    const needIds = classifyNeeds(userText, mode);
     track('message_send', { mode });
     track('message_sent', { 
       mode, 

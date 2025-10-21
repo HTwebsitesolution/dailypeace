@@ -1,0 +1,36 @@
+{
+  "need_id": "strength_courage", 
+  "display_name": "Strength & Courage",
+  "policy": {
+    "min_verses": 3,
+    "max_verses": 5,
+    "allow_cross_gospel": true,
+    "translation": "KJV"
+  },
+  "candidates": [
+    {
+      "ref": "Isaiah 40:31",
+      "unit": "Isaiah 40:29-31",
+      "priority": 0.95,
+      "tones": ["strength", "renewal", "endurance"]
+    },
+    {
+      "ref": "Joshua 1:9",
+      "unit": "Joshua 1:8-9", 
+      "priority": 0.93,
+      "tones": ["courage", "presence", "strength"]
+    },
+    {
+      "ref": "Philippians 4:13",
+      "unit": "Philippians 4:11-13",
+      "priority": 0.90,
+      "tones": ["strength", "ability", "contentment"]
+    },
+    {
+      "ref": "2 Corinthians 12:9",
+      "unit": "2 Corinthians 12:9-10",
+      "priority": 0.88,
+      "tones": ["grace", "strength", "weakness"]
+    }
+  ]
+}

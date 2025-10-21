@@ -1,0 +1,36 @@
+{
+  "need_id": "purpose_meaning",
+  "display_name": "Purpose & Meaning",
+  "policy": {
+    "min_verses": 2, 
+    "max_verses": 4,
+    "allow_cross_gospel": true,
+    "translation": "KJV"
+  },
+  "candidates": [
+    {
+      "ref": "Jeremiah 29:11",
+      "unit": "Jeremiah 29:11-13",
+      "priority": 0.95,
+      "tones": ["plans", "future", "hope"]
+    },
+    {
+      "ref": "Ephesians 2:10",
+      "unit": "Ephesians 2:8-10", 
+      "priority": 0.93,
+      "tones": ["workmanship", "purpose", "good works"]
+    },
+    {
+      "ref": "Romans 8:28",
+      "unit": "Romans 8:28-30",
+      "priority": 0.90,
+      "tones": ["purpose", "calling", "good"]
+    },
+    {
+      "ref": "Proverbs 3:5-6",
+      "unit": "Proverbs 3:5-6",
+      "priority": 0.88,
+      "tones": ["trust", "guidance", "paths"]
+    }
+  ]
+}
