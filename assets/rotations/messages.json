@@ -358,5 +358,185 @@
     "category": "gratitude_praise",
     "text": "End this day with praise. Tomorrow will begin with the strength you build tonight.",
     "verses": ["Psalm 92:1-2", "Psalm 149:5"]
+  },
+  {
+    "id": "courage_01",
+    "category": "courage_faith_action",
+    "text": "Courage does not roar; it whispers, 'I will trust again today.' Take the step you fear—I am already there.",
+    "verses": ["Deuteronomy 31:8", "Joshua 1:9"]
+  },
+  {
+    "id": "courage_02",
+    "category": "courage_faith_action",
+    "text": "You do not need perfect faith to begin, only a willing heart. Obedience opens the path that fear hides.",
+    "verses": ["Matthew 14:29", "Isaiah 41:13"]
+  },
+  {
+    "id": "courage_03",
+    "category": "courage_faith_action",
+    "text": "Stand even when trembling. I delight more in your trust than your strength.",
+    "verses": ["2 Corinthians 12:9", "Psalm 27:1"]
+  },
+  {
+    "id": "courage_04",
+    "category": "courage_faith_action",
+    "text": "Courage is not absence of fear, but choosing faith within it. Step forward; I will steady your feet.",
+    "verses": ["Psalm 56:3", "Isaiah 43:2"]
+  },
+  {
+    "id": "courage_05",
+    "category": "courage_faith_action",
+    "text": "When the path feels lonely, remember: every faithful step leaves light for another to follow.",
+    "verses": ["Matthew 5:16", "Hebrews 11:1"]
+  },
+  {
+    "id": "courage_06",
+    "category": "courage_faith_action",
+    "text": "Do not wait for strength to appear; move and strength will meet you on the way.",
+    "verses": ["Exodus 14:15", "Philippians 4:13"]
+  },
+  {
+    "id": "courage_07",
+    "category": "courage_faith_action",
+    "text": "Faith does not shrink from mountains; it speaks to them. Begin speaking hope where fear once ruled.",
+    "verses": ["Mark 11:23", "Romans 8:31"]
+  },
+  {
+    "id": "courage_08",
+    "category": "courage_faith_action",
+    "text": "When you stand for love in a world of fear, you reflect Me most clearly.",
+    "verses": ["1 John 4:18", "John 16:33"]
+  },
+  {
+    "id": "courage_09",
+    "category": "courage_faith_action",
+    "text": "I call you not to comfort, but to purpose. Step beyond safety and you will meet My power.",
+    "verses": ["Luke 5:4", "Acts 1:8"]
+  },
+  {
+    "id": "courage_10",
+    "category": "courage_faith_action",
+    "text": "Every time you rise again, the darkness loses ground. Keep standing.",
+    "verses": ["Micah 7:8", "Galatians 6:9"]
+  },
+  {
+    "id": "rest_01",
+    "category": "rest_renewal",
+    "text": "Rest is not idleness—it is trust that the world keeps turning because I hold it, not you.",
+    "verses": ["Matthew 11:28", "Psalm 23:2-3"]
+  },
+  {
+    "id": "rest_02",
+    "category": "rest_renewal",
+    "text": "Even in your silence, I am working. Let stillness be your act of faith today.",
+    "verses": ["Exodus 14:14", "Psalm 46:10"]
+  },
+  {
+    "id": "rest_03",
+    "category": "rest_renewal",
+    "text": "You do not earn peace; you receive it. Lay down striving and let Me breathe new life into you.",
+    "verses": ["Isaiah 30:15", "2 Corinthians 4:16"]
+  },
+  {
+    "id": "rest_04",
+    "category": "rest_renewal",
+    "text": "Stop rehearsing your worries. I am already rehearsing your redemption.",
+    "verses": ["Psalm 127:2", "Matthew 6:27"]
+  },
+  {
+    "id": "rest_05",
+    "category": "rest_renewal",
+    "text": "My rest is not escape—it is renewal. Come apart with Me before you come apart within yourself.",
+    "verses": ["Mark 6:31", "Hebrews 4:9-10"]
+  },
+  {
+    "id": "rest_06",
+    "category": "rest_renewal",
+    "text": "Let the night do its holy work. Sleep is My reminder that grace does not depend on your effort.",
+    "verses": ["Psalm 3:5", "Lamentations 3:23"]
+  },
+  {
+    "id": "rest_07",
+    "category": "rest_renewal",
+    "text": "When your spirit feels dry, return to the well of My presence. Still waters run deeper than emotion.",
+    "verses": ["John 4:14", "Psalm 63:1"]
+  },
+  {
+    "id": "rest_08",
+    "category": "rest_renewal",
+    "text": "Rest is not weakness. Even I paused after creation to delight in the good I had made.",
+    "verses": ["Genesis 2:2-3", "Ecclesiastes 3:13"]
+  },
+  {
+    "id": "rest_09",
+    "category": "rest_renewal",
+    "text": "When you cannot pray, rest. I know the words your silence hides.",
+    "verses": ["Romans 8:26", "Psalm 62:1"]
+  },
+  {
+    "id": "rest_10",
+    "category": "rest_renewal",
+    "text": "Breathe. You are not behind; you are being renewed for what's next.",
+    "verses": ["Isaiah 40:31", "Psalm 51:10"]
+  },
+  {
+    "id": "love_01",
+    "category": "love_community",
+    "text": "Love is the truest sign of life in Me. Let it be patient, not perfect; real, not rehearsed.",
+    "verses": ["1 Corinthians 13:4-7", "John 13:34-35"]
+  },
+  {
+    "id": "love_02",
+    "category": "love_community",
+    "text": "You cannot love from emptiness. Let Me fill you until kindness overflows naturally.",
+    "verses": ["John 15:5", "Romans 5:5"]
+  },
+  {
+    "id": "love_03",
+    "category": "love_community",
+    "text": "Each person you meet is a soul I cherish. See them as I see you—beloved and becoming.",
+    "verses": ["Luke 6:31", "Ephesians 4:2"]
+  },
+  {
+    "id": "love_04",
+    "category": "love_community",
+    "text": "Community is not perfect people gathered, but forgiven people learning grace together.",
+    "verses": ["Colossians 3:13-14", "Acts 2:42"]
+  },
+  {
+    "id": "love_05",
+    "category": "love_community",
+    "text": "Forgive quickly, listen deeply, serve quietly—this is the rhythm of love that transforms worlds.",
+    "verses": ["Philippians 2:3-4", "James 1:19"]
+  },
+  {
+    "id": "love_06",
+    "category": "love_community",
+    "text": "Isolation shrinks the heart. Reach out; sometimes healing begins with hello.",
+    "verses": ["Hebrews 10:24-25", "Proverbs 27:17"]
+  },
+  {
+    "id": "love_07",
+    "category": "love_community",
+    "text": "Let your love include those who cannot return it. That is how you resemble your Father.",
+    "verses": ["Matthew 5:44-45", "Romans 12:20"]
+  },
+  {
+    "id": "love_08",
+    "category": "love_community",
+    "text": "Serve not to be seen, but because you have seen My love.",
+    "verses": ["Galatians 5:13", "Matthew 25:40"]
+  },
+  {
+    "id": "love_09",
+    "category": "love_community",
+    "text": "Love listens more than it lectures. Be slow to speak, quick to understand.",
+    "verses": ["James 1:19", "Proverbs 18:13"]
+  },
+  {
+    "id": "love_10",
+    "category": "love_community",
+    "text": "Where love is practiced, I am present. Let every act of grace be your worship today.",
+    "verses": ["1 John 4:12", "Colossians 3:14"]
   }
 ]
