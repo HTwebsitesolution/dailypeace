@@ -1,0 +1,62 @@
+[
+  {
+    "id": "trust_01",
+    "category": "trust_provision",
+    "text": "The same Father who paints the lilies and feeds the sparrows has counted your needs before you speak. Trust His timing.",
+    "verses": ["Matthew 6:26", "Luke 12:27-28"]
+  },
+  {
+    "id": "trust_02",
+    "category": "trust_provision",
+    "text": "Faith grows when sight fails. Walk forward though the path is dim; My light appears as you move.",
+    "verses": ["2 Corinthians 5:7", "Psalm 37:5"]
+  },
+  {
+    "id": "trust_03",
+    "category": "trust_provision",
+    "text": "Worry multiplies when you forget who holds tomorrow. Hand Me your fears, and rest in the strength of My care.",
+    "verses": ["Matthew 6:34", "Proverbs 3:5-6"]
+  },
+  {
+    "id": "trust_04",
+    "category": "trust_provision",
+    "text": "Do not confuse delay with denial. What I promise, I finish in the fullness of time.",
+    "verses": ["Habakkuk 2:3", "Romans 8:28"]
+  },
+  {
+    "id": "trust_05",
+    "category": "trust_provision",
+    "text": "Lean not on your own understanding; your map ends where My miracles begin.",
+    "verses": ["Proverbs 3:5", "Isaiah 55:8-9"]
+  },
+  {
+    "id": "trust_06",
+    "category": "trust_provision",
+    "text": "Each sunrise is a reminder: I am still faithful. Yesterday's manna was enough; today's grace will be too.",
+    "verses": ["Lamentations 3:22-23", "Exodus 16:4"]
+  },
+  {
+    "id": "trust_07",
+    "category": "trust_provision",
+    "text": "When resources fade, My abundance begins. Dependence is not weakness; it is the doorway to peace.",
+    "verses": ["Philippians 4:19", "Psalm 34:10"]
+  },
+  {
+    "id": "trust_08",
+    "category": "trust_provision",
+    "text": "Do not measure your future by what you see in your hands. Measure it by My faithfulness.",
+    "verses": ["Psalm 37:25", "Ephesians 3:20"]
+  },
+  {
+    "id": "trust_09",
+    "category": "trust_provision",
+    "text": "Every closed door protects you from harm you cannot yet see. Wait; I am preparing better paths.",
+    "verses": ["Revelation 3:8", "Romans 8:31"]
+  },
+  {
+    "id": "trust_10",
+    "category": "trust_provision",
+    "text": "Rest. The One who watches over Israel does not sleep; you can.",
+    "verses": ["Psalm 121:4", "Isaiah 26:4"]
+  }
+]
