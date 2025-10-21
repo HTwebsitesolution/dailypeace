@@ -8,6 +8,7 @@ import { MicButton } from "@/app/components/MicButton";
 import { MessageBubble } from "@/app/components/MessageBubble";
 import { apiGenerate } from "@/lib/api";
 import { loadKJVIndex, selectVerses } from "@/lib/verse";
+import { classifyNeeds } from "@/lib/classifier";
 import fear from "@/assets/seeds/fear_anxiety.json";
 
 export default function ChatScreen() {
@@ -35,7 +36,8 @@ export default function ChatScreen() {
     setText("");
     setBusy(true);
     try {
-      const verses = await selectVerses(mode, seeds as any, kjv, ["fear_anxiety"]); // TODO: replace with classifier
+      const needIds = classifyNeeds(userText);
+      const verses = await selectVerses(mode, seeds as any, kjv, needIds);
       const res = await apiGenerate(userText, mode, verses);
 
       if (res.inspired_message?.text) {

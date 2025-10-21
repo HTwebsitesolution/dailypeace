@@ -10,3 +10,6 @@ ios
 .env
 .env.*
 .cache
+
+# Local Netlify folder
+.netlify
