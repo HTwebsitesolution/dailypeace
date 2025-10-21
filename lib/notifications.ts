@@ -55,29 +55,40 @@ export const notifications = {
     try {
       await Notifications.cancelAllScheduledNotificationsAsync();
       
-      const inspiringMessages = [
-        { title: "Your Daily Peace 🌅", body: "Good morning! Take a moment to find peace in God's presence today." },
-        { title: "Morning Blessing ✨", body: "\"Peace I leave with you, my peace I give unto you.\" - John 14:27" },
-        { title: "Start with Peace 🙏", body: "\"Let not your heart be troubled: ye believe in God, believe also in me.\" - John 14:1" },
-        { title: "Divine Encouragement 💫", body: "\"But seek ye first the kingdom of God, and his righteousness.\" - Matthew 6:33" },
-        { title: "Fear Not 🕊️", body: "\"Fear not, little flock; for it is your Father's good pleasure to give you the kingdom.\" - Luke 12:32" },
-        { title: "Rest in Him ⭐", body: "\"Come unto me, all ye that labour and are heavy laden, and I will give you rest.\" - Matthew 11:28" },
-        { title: "Trust His Plan 🌟", body: "\"For I know the thoughts that I think toward you, saith the Lord, thoughts of peace.\" - Jeremiah 29:11" },
-        { title: "His Strength Today 💪", body: "\"I can do all things through Christ which strengtheneth me.\" - Philippians 4:13" },
-        { title: "Be Still & Know 🧘‍♀️", body: "\"Be still, and know that I am God.\" - Psalm 46:10" },
-        { title: "Renewed Each Morning 🌄", body: "\"His compassions fail not. They are new every morning.\" - Lamentations 3:22-23" }
-      ];
+      // Load the rotating reflections
+      let reflections;
+      try {
+        reflections = require('../assets/rotations/messages.json');
+      } catch {
+        // Fallback messages if file not available
+        reflections = [
+          { id: "fallback_1", text: "Peace I leave with you, my peace I give unto you.", verses: ["John 14:27"] },
+          { id: "fallback_2", text: "Let not your heart be troubled: ye believe in God, believe also in me.", verses: ["John 14:1"] }
+        ];
+      }
 
-      // Pick a different message each day using date as seed
+      // Pick a different reflection each day using date as seed
       const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
-      const message = inspiringMessages[dayOfYear % inspiringMessages.length];
+      const reflection = reflections[dayOfYear % reflections.length];
+      
+      // Create beautiful notification content
+      const title = "Daily Peace 🙏";
+      const body = reflection.text.length > 120 
+        ? reflection.text.substring(0, 117) + "..." 
+        : reflection.text;
 
       await Notifications.scheduleNotificationAsync({
         content: {
-          title: message.title,
-          body: message.body,
+          title,
+          body,
           sound: 'default',
-          data: { type: 'daily_peace', timestamp: Date.now() }
+          data: { 
+            type: 'daily_peace', 
+            timestamp: Date.now(),
+            reflectionId: reflection.id,
+            category: reflection.category,
+            verses: reflection.verses?.join(', ')
+          }
         },
         trigger: {
           hour,
@@ -116,6 +127,36 @@ export const notifications = {
       track('daily_notifications_cancelled');
     } catch (error) {
       track('cancel_notifications_error', { error: (error as Error).message });
+    }
+  },
+
+  // Get daily reflection message
+  getDailyReflection(dayOffset: number = 0) {
+    try {
+      const reflections = require('../assets/rotations/messages.json');
+      const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24)) + dayOffset;
+      return reflections[dayOfYear % reflections.length];
+    } catch {
+      return {
+        id: "fallback",
+        category: "peace_calm", 
+        text: "Peace I leave with you, my peace I give unto you. Let not your heart be troubled.",
+        verses: ["John 14:27", "John 14:1"]
+      };
+    }
+  },
+
+  // Get reflection by category
+  getReflectionByCategory(category: string) {
+    try {
+      const reflections = require('../assets/rotations/messages.json');
+      const categoryReflections = reflections.filter((r: any) => r.category === category);
+      if (categoryReflections.length === 0) return this.getDailyReflection();
+      
+      const randomIndex = Math.floor(Math.random() * categoryReflections.length);
+      return categoryReflections[randomIndex];
+    } catch {
+      return this.getDailyReflection();
     }
   },
 
