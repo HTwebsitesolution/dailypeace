@@ -7,11 +7,15 @@ import RootNav from "./navigation";
 import { SettingsProvider } from "../lib/settings";
 import { analytics } from "../lib/analytics";
 
-Sentry.init({
-  dsn: Constants.expoConfig?.extra?.SENTRY_DSN,
-  enableInExpoDevelopment: true,
-  debug: false
-});
+// Only initialize Sentry if we have a real DSN (not a placeholder)
+const sentryDsn = Constants.expoConfig?.extra?.SENTRY_DSN;
+if (sentryDsn && !sentryDsn.startsWith('REPLACE_WITH_')) {
+  Sentry.init({
+    dsn: sentryDsn,
+    enableInExpoDevelopment: true,
+    debug: false
+  });
+}
 
 export default function App() {
   useEffect(() => { analytics(); }, []);
