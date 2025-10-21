@@ -9,7 +9,7 @@ import { MessageBubble } from "@/app/components/MessageBubble";
 import { apiGenerate } from "@/lib/api";
 import { loadKJVIndex, selectVerses } from "@/lib/verse";
 import { classifyNeeds } from "@/lib/classifier";
-import fear from "@/assets/seeds/fear_anxiety.json";
+import seedsIndex from "@/assets/seeds/index.json";
 
 export default function ChatScreen() {
   const [mode, setMode] = useState<Mode>("conversational");
@@ -20,7 +20,7 @@ export default function ChatScreen() {
   const [busy, setBusy] = useState(false);
   const scroll = useRef<ScrollView>(null);
 
-  const seeds = useMemo(()=>({ fear_anxiety: fear }), []);
+  const seeds = useMemo(()=> seedsIndex as any, []);
   const [kjv, setKjv] = useState<Record<string,string>>({});
 
   useEffect(()=>{ (async()=> setKjv(await loadKJVIndex()))(); }, []);

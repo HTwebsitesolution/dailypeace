@@ -6,11 +6,25 @@ type Mode = "conversational" | "biblical" | "reflective";
 type Verse = { ref: string; text: string };
 type Payload = { user_text: string; mode?: Mode; verses: Verse[] };
 
-const SYSTEM = `You are a compassionate, intelligent devotional guide. Do not impersonate Jesus.
+function getSystemPrompt(mode: Mode): string {
+  if (mode === "conversational") {
+    return `You are a compassionate, intelligent devotional guide. Do not impersonate Jesus.
 Use only the supplied verses for grounding (Gospels). Warm, pastoral tone (8th–10th grade).
 140–220 words. End with ONE gentle question. Add a short prayer TO GOD (<=60 words).
 No promises beyond Scripture. Return JSON: { "text": string, "citations": string[], "disclaimer": string }.
 Disclaimer must be exactly: "AI-generated reflection inspired by Scripture (not a divine message)."`;
+  }
+  
+  if (mode === "reflective") {
+    return `You are a thoughtful spiritual guide for contemplation. Do not impersonate Jesus.
+Use only the supplied verses for grounding (Gospels). Reflective, meditative tone (8th–10th grade).
+80–120 words. End with TWO reflection questions for contemplation. No prayer needed.
+Focus on deeper spiritual meaning. Return JSON: { "text": string, "citations": string[], "disclaimer": string }.
+Disclaimer must be exactly: "AI-generated reflection inspired by Scripture (not a divine message)."`;
+  }
+
+  return ""; // biblical mode handled separately
+}
 
 export const handler: Handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return cors(200, {});
@@ -26,12 +40,13 @@ export const handler: Handler = async (event) => {
     }
 
     const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+    const systemPrompt = getSystemPrompt(body.mode || "conversational");
     const resp = await client.chat.completions.create({
       model: "gpt-4o-mini",
       temperature: 0.7,
       response_format: { type: "json_object" },
       messages: [
-        { role: "system", content: SYSTEM },
+        { role: "system", content: systemPrompt },
         { role: "user", content: `User: ${body.user_text}\nScripture supplied:\n${verseContext}\nUse only these verses for grounding.` }
       ]
     });

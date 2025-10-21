@@ -1,0 +1,350 @@
+{
+  "fear_anxiety": {
+    "need_id": "fear_anxiety",
+    "display_name": "Fear & Anxiety",
+    "policy": {
+      "min_verses": 3,
+      "max_verses": 6,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "John 14:1",
+        "unit": "John 14:1",
+        "priority": 0.95,
+        "tones": ["comfort", "trust"]
+      },
+      {
+        "ref": "John 14:27",
+        "unit": "John 14:27",
+        "priority": 0.93,
+        "tones": ["peace", "reassurance"]
+      },
+      {
+        "ref": "Matthew 6:33",
+        "unit": "Matthew 6:31-34",
+        "priority": 0.9,
+        "tones": ["seek", "trust"]
+      },
+      {
+        "ref": "Luke 12:32",
+        "unit": "Luke 12:22-34",
+        "priority": 0.88,
+        "tones": ["provision", "trust"]
+      }
+    ]
+  },
+  "provision_finances_work": {
+    "need_id": "provision_finances_work",
+    "display_name": "Provision, Finances & Work",
+    "policy": {
+      "min_verses": 3,
+      "max_verses": 6,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Matthew 6:26",
+        "unit": "Matthew 6:25-34",
+        "priority": 0.95,
+        "tones": ["provision", "trust"]
+      },
+      {
+        "ref": "Luke 12:24",
+        "unit": "Luke 12:22-31",
+        "priority": 0.9,
+        "tones": ["provision", "care"]
+      },
+      {
+        "ref": "John 14:1",
+        "unit": "John 14:1",
+        "priority": 0.85,
+        "tones": ["trust", "peace"]
+      }
+    ]
+  },
+  "grief_loss": {
+    "need_id": "grief_loss",
+    "display_name": "Grief & Loss",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 5,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "John 14:1",
+        "unit": "John 14:1-3",
+        "priority": 0.95,
+        "tones": ["comfort", "hope"]
+      },
+      {
+        "ref": "John 14:27",
+        "unit": "John 14:27",
+        "priority": 0.9,
+        "tones": ["peace", "comfort"]
+      }
+    ]
+  },
+  "guilt_shame": {
+    "need_id": "guilt_shame",
+    "display_name": "Guilt & Shame",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "John 14:27",
+        "unit": "John 14:27",
+        "priority": 0.9,
+        "tones": ["peace", "comfort"]
+      }
+    ]
+  },
+  "forgiveness_needed": {
+    "need_id": "forgiveness_needed",
+    "display_name": "Seeking Forgiveness",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "John 14:1",
+        "unit": "John 14:1",
+        "priority": 0.9,
+        "tones": ["forgiveness", "peace"]
+      }
+    ]
+  },
+  "forgiving_others": {
+    "need_id": "forgiving_others",
+    "display_name": "Forgiving Others",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Matthew 6:14",
+        "unit": "Matthew 6:14-15",
+        "priority": 0.9,
+        "tones": ["forgiveness", "grace"]
+      }
+    ]
+  },
+  "illness_suffering": {
+    "need_id": "illness_suffering",
+    "display_name": "Illness & Suffering",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 5,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "John 14:27",
+        "unit": "John 14:27",
+        "priority": 0.95,
+        "tones": ["comfort", "peace"]
+      }
+    ]
+  },
+  "loneliness_rejection": {
+    "need_id": "loneliness_rejection",
+    "display_name": "Loneliness & Rejection",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "John 14:1",
+        "unit": "John 14:1",
+        "priority": 0.9,
+        "tones": ["comfort", "presence"]
+      }
+    ]
+  },
+  "purpose_direction": {
+    "need_id": "purpose_direction",
+    "display_name": "Purpose & Direction",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Matthew 6:33",
+        "unit": "Matthew 6:31-34",
+        "priority": 0.95,
+        "tones": ["guidance", "trust"]
+      }
+    ]
+  },
+  "doubt_faith": {
+    "need_id": "doubt_faith",
+    "display_name": "Doubt & Faith Crisis",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "John 14:1",
+        "unit": "John 14:1",
+        "priority": 0.9,
+        "tones": ["faith", "trust"]
+      }
+    ]
+  },
+  "temptation_sin": {
+    "need_id": "temptation_sin",
+    "display_name": "Temptation & Sin",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "John 14:27",
+        "unit": "John 14:27",
+        "priority": 0.9,
+        "tones": ["strength", "peace"]
+      }
+    ]
+  },
+  "reconciliation_conflict": {
+    "need_id": "reconciliation_conflict",
+    "display_name": "Reconciliation & Conflict",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Matthew 6:14",
+        "unit": "Matthew 6:14-15",
+        "priority": 0.9,
+        "tones": ["reconciliation", "peace"]
+      }
+    ]
+  },
+  "weariness_burnout": {
+    "need_id": "weariness_burnout",
+    "display_name": "Weariness & Burnout",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "John 14:27",
+        "unit": "John 14:27",
+        "priority": 0.95,
+        "tones": ["rest", "peace"]
+      }
+    ]
+  },
+  "gratitude_praise": {
+    "need_id": "gratitude_praise",
+    "display_name": "Gratitude & Praise",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Luke 12:32",
+        "unit": "Luke 12:32",
+        "priority": 0.9,
+        "tones": ["gratitude", "joy"]
+      }
+    ]
+  },
+  "decision_making": {
+    "need_id": "decision_making",
+    "display_name": "Decision Making",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Matthew 6:33",
+        "unit": "Matthew 6:31-34",
+        "priority": 0.9,
+        "tones": ["wisdom", "guidance"]
+      }
+    ]
+  },
+  "repentance_return": {
+    "need_id": "repentance_return",
+    "display_name": "Repentance & Return",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "John 14:1",
+        "unit": "John 14:1",
+        "priority": 0.9,
+        "tones": ["restoration", "peace"]
+      }
+    ]
+  },
+  "joy_hope": {
+    "need_id": "joy_hope",
+    "display_name": "Joy & Hope",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "John 14:27",
+        "unit": "John 14:27",
+        "priority": 0.9,
+        "tones": ["joy", "hope"]
+      },
+      {
+        "ref": "Luke 12:32",
+        "unit": "Luke 12:32",
+        "priority": 0.85,
+        "tones": ["hope", "comfort"]
+      }
+    ]
+  }
+}
