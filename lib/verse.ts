@@ -29,7 +29,8 @@ function fetchText(refOrUnit: string, idx: Record<string,string>) {
 }
 
 export async function selectVerses(mode: Mode, needSeeds: any, kjvIdx: Record<string,string>, needIds: string[]): Promise<Verse[]> {
-  const count = mode === "biblical" ? 5 : mode === "reflective" ? 2 : 3;
+  // Payload size safeguard: limit to 6 verses max for API stability
+  const count = Math.min(mode === "biblical" ? 5 : mode === "reflective" ? 2 : 3, 6);
   const preferUnit = mode !== "reflective";
   const verses: Verse[] = [];
   for (const needId of needIds) {

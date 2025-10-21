@@ -1,14 +1,23 @@
 
 import React from "react";
 import { View, Pressable, Text, StyleSheet } from "react-native";
-import type { Mode } from "@/lib/types";
+import type { Mode } from "../../lib/types";
+import { track } from "../../lib/analytics";
 
 export function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (m: Mode)=>void }) {
   const modes: Mode[] = ["conversational","biblical","reflective"];
+  
+  const handleModeChange = (m: Mode) => {
+    if (m !== mode) {
+      track("mode_change", { mode: m });
+      onChange(m);
+    }
+  };
+
   return (
     <View style={styles.row}>
       {modes.map(m => (
-        <Pressable key={m} onPress={()=>onChange(m)} style={[styles.btn, mode===m && styles.active]}>
+        <Pressable key={m} onPress={()=>handleModeChange(m)} style={[styles.btn, mode===m && styles.active]}>
           <Text style={styles.txt}>{m[0].toUpperCase()+m.slice(1)}</Text>
         </Pressable>
       ))}
