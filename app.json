@@ -16,7 +16,33 @@
       "bundleIdentifier": "com.yourcompany.dailypeace"
     },
     "android": {
-      "package": "com.yourcompany.dailypeace"
+      "package": "com.yourcompany.dailypeace",
+      "useNextNotificationsApi": true
+    },
+    "plugins": [
+      [
+        "sentry-expo",
+        {
+          "project": "dailypeace",
+          "organization": "htwebsolutions"
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#2F80ED",
+          "mode": "production"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "REPLACE_WITH_EAS_PROJECT_ID"
+      },
+      "SENTRY_DSN": "REPLACE_WITH_SENTRY_DSN",
+      "POSTHOG_KEY": "REPLACE_WITH_POSTHOG_KEY",
+      "POSTHOG_HOST": "https://app.posthog.com"
     },
     "assetBundlePatterns": [
       "**/*"
