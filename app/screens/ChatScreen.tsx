@@ -31,12 +31,25 @@ export default function ChatScreen() {
   ]);
   const [busy, setBusy] = useState(false);
   const [lastScriptureText, setLastScriptureText] = useState("");
+  const [dailyReflection, setDailyReflection] = useState<any>(null);
+  const [showDailyMessage, setShowDailyMessage] = useState(true);
   const scroll = useRef<ScrollView>(null);
 
   const seeds = useMemo(()=> seedsIndex as any, []);
   const [kjv, setKjv] = useState<Record<string,string>>({});
 
   useEffect(()=>{ (async()=> setKjv(await loadKJVIndex()))(); }, []);
+
+  // Load today's daily reflection
+  useEffect(() => {
+    try {
+      const todaysReflection = notifications.getDailyReflection();
+      setDailyReflection(todaysReflection);
+      track('daily_reflection_loaded', { reflectionId: todaysReflection.id });
+    } catch (error) {
+      console.warn('Failed to load daily reflection:', error);
+    }
+  }, []);
 
   async function onSend(userText: string) {
     if (!userText.trim() || busy) return;
@@ -172,6 +185,51 @@ export default function ChatScreen() {
       </View>
 
       <ModeToggle mode={mode} onChange={setMode} />
+
+      {/* Daily Reflection Card */}
+      {showDailyMessage && dailyReflection && (
+        <View style={{ marginHorizontal: 10, marginBottom: 10, backgroundColor: "#1F2937", borderRadius: 16, overflow: "hidden" }}>
+          <View style={{ backgroundColor: "#2F80ED", padding: 12 }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+              <Text style={{ color: "#fff", fontSize: 16, fontWeight: "700" }}>Today's Reflection 🙏</Text>
+              <Pressable 
+                onPress={() => {
+                  setShowDailyMessage(false);
+                  track('daily_message_dismissed');
+                }}
+                style={{ padding: 4 }}
+              >
+                <Text style={{ color: "#fff", fontSize: 18 }}>×</Text>
+              </Pressable>
+            </View>
+          </View>
+          <View style={{ padding: 16 }}>
+            <Text style={{ color: "#EAF2FF", fontSize: 15, lineHeight: 22, marginBottom: 12 }}>
+              {dailyReflection.text}
+            </Text>
+            {dailyReflection.verses && (
+              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+                {dailyReflection.verses.map((verse: string, i: number) => (
+                  <View key={i} style={{ backgroundColor: "#374151", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 }}>
+                    <Text style={{ color: "#9FB0C3", fontSize: 12 }}>{verse}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
+            <Pressable
+              onPress={() => {
+                const verseText = dailyReflection.verses?.join(", ") || "";
+                sharing.shareReflection(dailyReflection.text, verseText);
+                track('daily_reflection_shared');
+              }}
+              style={{ marginTop: 12, alignSelf: "flex-start", paddingHorizontal: 12, paddingVertical: 6, backgroundColor: "#2F80ED", borderRadius: 8 }}
+            >
+              <Text style={{ color: "#fff", fontSize: 12, fontWeight: "600" }}>Share 📤</Text>
+            </Pressable>
+          </View>
+        </View>
+      )}
+
       <ScrollView ref={scroll} contentContainerStyle={{ padding: 10 }}>
         {msgs.map((m,i)=> <MessageBubble key={i} role={m.role}>{m.text}</MessageBubble>)}
       </ScrollView>
