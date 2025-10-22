@@ -19,6 +19,9 @@
       "package": "com.yourcompany.dailypeace",
       "useNextNotificationsApi": true
     },
+    "web": {
+      "favicon": "./assets/DailyPeace App Logo.png"
+    },
     "plugins": [
       [
         "sentry-expo",
