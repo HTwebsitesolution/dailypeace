@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { View, FlatList, KeyboardAvoidingView, Platform, Alert, Animated, Text, Pressable, Image } from "react-native";
+import { View, FlatList, KeyboardAvoidingView, Platform, Alert, Animated, Text, Pressable, Image, ImageBackground } from "react-native";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { useNavigation } from "@react-navigation/native";
@@ -16,6 +16,12 @@ import ChatInput from "../components/ChatInput";
 import ReflectionCard from "../components/ReflectionCard";
 
 const logo = require("../../assets/DailyPeace App Logo.png");
+
+const backgrounds = {
+  conversational: require("../../assets/images/hero-ocean.png"),
+  biblical: require("../../assets/images/hero-mountain.png"),
+  reflective: require("../../assets/images/hero-dove.png"),
+};
 
 interface Message {
   id: string;
@@ -215,13 +221,14 @@ export default function ChatScreen() {
   };
 
   return (
-    <Animated.View style={{ flex: 1, backgroundColor: "#0B1016", opacity: fadeAnim }}>
-      <View style={{ flex: 1, paddingHorizontal: 60, position: 'relative' }}>
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-        >
+    <ImageBackground source={backgrounds[mode]} style={{ flex: 1 }} resizeMode="cover">
+      <Animated.View style={{ flex: 1, backgroundColor: "rgba(11,16,22,0.8)", opacity: fadeAnim }}>
+        <View style={{ flex: 1, paddingHorizontal: 60, position: 'relative' }}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+          >
         {/* Header */}
         <View style={{ paddingTop: 56, paddingBottom: 16, paddingHorizontal: 20, backgroundColor: "#0B1016", borderBottomWidth: 1, borderBottomColor: "rgba(255,255,255,0.05)", alignItems: "center" }}>
           <View style={{ width: "100%", maxWidth: 400, alignItems: "center" }}>
@@ -298,7 +305,8 @@ export default function ChatScreen() {
             <Text style={{ color: "#9FB0C3", fontSize: 18 }}>⚙️</Text>
           </Pressable>
         </View>
-      </View>
-    </Animated.View>
+        </View>
+      </Animated.View>
+    </ImageBackground>
   );
 }
