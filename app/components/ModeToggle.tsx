@@ -5,9 +5,9 @@ import { View, Pressable, Text, Animated } from "react-native";
 export type Mode = "conversational" | "biblical" | "reflective";
 
 const LABELS: Record<Mode, string> = {
-  conversational: "Conversational",
-  biblical: "Biblical",
-  reflective: "Reflective",
+  conversational: "Friendly Chat",
+  biblical: "Scripture Wisdom",
+  reflective: "Quiet Reflection",
 };
 
 export default function ModeToggle({

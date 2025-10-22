@@ -59,7 +59,7 @@ export default function ReflectionCard({
         borderTopRightRadius: 20,
         backgroundColor: "rgba(59, 130, 246, 0.9)"
       }}>
-        <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>{title} 🙏</Text>
+        <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>A Moment of Peace 🙏</Text>
         {onClose ? (
           <Pressable
             onPress={onClose}
@@ -107,7 +107,7 @@ export default function ReflectionCard({
               }}
               android_ripple={{ color: "#ffffff30" }}
             >
-              <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>Share 🔗</Text>
+              <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>Share this blessing 🔗</Text>
             </Pressable>
           ) : null}
         </View>

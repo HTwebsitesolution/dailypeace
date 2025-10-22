@@ -148,11 +148,11 @@ export default function ChatScreen() {
           });
         }
       } else {
-        addMessage("app", "I'm here to listen and share wisdom from Scripture. How are you feeling today?");
+        addMessage("app", "Hello! I'm here to listen and offer comfort from God's Word. How can I support you today?");
       }
     } catch (error: any) {
       console.error("Generation error:", error);
-      addMessage("app", "I'm having trouble connecting right now. Please try again in a moment.");
+      addMessage("app", "Oops, I'm having a little trouble right now. Let's try again in a moment, okay?");
     } finally {
       setLoading(false);
     }
@@ -207,7 +207,7 @@ export default function ChatScreen() {
 
   const shareReflection = () => {
     // TODO: Implement sharing
-    Alert.alert("Share", "Sharing functionality coming soon!");
+    Alert.alert("Share", "Sharing features are on the way—stay tuned!");
   };
 
   const closeReflection = () => {
@@ -270,7 +270,7 @@ export default function ChatScreen() {
           ListEmptyComponent={
             <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 24, paddingTop: 20 }}>
               <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
-                Start a conversation above, or tap the close button on the reflection to begin chatting. ✨
+                I'm here whenever you're ready to talk. Start a conversation or explore the daily reflection above. 🌟
               </Text>
             </View>
           }
