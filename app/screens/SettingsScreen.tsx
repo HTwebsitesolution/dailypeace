@@ -6,6 +6,7 @@ import { useSettings } from "../../lib/settings";
 import { notifications } from "../../lib/notifications";
 import type { Mode } from "../../lib/types";
 import { track } from "../../lib/analytics";
+import SettingsCard from "../components/SettingsCard";
 
 export default function SettingsScreen() {
   const nav = useNavigation<any>();
@@ -85,7 +86,7 @@ export default function SettingsScreen() {
   const modes: Mode[] = ["conversational", "biblical", "reflective"];
 
   return (
-    <View style={{ flex:1, backgroundColor:"#0B1016", paddingTop: 56, paddingHorizontal: 16, gap: 16 }}>
+    <View className="flex-1 bg-bg pt-14 px-4 gap-4">
       <Header title="Settings" onBack={() => nav.goBack()} />
 
       <Section title="Default Mode">
@@ -100,35 +101,42 @@ export default function SettingsScreen() {
       </Section>
 
       <Section title="Voice & Audio">
-        <Row label="Read replies aloud (TTS)">
-          <Switch value={settings.ttsEnabled} onValueChange={(v) => setSetting("ttsEnabled", v)} />
-        </Row>
-        <Row label="Store voice recordings on device">
-          <Switch value={settings.storeVoiceRecordings} onValueChange={(v) => setSetting("storeVoiceRecordings", v)} />
-        </Row>
+        <SettingsCard
+          title="Read replies aloud"
+          subtitle="Text-to-speech playback"
+          right={<Switch value={settings.ttsEnabled} onValueChange={(v) => setSetting("ttsEnabled", v)} />}
+        />
+        <SettingsCard
+          title="Store voice recordings"
+          subtitle="Voice recordings not stored by default"
+          right={<Switch value={settings.storeVoiceRecordings} onValueChange={(v) => setSetting("storeVoiceRecordings", v)} />}
+        />
       </Section>
 
       <Section title="Daily Reminder">
-        <Row label="Daily peace notifications">
-          <Switch value={notifEnabled} onValueChange={toggleDailyReminder} />
-        </Row>
-        
+        <SettingsCard
+          title="Daily peace notifications"
+          subtitle="8:00 AM local time"
+          right={<Switch value={notifEnabled} onValueChange={toggleDailyReminder} />}
+        />
+
         {notifEnabled && (
-          <Pressable onPress={changeNotificationTime} style={{ backgroundColor:"#141B23", padding:12, borderRadius:12, flexDirection:"row", alignItems:"center", justifyContent:"space-between" }}>
-            <Text style={{ color:"#EAF2FF" }}>Reminder time</Text>
-            <Text style={{ color:"#9FB0C3" }}>
-              {notifSchedule.hour === 12 ? "12:00 PM" :
-               notifSchedule.hour > 12 ? `${notifSchedule.hour - 12}:00 PM` :
-               notifSchedule.hour === 0 ? "12:00 AM" :
-               `${notifSchedule.hour}:00 AM`}
-            </Text>
-          </Pressable>
+          <SettingsCard
+            title="Reminder time"
+            subtitle={
+              notifSchedule.hour === 12 ? "12:00 PM" :
+              notifSchedule.hour > 12 ? `${notifSchedule.hour - 12}:00 PM` :
+              notifSchedule.hour === 0 ? "12:00 AM" :
+              `${notifSchedule.hour}:00 AM`
+            }
+            onPress={changeNotificationTime}
+          />
         )}
 
         {notifEnabled && (
           <View style={{ backgroundColor:"#1a2332", padding:12, borderRadius:12 }}>
             <Text style={{ color:"#9FB0C3", fontSize:12, lineHeight:16 }}>
-              ✨ Daily inspirational messages with Scripture verses will be delivered at your chosen time. 
+              ✨ Daily inspirational messages with Scripture verses will be delivered at your chosen time.
               Notifications include encouraging words from Jesus and biblical wisdom to start your day with peace.
             </Text>
           </View>
@@ -136,12 +144,11 @@ export default function SettingsScreen() {
       </Section>
 
       <Section title="About & Privacy">
-        <Pressable onPress={() => nav.navigate("Disclaimer")} style={{ backgroundColor:"#141B23", padding:14, borderRadius:12 }}>
-          <Text style={{ color:"#EAF2FF" }}>View Disclaimer</Text>
-          <Text style={{ color:"#9FB0C3", marginTop:4, fontSize:12 }}>
-            AI-generated reflection inspired by Scripture (not a divine message). Voice recordings are transcribed and (by default) not stored.
-          </Text>
-        </Pressable>
+        <SettingsCard
+          title="View Disclaimer"
+          subtitle="AI-generated reflection inspired by Scripture (not a divine message). Voice recordings are transcribed and (by default) not stored."
+          onPress={() => nav.navigate("Disclaimer")}
+        />
       </Section>
     </View>
   );
@@ -149,27 +156,19 @@ export default function SettingsScreen() {
 
 function Header({ title, onBack }: { title: string; onBack: () => void }) {
   return (
-    <View style={{ flexDirection:"row", alignItems:"center", paddingHorizontal:16, marginBottom:8 }}>
-      <Pressable onPress={onBack} style={{ padding:8, borderRadius:8, backgroundColor:"#141B23", marginRight:8 }}>
-        <Text style={{ color:"#EAF2FF" }}>Back</Text>
+    <View className="flex-row items-center px-4 mb-2">
+      <Pressable onPress={onBack} className="p-2 rounded-lg bg-surface mr-2">
+        <Text className="text-white">Back</Text>
       </Pressable>
-      <Text style={{ color:"#EAF2FF", fontSize:18, fontWeight:"700" }}>{title}</Text>
+      <Text className="text-white text-lg font-bold">{title}</Text>
     </View>
   );
 }
 function Section({ title, children }: { title:string; children: React.ReactNode }) {
   return (
-    <View style={{ gap:8 }}>
-      <Text style={{ color:"#9FB0C3", fontWeight:"600" }}>{title}</Text>
-      <View style={{ gap:10 }}>{children}</View>
-    </View>
-  );
-}
-function Row({ label, children }: { label:string; children: React.ReactNode }) {
-  return (
-    <View style={{ backgroundColor:"#141B23", padding:12, borderRadius:12, flexDirection:"row", alignItems:"center", justifyContent:"space-between" }}>
-      <Text style={{ color:"#EAF2FF" }}>{label}</Text>
-      {children}
+    <View className="gap-2">
+      <Text className="text-muted font-semibold">{title}</Text>
+      <View className="gap-2.5">{children}</View>
     </View>
   );
 }

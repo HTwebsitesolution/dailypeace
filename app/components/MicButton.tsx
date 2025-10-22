@@ -1,6 +1,6 @@
 
-import React, { useRef, useState } from "react";
-import { Pressable, Text } from "react-native";
+import React, { useRef, useState, useEffect } from "react";
+import { Pressable, Text, Animated } from "react-native";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { apiTranscribe } from "../../lib/api";
@@ -10,7 +10,31 @@ import { track } from "../../lib/analytics";
 export function MicButton({ onTranscribed }: { onTranscribed: (text: string)=>void }) {
   const recordingRef = useRef<Audio.Recording | null>(null);
   const [listening, setListening] = useState(false);
+  const pulseAnim = useRef(new Animated.Value(1)).current;
   const { settings } = useSettings();
+
+  useEffect(() => {
+    if (listening) {
+      // Start pulsing animation when listening
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, {
+            toValue: 1.1,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+          Animated.timing(pulseAnim, {
+            toValue: 1,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    } else {
+      // Reset animation when not listening
+      pulseAnim.setValue(1);
+    }
+  }, [listening]);
 
   async function start() {
     track("voice_start");
@@ -84,11 +108,19 @@ export function MicButton({ onTranscribed }: { onTranscribed: (text: string)=>vo
   }
 
   return (
-    <Pressable
-      onPressIn={start}
-      onPressOut={stop}
-      style={{ padding: 12, borderRadius: 24, backgroundColor: listening ? "#E53935" : "#2F80ED" }}>
-      <Text style={{ color: "#fff", fontWeight: "700" }}>{listening ? "Listening…" : "Hold to Speak"}</Text>
-    </Pressable>
+    <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
+      <Pressable
+        onPressIn={start}
+        onPressOut={stop}
+        className={`px-3 py-3 rounded-2xl transition-all duration-200 ${
+          listening ? "bg-danger active:bg-danger/80" : "bg-primary active:bg-primary/80"
+        }`}
+        android_ripple={{ color: "#ffffff30" }}
+      >
+        <Text className="text-white font-bold">
+          {listening ? "🎤 Listening…" : "🎤 Hold to Speak"}
+        </Text>
+      </Pressable>
+    </Animated.View>
   );
 }

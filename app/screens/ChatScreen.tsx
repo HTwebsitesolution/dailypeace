@@ -1,281 +1,304 @@
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { View, TextInput, Pressable, Text, ScrollView, Alert } from "react-native";
-import * as Speech from "expo-speech";
-import ViewShot, { captureRef } from "react-native-view-shot";
-import * as Sharing from "expo-sharing";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { View, FlatList, KeyboardAvoidingView, Platform, Alert, Animated, Text, Pressable, Image } from "react-native";
+import { Audio } from "expo-av";
+import * as FileSystem from "expo-file-system";
 import { useNavigation } from "@react-navigation/native";
 import { useSettings } from "../../lib/settings";
-import { track } from "../../lib/analytics";
-import { Mode } from "../../lib/types";
-import { ModeToggle } from "../components/ModeToggle";
-import { MicButton } from "../components/MicButton";
-import { MessageBubble } from "../components/MessageBubble";
-import { apiGenerate } from "../../lib/api";
+import { apiGenerate, apiTranscribe } from "../../lib/api";
 import { loadKJVIndex, selectVerses } from "../../lib/verse";
-import { classifyNeeds } from "../../lib/classifier";
-import { analytics } from "../../lib/analytics";
-import { sharing } from "../../lib/sharing";
-import { notifications } from "../../lib/notifications";
-import seedsIndex from "../../assets/seeds/index.json";
+import fearAnxietySeeds from "../../assets/seeds/fear_anxiety.json";
+import { track } from "../../lib/analytics";
+import type { Mode, Verse, InspiredMessage } from "../../lib/types";
+import ModeToggle from "../components/ModeToggle";
+import { MessageBubble } from "../components/MessageBubble";
+import ChatInput from "../components/ChatInput";
+import ReflectionCard from "../components/ReflectionCard";
+
+const logo = require("../../assets/DailyPeace App Logo.png");
+
+interface Message {
+  id: string;
+  role: "user" | "app";
+  content: string;
+  timestamp: Date;
+}
+
+interface Reflection {
+  message: string;
+  verses: string[];
+}
 
 export default function ChatScreen() {
   const nav = useNavigation<any>();
   const { settings } = useSettings();
-  const scriptureRef = useRef<ViewShot>(null);
-  
-  const [mode, setMode] = useState<Mode>("conversational");
-  const [text, setText] = useState("");
-  const [msgs, setMsgs] = useState<{role:"user"|"app"; text:string}[]>([
-    { role:"app", text:"Welcome to Daily Peace. Share what's on your heart by typing or holding the mic. 🙏" }
-  ]);
-  const [busy, setBusy] = useState(false);
-  const [lastScriptureText, setLastScriptureText] = useState("");
-  const [dailyReflection, setDailyReflection] = useState<any>(null);
-  const [showDailyMessage, setShowDailyMessage] = useState(true);
-  const scroll = useRef<ScrollView>(null);
+  const [mode, setMode] = useState<Mode>(settings.defaultMode);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputText, setInputText] = useState("");
+  const [recording, setRecording] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [reflection, setReflection] = useState<Reflection | null>(null);
+  const [kjvIndex, setKjvIndex] = useState<Record<string, string> | null>(null);
+  const [needSeeds, setNeedSeeds] = useState<any>(null);
 
-  const seeds = useMemo(()=> seedsIndex as any, []);
-  const [kjv, setKjv] = useState<Record<string,string>>({});
+  const recordingRef = useRef<Audio.Recording | null>(null);
+  const flatListRef = useRef<FlatList>(null);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const logoAnim = useRef(new Animated.Value(1)).current;
 
-  useEffect(()=>{ (async()=> setKjv(await loadKJVIndex()))(); }, []);
-
-  // Load today's daily reflection
   useEffect(() => {
-    try {
-      const todaysReflection = notifications.getDailyReflection();
-      setDailyReflection(todaysReflection);
-      track('daily_reflection_loaded', { reflectionId: todaysReflection.id });
-    } catch (error) {
-      console.warn('Failed to load daily reflection:', error);
-    }
+    loadData();
+    requestPermissions();
+    loadDailyReflection();
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+    Animated.timing(logoAnim, {
+      toValue: 1,
+      duration: 1000,
+      delay: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(logoAnim, { toValue: 1.05, duration: 2000, useNativeDriver: true }),
+          Animated.timing(logoAnim, { toValue: 0.95, duration: 2000, useNativeDriver: true }),
+        ]),
+        { iterations: -1 }
+      ).start();
+    });
   }, []);
 
-  async function onSend(userText: string) {
-    if (!userText.trim() || busy) return;
-    
-    // Analytics: Track user input with enhanced classification
-    const needIds = classifyNeeds(userText, mode);
-    track('message_send', { mode });
-    track('message_sent', { 
-      mode, 
-      needIds, 
-      messageLength: userText.length,
-      hasAnxietyKeywords: /anxious|worry|fear|scared/i.test(userText)
-    });
-    
-    // Minimal crisis check
-    if (/suicide|kill myself|end my life/i.test(userText)) {
-      track('crisis_detected', { userText: userText.substring(0, 50) });
-      const crisisMessage = "I'm really sorry you're feeling this. You matter and your life is precious. Please talk to someone who can help right now. In the UK, call Samaritans at 116 123. If you're elsewhere, contact your local crisis line or emergency services.";
-      setMsgs(m => [...m, { role:"user", text: userText }, { role:"app", text: crisisMessage }]);
-      
-      // Send follow-up encouragement notification
-      setTimeout(() => {
-        notifications.sendEncouragement(
-          "You are not alone 💙",
-          "Remember, there are people who care about you. Take it one moment at a time.",
-          300 // 5 minutes later
-        );
-      }, 1000);
-      return;
-    }
-    
-    setMsgs(m => [...m, { role:"user", text: userText }]);
-    setText("");
-    setBusy(true);
-    
+  const loadDailyReflection = async () => {
     try {
-      const verses = await selectVerses(mode, seeds as any, kjv, needIds);
-      const res = await apiGenerate(userText, mode, verses);
+      // Load a default daily reflection
+      const dailyMessage = "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.";
+      const dailyVerses = ["John 14:27"];
 
-      if (res.inspired_message?.text) {
-        const block = res.inspired_message.text + "\n\n" + res.inspired_message.disclaimer;
-        setMsgs(m => [...m, { role:"app", text: block }]);
-        
-        // Analytics: Track successful response
-        track('ai_response_generated', { 
-          mode,
-          needIds,
-          responseLength: res.inspired_message.text.length,
-          citationsCount: res.inspired_message.citations?.length || 0
-        });
-        
-        // Optional TTS
-        if (settings.ttsEnabled) {
-          try {
-            // Debug: Set audio mode for iOS mute switch compatibility
-            await Speech.speak(res.inspired_message.text, { 
-              rate: 0.95, 
-              pitch: 1.0, 
-              language: "en-US",
-              onStart: () => track("tts_play"),
-              onError: (error) => {
-                console.warn("[TTS] Speech failed (check iOS mute switch):", error);
-                track("tts_failed", { error: error?.toString()?.substring(0, 50) });
-              }
-            });
-          } catch (error: any) {
-            console.warn("[TTS] Speech setup failed:", error.message);
-            track("tts_failed", { error: error.message?.substring(0, 50) });
-          }
-        }
-        
-        // Show sharing options for meaningful responses
-        if (res.inspired_message.text.length > 100) {
-          setTimeout(() => {
-            Alert.alert(
-              "Share this reflection? 💫",
-              "Would you like to save or share this meaningful response?",
-              [
-                { text: "Cancel", style: "cancel" },
-                { 
-                  text: "Save Favorite ⭐", 
-                  onPress: () => {
-                    const verseText = verses.map((v: any) => `${v.text} (${v.ref})`).join("; ");
-                    sharing.saveFavorite(res.inspired_message?.text || "", verseText, new Date().toLocaleDateString());
-                    track('reflection_saved_from_alert');
-                  }
-                },
-                { 
-                  text: "Share 📤", 
-                  onPress: () => {
-                    const verseText = verses.map((v: any) => `${v.text} (${v.ref})`).join("; ");
-                    sharing.shareReflection(res.inspired_message?.text || "", verseText);
-                    track('reflection_shared_from_alert');
-                  }
-                }
-              ]
-            );
-          }, 3000); // Show after user has time to read
-        }
-      }
-
-      const scriptureText = verses.map((v: any) => `> ${v.text} (${v.ref})`).join("\n\n");
-      setLastScriptureText(scriptureText);
-      setMsgs(m => [...m, { role:"app", text: scriptureText }]);
-      
-      // Analytics: Track verse delivery
-      track('verses_delivered', { 
-        needIds,
-        versesCount: verses.length,
-        mode
+      setReflection({
+        message: dailyMessage,
+        verses: dailyVerses,
       });
-      
-    } catch (e: any) {
-      track('message_generation_error', { 
-        context: 'message_generation',
-        userText: userText.substring(0, 100),
-        mode
-      });
-      setMsgs(m => [...m, { role:"app", text: "Sorry—something went wrong. Please try again." }]);
-    } finally {
-      setBusy(false);
-      setTimeout(()=> scroll.current?.scrollToEnd({ animated: true }), 50);
+    } catch (error) {
+      console.error("Failed to load daily reflection:", error);
     }
-  }
+  };
+
+  const loadData = async () => {
+    try {
+      const idx = await loadKJVIndex();
+      setKjvIndex(idx);
+      setNeedSeeds(fearAnxietySeeds);
+    } catch (error) {
+      console.error("Failed to load data:", error);
+    }
+  };
+
+  const requestPermissions = async () => {
+    try {
+      await Audio.requestPermissionsAsync();
+    } catch (error) {
+      console.warn("Audio permissions not granted:", error);
+    }
+  };
+
+  const addMessage = useCallback((role: "user" | "app", content: string) => {
+    const message: Message = {
+      id: Date.now().toString(),
+      role,
+      content,
+      timestamp: new Date(),
+    };
+    setMessages(prev => [...prev, message]);
+    setTimeout(() => {
+      flatListRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+  }, []);
+
+  const handleSend = async () => {
+    if (!inputText.trim() || loading) return;
+
+    const userMessage = inputText.trim();
+    setInputText("");
+    addMessage("user", userMessage);
+
+    setLoading(true);
+    track("message_sent", { mode, length: userMessage.length });
+
+    try {
+      // Get relevant verses
+      const verses = kjvIndex && needSeeds ?
+        await selectVerses(mode, needSeeds, kjvIndex, ["fear", "anxiety"]) :
+        [];
+
+      // Generate response
+      const result = await apiGenerate(userMessage, mode, verses);
+
+      if (result.inspired_message) {
+        const response = result.inspired_message;
+        addMessage("app", response.text);
+
+        // Show reflection card if we have verses
+        if (response.citations.length > 0) {
+          setReflection({
+            message: response.text,
+            verses: response.citations,
+          });
+        }
+      } else {
+        addMessage("app", "I'm here to listen and share wisdom from Scripture. How are you feeling today?");
+      }
+    } catch (error: any) {
+      console.error("Generation error:", error);
+      addMessage("app", "I'm having trouble connecting right now. Please try again in a moment.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const startRecording = async () => {
+    try {
+      setRecording(true);
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+        shouldDuckAndroid: true,
+        playThroughEarpieceAndroid: false,
+      });
+
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
+      );
+      recordingRef.current = recording;
+    } catch (error) {
+      console.error("Recording start error:", error);
+      setRecording(false);
+      Alert.alert("Recording Error", "Unable to start recording. Please check microphone permissions.");
+    }
+  };
+
+  const stopRecording = async () => {
+    if (!recordingRef.current) return;
+
+    try {
+      setRecording(false);
+      await recordingRef.current.stopAndUnloadAsync();
+      const uri = recordingRef.current.getURI();
+
+      if (uri) {
+        // Convert to base64 for API
+        const base64 = await FileSystem.readAsStringAsync(uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+
+        // Transcribe
+        const transcribedText = await apiTranscribe("voice.mp3", base64);
+        setInputText(transcribedText);
+      }
+    } catch (error) {
+      console.error("Recording stop error:", error);
+      Alert.alert("Transcription Error", "Unable to process voice recording.");
+    } finally {
+      recordingRef.current = null;
+    }
+  };
+
+  const shareReflection = () => {
+    // TODO: Implement sharing
+    Alert.alert("Share", "Sharing functionality coming soon!");
+  };
+
+  const closeReflection = () => {
+    setReflection(null);
+  };
 
   return (
-    <View style={{ flex:1, backgroundColor:"#0B1016", paddingTop: 56 }}>
-      <View style={{ flexDirection:"row", alignItems:"center", justifyContent:"space-between", paddingHorizontal:10 }}>
-        <Text style={{ color:"#EAF2FF", fontSize:18, fontWeight:"700" }}>Daily Peace</Text>
-        <Pressable onPress={()=> nav.navigate("Settings")} style={{ padding:8, borderRadius:8, backgroundColor:"#141B23" }}>
-          <Text style={{ color:"#EAF2FF" }}>Settings</Text>
-        </Pressable>
-      </View>
-
-      <ModeToggle mode={mode} onChange={setMode} />
-
-      {/* Daily Reflection Card */}
-      {showDailyMessage && dailyReflection && (
-        <View style={{ marginHorizontal: 10, marginBottom: 10, backgroundColor: "#1F2937", borderRadius: 16, overflow: "hidden" }}>
-          <View style={{ backgroundColor: "#2F80ED", padding: 12 }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-              <Text style={{ color: "#fff", fontSize: 16, fontWeight: "700" }}>Today's Reflection 🙏</Text>
-              <Pressable 
-                onPress={() => {
-                  setShowDailyMessage(false);
-                  track('daily_message_dismissed');
-                }}
-                style={{ padding: 4 }}
-              >
-                <Text style={{ color: "#fff", fontSize: 18 }}>×</Text>
-              </Pressable>
+    <Animated.View style={{ flex: 1, backgroundColor: "#0B1016", opacity: fadeAnim }}>
+      <View style={{ flex: 1, paddingHorizontal: 60, position: 'relative' }}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+        >
+        {/* Header */}
+        <View style={{ paddingTop: 56, paddingBottom: 16, paddingHorizontal: 20, backgroundColor: "#0B1016", borderBottomWidth: 1, borderBottomColor: "rgba(255,255,255,0.05)", alignItems: "center" }}>
+          <View style={{ width: "100%", maxWidth: 400, alignItems: "center" }}>
+            <View style={{ alignItems: "center", marginBottom: 12 }}>
+              <Text style={{ color: "#EAF2FF", fontSize: 32, fontWeight: "bold", textAlign: "center", textShadowColor: "rgba(0,0,0,0.3)", textShadowOffset: {width: 0, height: 2}, textShadowRadius: 4 }}>
+                Daily Peace
+              </Text>
+              <Text style={{ color: "#9FB0C3", fontSize: 18, textAlign: "center", marginTop: 6, fontStyle: "italic" }}>
+                Find peace and hope from scriptures ✨
+              </Text>
             </View>
           </View>
-          <View style={{ padding: 16 }}>
-            <Text style={{ color: "#EAF2FF", fontSize: 15, lineHeight: 22, marginBottom: 12 }}>
-              {dailyReflection.text}
-            </Text>
-            {dailyReflection.verses && (
-              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                {dailyReflection.verses.map((verse: string, i: number) => (
-                  <View key={i} style={{ backgroundColor: "#374151", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 }}>
-                    <Text style={{ color: "#9FB0C3", fontSize: 12 }}>{verse}</Text>
-                  </View>
-                ))}
-              </View>
-            )}
-            <Pressable
-              onPress={() => {
-                const verseText = dailyReflection.verses?.join(", ") || "";
-                sharing.shareReflection(dailyReflection.text, verseText);
-                track('daily_reflection_shared');
-              }}
-              style={{ marginTop: 12, alignSelf: "flex-start", paddingHorizontal: 12, paddingVertical: 6, backgroundColor: "#2F80ED", borderRadius: 8 }}
-            >
-              <Text style={{ color: "#fff", fontSize: 12, fontWeight: "600" }}>Share 📤</Text>
-            </Pressable>
+          <View style={{ position: "absolute", left: 20, top: 56 }}>
+            <Animated.View style={{ opacity: 1, transform: [{ scale: logoAnim }], shadowOpacity: logoAnim.interpolate({ inputRange: [0.95, 1.05], outputRange: [0.3, 0.6] }), shadowColor: '#EAF2FF', shadowRadius: 10 }}>
+              <Image source={logo} style={{ width: 120, height: 120, resizeMode: 'contain' }} />
+            </Animated.View>
+          </View>
+          <View style={{ alignSelf: 'center' }}>
+            <ModeToggle value={mode} onChange={setMode} />
           </View>
         </View>
-      )}
 
-      <ScrollView ref={scroll} contentContainerStyle={{ padding: 10 }}>
-        {msgs.map((m,i)=> <MessageBubble key={i} role={m.role}>{m.text}</MessageBubble>)}
-      </ScrollView>
+        {/* Daily Reflection */}
+        {reflection && (
+          <ReflectionCard
+            message={reflection.message}
+            verses={reflection.verses}
+            onShare={shareReflection}
+            onClose={closeReflection}
+          />
+        )}
 
-      {/* Shareable Scripture Card */}
-      {lastScriptureText && (
-        <>
-          <ViewShot ref={scriptureRef} options={{ format: "png", quality: 1 }}>
-            <View style={{ backgroundColor:"#141B23", marginHorizontal:10, marginTop:6, padding:16, borderRadius:16 }}>
-              <Text style={{ color:"#EAF2FF", fontWeight:"700", marginBottom:6 }}>Direct Words of Jesus</Text>
-              <Text style={{ color:"#EAF2FF" }}>
-                {lastScriptureText}
+        {/* Messages */}
+        <FlatList
+          ref={flatListRef}
+          data={messages}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <MessageBubble role={item.role}>
+              {item.content}
+            </MessageBubble>
+          )}
+          style={{ flex: 1, paddingHorizontal: 8 }}
+          contentContainerStyle={{ paddingVertical: 16, flexGrow: messages.length === 0 ? 1 : 0 }}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 24, paddingTop: 20 }}>
+              <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
+                Start a conversation above, or tap the close button on the reflection to begin chatting. ✨
               </Text>
-              <Text style={{ color:"#9FB0C3", marginTop:12, fontSize:12 }}>Daily Peace • dailypeace.life</Text>
             </View>
-          </ViewShot>
-
-          <View style={{ flexDirection:"row", justifyContent:"flex-end", paddingHorizontal:10, marginTop:6 }}>
-            <Pressable onPress={async ()=>{
-              try {
-                const uri = await scriptureRef.current?.capture?.();
-                if (uri && await Sharing.isAvailableAsync()) {
-                  await Sharing.shareAsync(uri);
-                  track("share_scripture_card");
-                }
-              } catch {}
-            }} style={{ paddingVertical:8, paddingHorizontal:12, backgroundColor:"#2F80ED", borderRadius:12 }}>
-              <Text style={{ color:"#fff", fontWeight:"700" }}>Share Scripture</Text>
-            </Pressable>
-          </View>
-        </>
-      )}
-
-      <View style={{ flexDirection:"row", gap:8, padding:10, alignItems:"center" }}>
-        <MicButton onTranscribed={(t)=> setText(t)} />
-        <TextInput
-          placeholder="Share what's on your heart…"
-          placeholderTextColor="#9FB0C3"
-          value={text}
-          onChangeText={setText}
-          style={{ flex:1, backgroundColor:"#141B23", color:"#EAF2FF", padding:12, borderRadius:12 }}
+          }
         />
-        <Pressable disabled={busy} onPress={()=> onSend(text)} style={{ padding:12, borderRadius:12, backgroundColor: busy ? "#3a485d" : "#2F80ED" }}>
-          <Text style={{ color:"#fff", fontWeight: "700" }}>{busy ? "…" : "Send"}</Text>
-        </Pressable>
+
+        {/* Input */}
+        <View style={{ backgroundColor: "#0B1016", borderTopWidth: 1, borderTopColor: "rgba(255,255,255,0.05)" }}>
+          <ChatInput
+            value={inputText}
+            onChangeText={setInputText}
+            onSend={handleSend}
+            onVoiceStart={startRecording}
+            onVoiceEnd={stopRecording}
+            recording={recording}
+            disabled={loading}
+          />
+        </View>
+        </KeyboardAvoidingView>
+        <View style={{ position: "absolute", right: -40, top: 56 }}>
+          <Pressable
+            onPress={() => nav.navigate("Settings")}
+            style={{ padding: 8, borderRadius: 8 }}
+            android_ripple={{ color: "rgba(255,255,255,0.1)" }}
+          >
+            <Text style={{ color: "#9FB0C3", fontSize: 18 }}>⚙️</Text>
+          </Pressable>
+        </View>
       </View>
-    </View>
+    </Animated.View>
   );
 }

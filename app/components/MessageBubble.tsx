@@ -1,18 +1,47 @@
 
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { View, Text, Animated } from "react-native";
 
 export function MessageBubble({ role, children }:{ role:"user"|"app"; children: React.ReactNode }) {
   const isUser = role==="user";
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(isUser ? 20 : -20)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 400,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
   return (
-    <View style={[styles.row, { justifyContent: isUser ? "flex-end" : "flex-start" }]}>
-      <View style={[styles.bubble, { backgroundColor: isUser ? "#2F80ED" : "#141B23" }]}>
-        <Text style={{ color:"#EAF2FF" }}>{children}</Text>
+    <Animated.View
+      style={{
+        flexDirection: "row",
+        marginVertical: 3,
+        paddingHorizontal: 6,
+        justifyContent: isUser ? "flex-end" : "flex-start",
+        opacity: fadeAnim,
+        transform: [{ translateX: slideAnim }],
+      }}
+    >
+      <View style={{
+        maxWidth: "85%",
+        borderRadius: 18,
+        paddingHorizontal: 12,
+        paddingVertical: 12,
+        backgroundColor: isUser ? "#3B82F6" : "#141B23"
+      }}>
+        <Text style={{ color: "#FFFFFF", fontSize: 16, lineHeight: 24 }}>{children}</Text>
       </View>
-    </View>
+    </Animated.View>
   );
 }
-const styles = StyleSheet.create({
-  row:{ flexDirection:"row", marginVertical:6, paddingHorizontal:10 },
-  bubble:{ maxWidth:"85%", borderRadius:14, padding:12 }
-});
