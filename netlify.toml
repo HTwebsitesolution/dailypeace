@@ -3,6 +3,9 @@
   publish = "web-dist"
   command = "npx expo export --platform web --output-dir web-dist && echo '# API routes\n/api/* /.netlify/functions/:splat 200\n\n# SPA fallback\n/* /index.html 200' > web-dist/_redirects"
 
+[build.environment]
+  NODE_VERSION = "18"
+
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
