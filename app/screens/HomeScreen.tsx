@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { ImageBackground, View, Text, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ReflectionCard from "../components/ReflectionCard";
 import ModeToggle from "../components/ModeToggle";
 
+const backgrounds = {
+  conversational: require("../../assets/images/hero-ocean.png"),
+  biblical: require("../../assets/images/hero-mountain.png"),
+  reflective: require("../../assets/images/hero-ocean.png"),
+};
+
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
+  const [mode, setMode] = useState<"conversational" | "biblical" | "reflective">("conversational");
 
   return (
     <ImageBackground
-      source={require("../../assets/images/hero-bg.png")}
+      source={backgrounds[mode]}
       resizeMode="cover"
       style={{ flex: 1, backgroundColor: "#0B1016" }}
     >
@@ -19,7 +26,7 @@ export default function HomeScreen() {
           Find peace and hope from scripture ✨
         </Text>
 
-        <ModeToggle value="conversational" onChange={() => {}} />
+        <ModeToggle value={mode} onChange={setMode} />
 
         <View style={{ marginTop: 32, width: "100%", maxWidth: 400 }}>
           <ReflectionCard
