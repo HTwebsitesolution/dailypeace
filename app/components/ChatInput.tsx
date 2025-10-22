@@ -36,7 +36,7 @@ export default function ChatInput({
         accessibilityLabel="Hold to speak"
       >
         <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>
-          {recording ? "🎙️ Listening…" : "🎤 Hold to Speak"}
+          {recording ? "🎙️ Listening with care…" : "🎤 Hold to share your voice"}
         </Text>
       </Pressable>
 
@@ -54,7 +54,7 @@ export default function ChatInput({
           ref={inputRef}
           value={value}
           onChangeText={onChangeText}
-          placeholder="Share what's on your heart today..."
+          placeholder="What's on your mind? I'm listening..."
           placeholderTextColor="#9FB0C3"
           editable={!disabled}
           multiline
@@ -74,7 +74,7 @@ export default function ChatInput({
         }}
         accessibilityLabel="Send message"
       >
-        <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>Send ✉️</Text>
+        <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>Send 💌</Text>
       </Pressable>
     </View>
   );
