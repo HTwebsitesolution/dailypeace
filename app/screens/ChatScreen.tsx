@@ -217,11 +217,11 @@ export default function ChatScreen() {
   return (
     <Animated.View style={{ flex: 1, backgroundColor: "#0B1016", opacity: fadeAnim }}>
       <View style={{ flex: 1, paddingHorizontal: 60, position: 'relative' }}>
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-        >
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+          >
         {/* Header */}
         <View style={{ paddingTop: 56, paddingBottom: 16, paddingHorizontal: 20, backgroundColor: "#0B1016", borderBottomWidth: 1, borderBottomColor: "rgba(255,255,255,0.05)", alignItems: "center" }}>
           <View style={{ width: "100%", maxWidth: 400, alignItems: "center" }}>
@@ -298,7 +298,7 @@ export default function ChatScreen() {
             <Text style={{ color: "#9FB0C3", fontSize: 18 }}>⚙️</Text>
           </Pressable>
         </View>
-      </View>
-    </Animated.View>
+        </View>
+      </Animated.View>
   );
 }
