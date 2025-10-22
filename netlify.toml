@@ -5,6 +5,7 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  EXPO_CLI_VERSION = "latest"
 
 [functions]
   directory = "netlify/functions"
