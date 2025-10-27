@@ -14,6 +14,7 @@ import ModeToggle from "../components/ModeToggle";
 import { MessageBubble } from "../components/MessageBubble";
 import ChatInput from "../components/ChatInput";
 import ReflectionCard from "../components/ReflectionCard";
+import AtmosphericBackground from "../components/AtmosphericBackground";
 
 const logo = require("../../assets/DailyPeace App Logo.png");
 
@@ -129,12 +130,26 @@ export default function ChatScreen() {
 
     try {
       // Get relevant verses
-      const verses = kjvIndex && needSeeds ?
-        await selectVerses(mode, needSeeds, kjvIndex, ["fear", "anxiety"]) :
-        [];
+      let verses: Verse[] = [];
+      if (kjvIndex && needSeeds) {
+        try {
+          verses = await selectVerses(mode, needSeeds, kjvIndex, ["fear", "anxiety"]);
+          console.log(`[Chat] Selected ${verses.length} verses for context`);
+        } catch (verseError) {
+          console.warn("[Chat] Verse selection failed, continuing without verses:", verseError);
+          verses = [];
+        }
+      } else {
+        console.warn("[Chat] kjvIndex or needSeeds not loaded yet");
+      }
 
-      // Generate response
-      const result = await apiGenerate(userMessage, mode, verses);
+      // Generate response with timeout
+      const result = await Promise.race([
+        apiGenerate(userMessage, mode, verses),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error("Request timeout after 30 seconds")), 30000)
+        )
+      ]) as GenerateResult;
 
       if (result.inspired_message) {
         const response = result.inspired_message;
@@ -152,7 +167,10 @@ export default function ChatScreen() {
       }
     } catch (error: any) {
       console.error("Generation error:", error);
-      addMessage("app", "I'm having trouble connecting right now. Please try again in a moment.");
+      // Provide more specific error information for debugging
+      const errorMsg = error?.message || "Unknown error";
+      console.error("Full error details:", { errorMsg, error });
+      addMessage("app", `I'm having a little trouble right now. Let's try again in a moment, okay?`);
     } finally {
       setLoading(false);
     }
@@ -215,90 +233,139 @@ export default function ChatScreen() {
   };
 
   return (
-    <Animated.View style={{ flex: 1, backgroundColor: "#0B1016", opacity: fadeAnim }}>
-      <View style={{ flex: 1, paddingHorizontal: 60, position: 'relative' }}>
-          <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-          >
-        {/* Header */}
-        <View style={{ paddingTop: 56, paddingBottom: 16, paddingHorizontal: 20, backgroundColor: "#0B1016", borderBottomWidth: 1, borderBottomColor: "rgba(255,255,255,0.05)", alignItems: "center" }}>
-          <View style={{ width: "100%", maxWidth: 400, alignItems: "center" }}>
-            <View style={{ alignItems: "center", marginBottom: 12 }}>
-              <Text style={{ color: "#EAF2FF", fontSize: 32, fontWeight: "bold", textAlign: "center", textShadowColor: "rgba(0,0,0,0.3)", textShadowOffset: {width: 0, height: 2}, textShadowRadius: 4 }}>
-                Daily Peace
-              </Text>
-              <Text style={{ color: "#9FB0C3", fontSize: 18, textAlign: "center", marginTop: 6, fontStyle: "italic" }}>
-                Find peace and hope from scriptures ✨
-              </Text>
+    <AtmosphericBackground 
+      mode={mode} 
+      rotationInterval={50000}
+      enableTimeRotation={true}
+      enableModeRotation={true}
+    >
+      <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+        <View style={{ flex: 1, paddingHorizontal: 60, position: 'relative' }}>
+            <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+            >
+          {/* Header */}
+          <View style={{ paddingTop: 56, paddingBottom: 16, paddingHorizontal: 20, backgroundColor: "rgba(20,27,35,0.6)", borderBottomWidth: 1, borderBottomColor: "rgba(255,255,255,0.05)", alignItems: "center" }}>
+            <View style={{ width: "100%", maxWidth: 400, alignItems: "center" }}>
+              <View style={{ alignItems: "center", marginBottom: 12 }}>
+                <Animated.View
+                  style={{
+                    opacity: fadeAnim,
+                    transform: [{ translateY: fadeAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [-20, 0]
+                    })}],
+                  }}
+                >
+                  <Text style={{ color: "#EAF2FF", fontSize: 38, fontWeight: "bold", textAlign: "center", textShadowColor: "rgba(0,0,0,0.3)", textShadowOffset: {width: 0, height: 2}, textShadowRadius: 4 }}>
+                    Daily Peace
+                  </Text>
+                </Animated.View>
+                <Animated.View
+                  style={{
+                    opacity: fadeAnim,
+                    transform: [{ translateY: fadeAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [-10, 0]
+                    })}],
+                  }}
+                >
+                  <Text style={{ color: "#9FB0C3", fontSize: 20, textAlign: "center", marginTop: 6, fontStyle: "italic" }}>
+                    Find peace and hope from scriptures ✨
+                  </Text>
+                </Animated.View>
+              </View>
+            </View>
+            <View style={{ position: "absolute", left: 20, top: 56 }}>
+              <Animated.View style={{ 
+                opacity: 1, 
+                transform: [{ scale: logoAnim }], 
+                shadowColor: '#EAF2FF',
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: logoAnim.interpolate({ inputRange: [0.95, 1.05], outputRange: [0.3, 0.6] }), 
+                shadowRadius: 10,
+                elevation: 5
+              }}>
+                <Image 
+                  source={logo} 
+                  style={{ 
+                    width: 120, 
+                    height: 120, 
+                    resizeMode: 'contain'
+                  }} 
+                />
+              </Animated.View>
+            </View>
+            <View style={{ alignSelf: 'center' }}>
+              <Animated.View
+                style={{
+                  opacity: fadeAnim,
+                  transform: [{ scale: fadeAnim }],
+                }}
+              >
+                <ModeToggle value={mode} onChange={setMode} />
+              </Animated.View>
             </View>
           </View>
-          <View style={{ position: "absolute", left: 20, top: 56 }}>
-            <Animated.View style={{ opacity: 1, transform: [{ scale: logoAnim }], shadowOpacity: logoAnim.interpolate({ inputRange: [0.95, 1.05], outputRange: [0.3, 0.6] }), shadowColor: '#EAF2FF', shadowRadius: 10 }}>
-              <Image source={logo} style={{ width: 120, height: 120, resizeMode: 'contain' }} />
-            </Animated.View>
-          </View>
-          <View style={{ alignSelf: 'center' }}>
-            <ModeToggle value={mode} onChange={setMode} />
-          </View>
-        </View>
 
-        {/* Daily Reflection */}
-        {reflection && (
-          <ReflectionCard
-            message={reflection.message}
-            verses={reflection.verses}
-            onShare={shareReflection}
-            onClose={closeReflection}
-          />
-        )}
-
-        {/* Messages */}
-        <FlatList
-          ref={flatListRef}
-          data={messages}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <MessageBubble role={item.role}>
-              {item.content}
-            </MessageBubble>
+          {/* Daily Reflection */}
+          {reflection && (
+            <ReflectionCard
+              message={reflection.message}
+              verses={reflection.verses}
+              onShare={shareReflection}
+              onClose={closeReflection}
+            />
           )}
-          style={{ flex: 1, paddingHorizontal: 8 }}
-          contentContainerStyle={{ paddingVertical: 16, flexGrow: messages.length === 0 ? 1 : 0 }}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 24, paddingTop: 20 }}>
-              <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
-                Start a conversation above, or tap the close button on the reflection to begin chatting. ✨
-              </Text>
-            </View>
-          }
-        />
 
-        {/* Input */}
-        <View style={{ backgroundColor: "#0B1016", borderTopWidth: 1, borderTopColor: "rgba(255,255,255,0.05)" }}>
-          <ChatInput
-            value={inputText}
-            onChangeText={setInputText}
-            onSend={handleSend}
-            onVoiceStart={startRecording}
-            onVoiceEnd={stopRecording}
-            recording={recording}
-            disabled={loading}
+          {/* Messages */}
+          <FlatList
+            ref={flatListRef}
+            data={messages}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <MessageBubble role={item.role}>
+                {item.content}
+              </MessageBubble>
+            )}
+            style={{ flex: 1, paddingHorizontal: 8 }}
+            contentContainerStyle={{ paddingVertical: 16, flexGrow: messages.length === 0 ? 1 : 0 }}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 24, paddingTop: 20 }}>
+                <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
+                  Start a conversation above, or tap the close button on the reflection to begin chatting. ✨
+                </Text>
+              </View>
+            }
           />
-        </View>
-        </KeyboardAvoidingView>
-        <View style={{ position: "absolute", right: -40, top: 56 }}>
-          <Pressable
-            onPress={() => nav.navigate("Settings")}
-            style={{ padding: 8, borderRadius: 8 }}
-            android_ripple={{ color: "rgba(255,255,255,0.1)" }}
-          >
-            <Text style={{ color: "#9FB0C3", fontSize: 18 }}>⚙️</Text>
-          </Pressable>
-        </View>
-        </View>
-      </Animated.View>
+
+          {/* Input */}
+          <View style={{ backgroundColor: "rgba(20,27,35,0.6)", borderTopWidth: 1, borderTopColor: "rgba(255,255,255,0.05)" }}>
+            <ChatInput
+              value={inputText}
+              onChangeText={setInputText}
+              onSend={handleSend}
+              onVoiceStart={startRecording}
+              onVoiceEnd={stopRecording}
+              recording={recording}
+              disabled={loading}
+            />
+          </View>
+          </KeyboardAvoidingView>
+          <View style={{ position: "absolute", right: -40, top: 56 }}>
+            <Pressable
+              onPress={() => nav.navigate("Settings")}
+              style={{ padding: 8, borderRadius: 8 }}
+              android_ripple={{ color: "rgba(255,255,255,0.1)" }}
+            >
+              <Text style={{ color: "#9FB0C3", fontSize: 18 }}>⚙️</Text>
+            </Pressable>
+          </View>
+          </View>
+        </Animated.View>
+    </AtmosphericBackground>
   );
 }

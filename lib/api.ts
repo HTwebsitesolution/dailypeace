@@ -7,11 +7,16 @@ export async function apiGenerate(user_text: string, mode: Mode, verses: Verse[]
     // Debug: Log API call details
     console.log(`[API] Calling ${API_BASE}/generate with ${verses.length} verses`);
     
+    const requestBody = JSON.stringify({ user_text, mode, verses });
+    console.log(`[API] Request body length: ${requestBody.length} chars`);
+    
     const res = await fetch(`${API_BASE}/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_text, mode, verses })
+      body: requestBody
     });
+    
+    console.log(`[API] Response status: ${res.status}`);
     
     if (!res.ok) {
       const errorText = await res.text().catch(() => "Unknown error");
@@ -19,9 +24,13 @@ export async function apiGenerate(user_text: string, mode: Mode, verses: Verse[]
       throw new Error(`Generate failed: ${res.status} ${errorText}`);
     }
     
-    return await res.json() as GenerateResult;
+    const result = await res.json();
+    console.log(`[API] Success! Got response with ${result.inspired_message ? 'message' : 'no message'}`);
+    return result as GenerateResult;
   } catch (error: any) {
-    console.error("[API] Network error:", error.message);
+    console.error("[API] Network error:", error);
+    console.error("[API] Error message:", error?.message);
+    console.error("[API] Error stack:", error?.stack);
     throw new Error(`API Error: ${error.message}`);
   }
 }
