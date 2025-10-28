@@ -24,13 +24,6 @@
     },
     "plugins": [
       [
-        "sentry-expo",
-        {
-          "project": "dailypeace",
-          "organization": "htwebsolutions"
-        }
-      ],
-      [
         "expo-notifications",
         {
           "icon": "./assets/icon.png",
