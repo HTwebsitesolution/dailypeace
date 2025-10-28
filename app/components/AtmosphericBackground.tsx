@@ -117,7 +117,7 @@ export default function AtmosphericBackground({
     return {
       opacity: fadeAnim.interpolate({
         inputRange: [0, 1],
-        outputRange: [0.4, 0.5], // Lower opacity for better text visibility
+        outputRange: [0.65, 0.75], // Brighter images for sharper appearance
       }),
     };
   };
@@ -141,33 +141,33 @@ export default function AtmosphericBackground({
           ],
         }}
       >
-        {/* Dark overlay for better content readability */}
+        {/* Subtle overlay for content readability */}
         <View style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.65)', // Much stronger overlay for text visibility
+          backgroundColor: 'rgba(0,0,0,0.35)', // Light overlay to preserve image brightness
         }} />
         
-        {/* Additional vignette effect for ambient focus */}
+        {/* Soft vignette effect */}
         <View style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.20)', // Stronger vignette
+          backgroundColor: 'rgba(0,0,0,0.10)', // Subtle vignette
         }} />
         
         {/* Content overlay */}
         <Animated.View style={{ 
           flex: 1, 
-          backgroundColor: "rgba(11, 16, 22, 0.15)", // Stronger content overlay
+          backgroundColor: "rgba(11, 16, 22, 0.05)", // Minimal content overlay
           opacity: fadeAnim.interpolate({
             inputRange: [0.2, 1],
-            outputRange: [0.3, 0.2], // Stronger dynamic overlay
+            outputRange: [0.1, 0.05], // Very subtle dynamic overlay
           })
         }}>
           {children}

@@ -58,7 +58,7 @@ export default function ReflectionCard({
         right: 0,
         bottom: 0,
         borderRadius: 24,
-        backgroundColor: 'rgba(0, 0, 0, 0.3)', // Additional darkening layer
+        backgroundColor: 'rgba(0, 0, 0, 0.15)', // Subtle darkening layer
       }} />
       {/* Header */}
       <View style={{
