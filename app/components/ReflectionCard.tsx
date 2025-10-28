@@ -37,29 +37,43 @@ export default function ReflectionCard({
       style={{
         marginHorizontal: 12,
         marginTop: 12,
-        borderRadius: 20,
-        backgroundColor: "#141B23",
+        borderRadius: 24,
+        backgroundColor: "#0F172A", // Premium dark blue-gray, fully opaque
         shadowColor: "#000000",
-        shadowOffset: { width: 0, height: 16 },
-        shadowOpacity: 0.5,
-        shadowRadius: 12,
-        elevation: 8,
+        shadowOffset: { width: 0, height: 20 },
+        shadowOpacity: 0.7,
+        shadowRadius: 16,
+        elevation: 12,
         opacity: fadeAnim,
         transform: [{ scale: scaleAnim }],
+        borderWidth: 1,
+        borderColor: "rgba(255,255,255,0.08)", // Subtle border for premium feel
       }}
     >
+      {/* Inner overlay for absolute text protection */}
+      <View style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        borderRadius: 24,
+        backgroundColor: 'rgba(0, 0, 0, 0.3)', // Additional darkening layer
+      }} />
       {/* Header */}
       <View style={{
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        backgroundColor: "rgba(59, 130, 246, 0.9)"
+        paddingHorizontal: 20,
+        paddingVertical: 16,
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
+        backgroundColor: "rgba(59, 130, 246, 0.95)", // More solid, vibrant blue
+        borderBottomWidth: 1,
+        borderBottomColor: "rgba(255,255,255,0.1)"
       }}>
-        <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>A Moment of Peace 🙏</Text>
+        <Text style={{ color: "#FFFFFF", fontWeight: "700", fontSize: 18, letterSpacing: 0.3 }}>A Moment of Peace 🙏</Text>
         {onClose ? (
           <Pressable
             onPress={onClose}
@@ -77,8 +91,17 @@ export default function ReflectionCard({
       </View>
 
       {/* Body */}
-      <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
-        <Text style={{ color: "#FFFFFF", fontSize: 18, lineHeight: 28 }}>{message}</Text>
+      <View style={{ paddingHorizontal: 20, paddingVertical: 20, zIndex: 1 }}>
+        <Text style={{ 
+          color: "#FFFFFF", 
+          fontSize: 19, 
+          lineHeight: 30,
+          fontWeight: "400",
+          textShadowColor: "rgba(0, 0, 0, 0.5)",
+          textShadowOffset: { width: 0, height: 1 },
+          textShadowRadius: 3,
+          letterSpacing: 0.2
+        }}>{message}</Text>
 
         {/* Verses */}
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 16 }}>
@@ -91,12 +114,14 @@ export default function ReflectionCard({
               }}
             >
               <View style={{
-                backgroundColor: "rgba(255,255,255,0.1)",
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                borderRadius: 12
+                backgroundColor: "rgba(165, 180, 252, 0.15)", // Slightly more visible
+                paddingHorizontal: 12,
+                paddingVertical: 6,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: "rgba(165, 180, 252, 0.3)"
               }}>
-                <Text style={{ color: "#A5B4FC", fontSize: 14, fontWeight: "600" }}>{v}</Text>
+                <Text style={{ color: "#E0E7FF", fontSize: 14, fontWeight: "700" }}>{v}</Text>
               </View>
             </Animated.View>
           ))}
@@ -118,13 +143,18 @@ export default function ReflectionCard({
                 onPress={onShare}
                 style={{
                   backgroundColor: "#3B82F6",
-                  paddingHorizontal: 12,
-                  paddingVertical: 8,
-                  borderRadius: 16
+                  paddingHorizontal: 16,
+                  paddingVertical: 12,
+                  borderRadius: 16,
+                  shadowColor: "#3B82F6",
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.4,
+                  shadowRadius: 8,
+                  elevation: 6,
                 }}
-                android_ripple={{ color: "#ffffff30" }}
+                android_ripple={{ color: "#ffffff40" }}
               >
-                <Text style={{ color: "#FFFFFF", fontWeight: "600", fontSize: 16 }}>Share this blessing 🔗</Text>
+                <Text style={{ color: "#FFFFFF", fontWeight: "700", fontSize: 16 }}>Share this blessing 🔗</Text>
               </Pressable>
             </Animated.View>
           ) : null}

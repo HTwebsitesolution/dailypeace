@@ -50,7 +50,7 @@ export default function HomeScreen() {
             transform: [{ translateY: translateYAnim }],
           }}
         >
-          <Text style={{ fontSize: 20, color: "#9FB0C3", marginBottom: 24, textAlign: "center" }}>Find peace and hope from scripture ✨</Text>
+          <Text style={{ fontSize: 20, color: "#E2E8F0", marginBottom: 24, textAlign: "center", fontWeight: "500" }}>Find peace and hope from scripture ✨</Text>
         </Animated.View>
 
         <Animated.View
@@ -104,7 +104,7 @@ export default function HomeScreen() {
             }}
             onPress={() => navigation.navigate("Chat")}
           >
-            <Text style={{ color: "#FFFFFF", fontSize: 20, fontWeight: "600" }}>Start a Conversation 🙏</Text>
+            <Text style={{ color: "#FFFFFF", fontSize: 20, fontWeight: "700" }}>Start a Conversation 🙏</Text>
           </Pressable>
         </Animated.View>
       </View>
