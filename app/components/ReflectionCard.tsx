@@ -38,7 +38,7 @@ export default function ReflectionCard({
         marginHorizontal: 12,
         marginTop: 12,
         borderRadius: 24,
-        backgroundColor: "#0F172A", // Very dark blue-gray for maximum contrast
+        backgroundColor: "#020617", // Extremely dark blue-gray - almost black for maximum contrast
         shadowColor: "#000000",
         shadowOffset: { width: 0, height: 20 },
         shadowOpacity: 0.7,
@@ -58,7 +58,7 @@ export default function ReflectionCard({
         right: 0,
         bottom: 0,
         borderRadius: 24,
-        backgroundColor: 'rgba(0, 0, 0, 0.35)', // Stronger darkening layer for text protection
+        backgroundColor: 'rgba(0, 0, 0, 0.50)', // Very strong darkening layer for text protection
       }} />
       {/* Header */}
       <View style={{
@@ -75,12 +75,12 @@ export default function ReflectionCard({
       }}>
         <Text style={{ 
           color: "#FFFFFF", 
-          fontWeight: "800", 
-          fontSize: 20, 
-          letterSpacing: 0.5,
-          textShadowColor: "rgba(0, 0, 0, 0.5)",
-          textShadowOffset: { width: 0, height: 2 },
-          textShadowRadius: 4
+          fontWeight: "900", 
+          fontSize: 22, 
+          letterSpacing: 0.6,
+          textShadowColor: "rgba(0, 0, 0, 0.9)",
+          textShadowOffset: { width: 0, height: 3 },
+          textShadowRadius: 5
         }}>A Moment of Peace 🙏</Text>
         {onClose ? (
           <Pressable
@@ -102,13 +102,13 @@ export default function ReflectionCard({
       <View style={{ paddingHorizontal: 20, paddingVertical: 20, zIndex: 1 }}>
         <Text style={{ 
           color: "#FFFFFF", 
-          fontSize: 22, 
-          lineHeight: 34,
-          fontWeight: "600",
-          textShadowColor: "rgba(0, 0, 0, 0.9)",
-          textShadowOffset: { width: 0, height: 3 },
-          textShadowRadius: 6,
-          letterSpacing: 0.4
+          fontSize: 24, 
+          lineHeight: 38,
+          fontWeight: "700",
+          textShadowColor: "rgba(0, 0, 0, 1.0)",
+          textShadowOffset: { width: 0, height: 4 },
+          textShadowRadius: 8,
+          letterSpacing: 0.5
         }}>{message}</Text>
 
         {/* Verses */}

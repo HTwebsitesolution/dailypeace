@@ -117,7 +117,7 @@ export default function AtmosphericBackground({
     return {
       opacity: fadeAnim.interpolate({
         inputRange: [0, 1],
-        outputRange: [0.65, 0.75], // Brighter images for sharper appearance
+        outputRange: [0.25, 0.35], // Much darker images for maximum text readability
       }),
     };
   };
@@ -148,7 +148,7 @@ export default function AtmosphericBackground({
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.55)', // Stronger dark overlay for text visibility
+          backgroundColor: 'rgba(0,0,0,0.70)', // Very strong dark overlay for text visibility
         }} />
         
         {/* Additional vignette effect */}
@@ -158,7 +158,7 @@ export default function AtmosphericBackground({
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.15)', // Stronger vignette
+          backgroundColor: 'rgba(0,0,0,0.20)', // Strong vignette
         }} />
         
         {/* Content overlay */}

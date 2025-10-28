@@ -47,7 +47,7 @@ export default function HomeScreen() {
           }}
         >
           <Text style={{ 
-            fontSize: 46, 
+            fontSize: 52, 
             fontWeight: "900", 
             color: "#FFFFFF", 
             marginBottom: 8, 
@@ -67,7 +67,7 @@ export default function HomeScreen() {
           }}
         >
           <Text style={{ 
-            fontSize: 22, 
+            fontSize: 24, 
             color: "#FFFFFF", 
             marginBottom: 24, 
             textAlign: "center", 

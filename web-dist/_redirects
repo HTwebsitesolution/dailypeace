@@ -1,6 +1,6 @@
 # API routes
 /api/* /.netlify/functions/:splat 200
 
-# SPA fallback
+# SPA fall teachingsback
 /* /index.html 200
 
