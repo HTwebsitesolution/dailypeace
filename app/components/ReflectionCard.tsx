@@ -21,12 +21,12 @@ export default function ReflectionCard({
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 600,
+        duration: 1200,
         useNativeDriver: true,
       }),
       Animated.timing(scaleAnim, {
         toValue: 1,
-        duration: 400,
+        duration: 1200,
         useNativeDriver: true,
       }),
     ]).start();
@@ -78,37 +78,55 @@ export default function ReflectionCard({
 
       {/* Body */}
       <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
-        <Text style={{ color: "#FFFFFF", fontSize: 16, lineHeight: 24 }}>{message}</Text>
+        <Text style={{ color: "#FFFFFF", fontSize: 18, lineHeight: 28 }}>{message}</Text>
 
         {/* Verses */}
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 16 }}>
-          {verses.map((v) => (
-            <View key={v} style={{
-              backgroundColor: "rgba(255,255,255,0.1)",
-              paddingHorizontal: 8,
-              paddingVertical: 4,
-              borderRadius: 12
-            }}>
-              <Text style={{ color: "#A5B4FC", fontSize: 13, fontWeight: "600" }}>{v}</Text>
-            </View>
+          {verses.map((v, index) => (
+            <Animated.View
+              key={v}
+              style={{
+                opacity: fadeAnim,
+                transform: [{ scale: scaleAnim }],
+              }}
+            >
+              <View style={{
+                backgroundColor: "rgba(255,255,255,0.1)",
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                borderRadius: 12
+              }}>
+                <Text style={{ color: "#A5B4FC", fontSize: 14, fontWeight: "600" }}>{v}</Text>
+              </View>
+            </Animated.View>
           ))}
         </View>
 
         {/* Actions */}
         <View style={{ flexDirection: "row", gap: 32, marginTop: 16 }}>
           {onShare ? (
-            <Pressable
-              onPress={onShare}
+            <Animated.View
               style={{
-                backgroundColor: "#3B82F6",
-                paddingHorizontal: 12,
-                paddingVertical: 8,
-                borderRadius: 16
+                opacity: fadeAnim,
+                transform: [{ translateX: fadeAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-20, 0]
+                })}],
               }}
-              android_ripple={{ color: "#ffffff30" }}
             >
-              <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>Share this blessing 🔗</Text>
-            </Pressable>
+              <Pressable
+                onPress={onShare}
+                style={{
+                  backgroundColor: "#3B82F6",
+                  paddingHorizontal: 12,
+                  paddingVertical: 8,
+                  borderRadius: 16
+                }}
+                android_ripple={{ color: "#ffffff30" }}
+              >
+                <Text style={{ color: "#FFFFFF", fontWeight: "600", fontSize: 16 }}>Share this blessing 🔗</Text>
+              </Pressable>
+            </Animated.View>
           ) : null}
         </View>
       </View>

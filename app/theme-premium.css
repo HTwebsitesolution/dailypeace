@@ -1,0 +1,121 @@
+/* app/theme-premium.css
+   Premium utilities for web (Expo web, Next, Netlify).
+   Add this to your web bundle (see usage notes below).
+*/
+
+/* ---------- Color tokens (mirror Tailwind / brand) ---------- */
+:root{
+  --bg:#0B1016;
+  --surface:#141B23;
+  --primary:#3B82F6;
+  --accent:#FCD34D;
+  --text:#EAF2FF;
+  --muted:#9FB0C3;
+}
+
+/* ---------- Base polish ---------- */
+html,body,#root{height:100%}
+body{background:var(--bg);color:var(--text);}
+
+/* ---------- Utilities layer (Tailwind will keep these) ---------- */
+@layer utilities {
+
+  /* Frosted glass cards */
+  .glass {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+  }
+  .glass-deep {
+    background: rgba(20,27,35,0.55);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 1.5rem;
+    box-shadow: 0 18px 60px rgba(0,0,0,0.5);
+  }
+
+  /* Hero overlays (stack above background image) */
+  .hero-overlay {               /* top→bottom scrim for legibility */
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.55) 0%,
+      rgba(0,0,0,0.38) 35%,
+      rgba(11,16,22,0.85) 100%
+    );
+    pointer-events: none;
+  }
+  .vignette {                   /* soft radial darkening around edges */
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center,
+      rgba(0,0,0,0.0) 30%,
+      rgba(0,0,0,0.18) 65%,
+      rgba(0,0,0,0.36) 100%);
+    pointer-events: none;
+  }
+
+  /* Halo behind icons / logo (wrap on a relative container) */
+  .halo {
+    position: relative;
+    isolation: isolate;
+  }
+  .halo::before {
+    content: ""; position: absolute; inset: -15%;
+    background: radial-gradient(circle at 50% 50%,
+      rgba(252,211,77,0.35) 0%,
+      rgba(59,130,246,0.18) 40%,
+      rgba(0,0,0,0.0) 70%);
+    filter: blur(14px);
+    z-index: -1;
+  }
+
+
+  /* Premium button gradient */
+  .btn-gradient {
+    background-image: linear-gradient(135deg, var(--primary), #5EA8FF 35%, var(--accent));
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(59,130,246,.35);
+  }
+  .btn-gradient:hover { filter: brightness(1.05); }
+  .btn-gradient:active { transform: translateY(1px); }
+
+  /* Verse/chip pill */
+  .chip {
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.10);
+    color: #A5B4FC;
+    border-radius: 10px;
+  }
+
+  /* Text glow (use sparingly: titles / small accents) */
+  .text-glow-sm { text-shadow: 0 0 8px rgba(255,255,255,0.15); }
+  .text-glow   { text-shadow:
+      0 0 10px rgba(255,255,255,0.18),
+      0 0 22px rgba(250,200,120,0.18);
+  }
+
+  /* Card shadow elevations */
+  .shadow-soft { box-shadow: 0 10px 30px rgba(0,0,0,0.30); }
+  .shadow-deep { box-shadow: 0 20px 60px rgba(0,0,0,0.45); }
+
+  /* Motion (gentle) */
+  .fade-in { animation: fadeIn .8s ease-out both; }
+  .rise-in { animation: riseIn 1s ease-out both; }
+  .float-slow { animation: floatSlow 6s ease-in-out infinite; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes floatSlow {
+    0%,100% { transform: translateY(0px); }
+    50%     { transform: translateY(-6px); }
+  }
+}

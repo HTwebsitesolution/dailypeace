@@ -1,21 +1,16 @@
 
 import React, { useEffect } from "react";
-import { SafeAreaView, StatusBar } from "react-native";
-import * as Sentry from "sentry-expo";
+import { SafeAreaView, StatusBar, Platform } from "react-native";
 import Constants from "expo-constants";
 import RootNav from "./navigation";
 import { SettingsProvider } from "../lib/settings";
 import { analytics } from "../lib/analytics";
 import { notifications } from "../lib/notifications";
 
-// Only initialize Sentry if we have a real DSN (not a placeholder)
-const sentryDsn = Constants.expoConfig?.extra?.SENTRY_DSN;
-if (sentryDsn && !sentryDsn.startsWith('REPLACE_WITH_')) {
-  Sentry.init({
-    dsn: sentryDsn,
-    enableInExpoDevelopment: true,
-    debug: false
-  });
+// Import premium CSS for web only
+if (Platform.OS === 'web') {
+  // @ts-ignore
+  require("./theme-premium.css");
 }
 
 export default function App() {

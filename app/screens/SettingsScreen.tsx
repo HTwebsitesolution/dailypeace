@@ -86,7 +86,7 @@ export default function SettingsScreen() {
   const modes: Mode[] = ["conversational", "biblical", "reflective"];
 
   return (
-    <View className="flex-1 bg-bg pt-14 px-4 gap-4">
+    <View style={{ flex: 1, backgroundColor: "#0B1016", paddingTop: 56, paddingHorizontal: 16, gap: 16 }}>
       <Header title="Settings" onBack={() => nav.goBack()} />
 
       <Section title="Default Mode">
@@ -156,19 +156,19 @@ export default function SettingsScreen() {
 
 function Header({ title, onBack }: { title: string; onBack: () => void }) {
   return (
-    <View className="flex-row items-center px-4 mb-2">
-      <Pressable onPress={onBack} className="p-2 rounded-lg bg-surface mr-2">
-        <Text className="text-white">Back</Text>
+    <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 16, marginBottom: 8 }}>
+      <Pressable onPress={onBack} style={{ padding: 8, borderRadius: 8, backgroundColor: "#141B23", marginRight: 8 }}>
+        <Text style={{ color: "#EAF2FF" }}>Back</Text>
       </Pressable>
-      <Text className="text-white text-lg font-bold">{title}</Text>
+      <Text style={{ color: "#EAF2FF", fontSize: 18, fontWeight: "bold" }}>{title}</Text>
     </View>
   );
 }
 function Section({ title, children }: { title:string; children: React.ReactNode }) {
   return (
-    <View className="gap-2">
-      <Text className="text-muted font-semibold">{title}</Text>
-      <View className="gap-2.5">{children}</View>
+    <View style={{ gap: 8 }}>
+      <Text style={{ color: "#9FB0C3", fontWeight: "600" }}>{title}</Text>
+      <View style={{ gap: 10 }}>{children}</View>
     </View>
   );
 }
