@@ -46,7 +46,17 @@ export default function HomeScreen() {
             marginBottom: 12,
           }}
         >
-          <Text style={{ fontSize: 42, fontWeight: "bold", color: "#FFFFFF", marginBottom: 8, textAlign: "center" }}>Daily Peace</Text>
+          <Text style={{ 
+            fontSize: 46, 
+            fontWeight: "900", 
+            color: "#FFFFFF", 
+            marginBottom: 8, 
+            textAlign: "center",
+            textShadowColor: "rgba(0, 0, 0, 0.6)",
+            textShadowOffset: { width: 0, height: 3 },
+            textShadowRadius: 6,
+            letterSpacing: 1
+          }}>Daily Peace</Text>
         </Animated.View>
         
         <Animated.View
@@ -56,7 +66,17 @@ export default function HomeScreen() {
             marginBottom: 20,
           }}
         >
-          <Text style={{ fontSize: 20, color: "#E2E8F0", marginBottom: 24, textAlign: "center", fontWeight: "500" }}>Find peace and hope from scripture ✨</Text>
+          <Text style={{ 
+            fontSize: 22, 
+            color: "#FFFFFF", 
+            marginBottom: 24, 
+            textAlign: "center", 
+            fontWeight: "600",
+            textShadowColor: "rgba(0, 0, 0, 0.6)",
+            textShadowOffset: { width: 0, height: 2 },
+            textShadowRadius: 4,
+            letterSpacing: 0.3
+          }}>Find peace and hope from scripture ✨</Text>
         </Animated.View>
 
         <Animated.View
@@ -111,7 +131,15 @@ export default function HomeScreen() {
             }}
             onPress={() => navigation.navigate("Chat")}
           >
-            <Text style={{ color: "#FFFFFF", fontSize: 20, fontWeight: "700" }}>Start a Conversation 🙏</Text>
+            <Text style={{ 
+              color: "#FFFFFF", 
+              fontSize: 22, 
+              fontWeight: "800",
+              textShadowColor: "rgba(0, 0, 0, 0.4)",
+              textShadowOffset: { width: 0, height: 2 },
+              textShadowRadius: 4,
+              letterSpacing: 0.5
+            }}>Start a Conversation 🙏</Text>
           </Pressable>
         </Animated.View>
       </ScrollView>

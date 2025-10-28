@@ -38,7 +38,7 @@ export default function ReflectionCard({
         marginHorizontal: 12,
         marginTop: 12,
         borderRadius: 24,
-        backgroundColor: "#0F172A", // Premium dark blue-gray, fully opaque
+        backgroundColor: "#1E293B", // Lighter blue-gray for better contrast
         shadowColor: "#000000",
         shadowOffset: { width: 0, height: 20 },
         shadowOpacity: 0.7,
@@ -58,7 +58,7 @@ export default function ReflectionCard({
         right: 0,
         bottom: 0,
         borderRadius: 24,
-        backgroundColor: 'rgba(0, 0, 0, 0.15)', // Subtle darkening layer
+        backgroundColor: 'rgba(0, 0, 0, 0.20)', // Slightly more darkening for text protection
       }} />
       {/* Header */}
       <View style={{
@@ -94,13 +94,13 @@ export default function ReflectionCard({
       <View style={{ paddingHorizontal: 20, paddingVertical: 20, zIndex: 1 }}>
         <Text style={{ 
           color: "#FFFFFF", 
-          fontSize: 19, 
-          lineHeight: 30,
-          fontWeight: "400",
-          textShadowColor: "rgba(0, 0, 0, 0.5)",
-          textShadowOffset: { width: 0, height: 1 },
-          textShadowRadius: 3,
-          letterSpacing: 0.2
+          fontSize: 21, 
+          lineHeight: 32,
+          fontWeight: "500",
+          textShadowColor: "rgba(0, 0, 0, 0.7)",
+          textShadowOffset: { width: 0, height: 2 },
+          textShadowRadius: 5,
+          letterSpacing: 0.3
         }}>{message}</Text>
 
         {/* Verses */}
@@ -114,14 +114,21 @@ export default function ReflectionCard({
               }}
             >
               <View style={{
-                backgroundColor: "rgba(165, 180, 252, 0.15)", // Slightly more visible
-                paddingHorizontal: 12,
-                paddingVertical: 6,
+                backgroundColor: "rgba(165, 180, 252, 0.20)", // More visible
+                paddingHorizontal: 14,
+                paddingVertical: 8,
                 borderRadius: 12,
-                borderWidth: 1,
-                borderColor: "rgba(165, 180, 252, 0.3)"
+                borderWidth: 1.5,
+                borderColor: "rgba(165, 180, 252, 0.5)"
               }}>
-                <Text style={{ color: "#E0E7FF", fontSize: 14, fontWeight: "700" }}>{v}</Text>
+                <Text style={{ 
+                  color: "#FFFFFF", 
+                  fontSize: 15, 
+                  fontWeight: "800",
+                  textShadowColor: "rgba(0, 0, 0, 0.5)",
+                  textShadowOffset: { width: 0, height: 1 },
+                  textShadowRadius: 3
+                }}>{v}</Text>
               </View>
             </Animated.View>
           ))}
