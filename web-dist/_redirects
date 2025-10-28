@@ -1,0 +1,6 @@
+# API routes
+/api/* /.netl等服务/functions/:splat 200
+
+# SPA fallback
+/* /index.html 200
+
