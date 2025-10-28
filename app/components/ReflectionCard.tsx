@@ -38,7 +38,7 @@ export default function ReflectionCard({
         marginHorizontal: 12,
         marginTop: 12,
         borderRadius: 24,
-        backgroundColor: "#1E293B", // Lighter blue-gray for better contrast
+        backgroundColor: "#0F172A", // Very dark blue-gray for maximum contrast
         shadowColor: "#000000",
         shadowOffset: { width: 0, height: 20 },
         shadowOpacity: 0.7,
@@ -58,7 +58,7 @@ export default function ReflectionCard({
         right: 0,
         bottom: 0,
         borderRadius: 24,
-        backgroundColor: 'rgba(0, 0, 0, 0.20)', // Slightly more darkening for text protection
+        backgroundColor: 'rgba(0, 0, 0, 0.35)', // Stronger darkening layer for text protection
       }} />
       {/* Header */}
       <View style={{
@@ -73,7 +73,15 @@ export default function ReflectionCard({
         borderBottomWidth: 1,
         borderBottomColor: "rgba(255,255,255,0.1)"
       }}>
-        <Text style={{ color: "#FFFFFF", fontWeight: "700", fontSize: 18, letterSpacing: 0.3 }}>A Moment of Peace 🙏</Text>
+        <Text style={{ 
+          color: "#FFFFFF", 
+          fontWeight: "800", 
+          fontSize: 20, 
+          letterSpacing: 0.5,
+          textShadowColor: "rgba(0, 0, 0, 0.5)",
+          textShadowOffset: { width: 0, height: 2 },
+          textShadowRadius: 4
+        }}>A Moment of Peace 🙏</Text>
         {onClose ? (
           <Pressable
             onPress={onClose}
@@ -94,13 +102,13 @@ export default function ReflectionCard({
       <View style={{ paddingHorizontal: 20, paddingVertical: 20, zIndex: 1 }}>
         <Text style={{ 
           color: "#FFFFFF", 
-          fontSize: 21, 
-          lineHeight: 32,
-          fontWeight: "500",
-          textShadowColor: "rgba(0, 0, 0, 0.7)",
-          textShadowOffset: { width: 0, height: 2 },
-          textShadowRadius: 5,
-          letterSpacing: 0.3
+          fontSize: 22, 
+          lineHeight: 34,
+          fontWeight: "600",
+          textShadowColor: "rgba(0, 0, 0, 0.9)",
+          textShadowOffset: { width: 0, height: 3 },
+          textShadowRadius: 6,
+          letterSpacing: 0.4
         }}>{message}</Text>
 
         {/* Verses */}
@@ -123,11 +131,11 @@ export default function ReflectionCard({
               }}>
                 <Text style={{ 
                   color: "#FFFFFF", 
-                  fontSize: 15, 
-                  fontWeight: "800",
-                  textShadowColor: "rgba(0, 0, 0, 0.5)",
-                  textShadowOffset: { width: 0, height: 1 },
-                  textShadowRadius: 3
+                  fontSize: 16, 
+                  fontWeight: "900",
+                  textShadowColor: "rgba(0, 0, 0, 0.7)",
+                  textShadowOffset: { width: 0, height: 2 },
+                  textShadowRadius: 4
                 }}>{v}</Text>
               </View>
             </Animated.View>
