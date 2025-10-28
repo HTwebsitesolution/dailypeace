@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, Pressable, Animated } from "react-native";
+import { View, Text, Pressable, Animated, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ReflectionCard from "../components/ReflectionCard";
 import ModeToggle from "../components/ModeToggle";
@@ -34,11 +34,16 @@ export default function HomeScreen() {
       enableTimeRotation={true}
       enableModeRotation={true}
     >
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
+      <ScrollView 
+        style={{ flex: 1 }} 
+        contentContainerStyle={{ alignItems: "center", paddingTop: 60, paddingBottom: 40, paddingHorizontal: 20 }}
+        showsVerticalScrollIndicator={false}
+      >
         <Animated.View
           style={{
             opacity: fadeAnim,
             transform: [{ translateY: translateYAnim }],
+            marginBottom: 12,
           }}
         >
           <Text style={{ fontSize: 42, fontWeight: "bold", color: "#FFFFFF", marginBottom: 8, textAlign: "center" }}>Daily Peace</Text>
@@ -48,6 +53,7 @@ export default function HomeScreen() {
           style={{
             opacity: fadeAnim,
             transform: [{ translateY: translateYAnim }],
+            marginBottom: 20,
           }}
         >
           <Text style={{ fontSize: 20, color: "#E2E8F0", marginBottom: 24, textAlign: "center", fontWeight: "500" }}>Find peace and hope from scripture ✨</Text>
@@ -57,6 +63,7 @@ export default function HomeScreen() {
           style={{
             opacity: fadeAnim,
             transform: [{ scale: fadeAnim }],
+            marginBottom: 20,
           }}
         >
           <ModeToggle value={mode} onChange={setMode} />
@@ -71,7 +78,7 @@ export default function HomeScreen() {
             })}],
           }}
         >
-          <View style={{ marginTop: 32, width: "100%", maxWidth: 400 }}>
+          <View style={{ marginTop: 16, width: "100%", maxWidth: 400 }}>
             <ReflectionCard
               title="A Moment of Peace"
               message="Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid."
@@ -107,7 +114,7 @@ export default function HomeScreen() {
             <Text style={{ color: "#FFFFFF", fontSize: 20, fontWeight: "700" }}>Start a Conversation 🙏</Text>
           </Pressable>
         </Animated.View>
-      </View>
+      </ScrollView>
     </AtmosphericBackground>
   );
 }
