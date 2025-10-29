@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { View, FlatList, KeyboardAvoidingView, Platform, Alert, Animated, Text, Pressable, Image } from "react-native";
+import { View, FlatList, KeyboardAvoidingView, Platform, Alert, Animated, Text, Pressable, Image, useWindowDimensions } from "react-native";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { useNavigation } from "@react-navigation/native";
