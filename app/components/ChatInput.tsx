@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { View, TextInput, Pressable, Text } from "react-native";
+import { View, TextInput, Pressable, Text, useWindowDimensions } from "react-native";
 
 export default function ChatInput({
   value,
@@ -19,6 +19,8 @@ export default function ChatInput({
   disabled?: boolean;
 }) {
   const inputRef = useRef<TextInput>(null);
+  const { width } = useWindowDimensions();
+  const isMobile = width < 768;
 
   return (
     <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12, paddingVertical: 12 }}>
@@ -28,15 +30,22 @@ export default function ChatInput({
         onPressOut={onVoiceEnd}
         disabled={disabled}
         style={{
-          paddingHorizontal: 12,
-          paddingVertical: 12,
-          borderRadius: 16,
+          paddingHorizontal: isMobile ? 8 : 12,
+          paddingVertical: isMobile ? 10 : 12,
+          borderRadius: 12,
           backgroundColor: recording ? "#EF4444" : "#3B82F6"
         }}
         accessibilityLabel="Hold to speak"
       >
-        <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>
-          {recording ? "🎙️ Listening with care…" : "🎤 Hold to share your voice"}
+        <Text style={{ 
+          color: "#FFFFFF", 
+          fontWeight: "600",
+          fontSize: isMobile ? 14 : 16
+        }}>
+          {isMobile 
+            ? (recording ? "🎙️" : "🎤") 
+            : (recording ? "🎙️ Listening with care…" : "🎤 Hold to share your voice")
+          }
         </Text>
       </Pressable>
 
@@ -67,14 +76,20 @@ export default function ChatInput({
         onPress={onSend}
         disabled={disabled || !value.trim()}
         style={{
-          paddingHorizontal: 16,
-          paddingVertical: 12,
-          borderRadius: 16,
+          paddingHorizontal: isMobile ? 12 : 16,
+          paddingVertical: isMobile ? 10 : 12,
+          borderRadius: 12,
           backgroundColor: disabled || !value.trim() ? "rgba(255,255,255,0.1)" : "#3B82F6"
         }}
         accessibilityLabel="Send message"
       >
-        <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>Send 💌</Text>
+        <Text style={{ 
+          color: "#FFFFFF", 
+          fontWeight: "600",
+          fontSize: isMobile ? 14 : 16
+        }}>
+          {isMobile ? "Send" : "Send 💌"}
+        </Text>
       </Pressable>
     </View>
   );
