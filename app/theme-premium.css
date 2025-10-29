@@ -184,4 +184,12 @@ body{background:var(--bg);color:var(--text);}
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
   }
+
+  /* respect iOS safe area for notches */
+  .safe-top { padding-top: max(16px, env(safe-area-inset-top)); }
+
+  /* helper for absolutely-centered decorative marks */
+  .abs-center {
+    position:absolute; left:50%; transform:translateX(-50%);
+  }
 }
