@@ -210,6 +210,51 @@ export default function HomeScreen() {
             </Pressable>
           </Animated.View>
         </View>
+        
+        {/* Premium Footer */}
+        <View style={{ 
+          marginTop: 60,
+          paddingVertical: 32,
+          paddingHorizontal: 20,
+          alignItems: 'center',
+          borderTopWidth: 1,
+          borderTopColor: 'rgba(255,255,255,0.1)',
+          width: '100%',
+          zIndex: 10
+        }}>
+          <View style={{ alignItems: 'center', marginBottom: 16 }}>
+            <Image
+              source={logoImage}
+              style={{ width: 48, height: 48, borderRadius: 24, marginBottom: 12 }}
+              resizeMode="cover"
+            />
+            <Text style={{ 
+              color: '#EAF2FF', 
+              fontSize: 20,
+              fontWeight: '700',
+              textAlign: 'center',
+              marginBottom: 8
+            }}>
+              Daily Peace
+            </Text>
+            <Text style={{ 
+              color: '#9FB0C3', 
+              fontSize: 14,
+              textAlign: 'center',
+              marginBottom: 20
+            }}>
+              Find peace and hope from Scripture
+            </Text>
+          </View>
+          
+          <Text style={{ 
+            color: '#6B7280', 
+            fontSize: 12,
+            textAlign: 'center'
+          }}>
+            © 2024 Daily Peace. Bringing Scripture into your daily life.
+          </Text>
+        </View>
       </ScrollView>
     </AtmosphericBackground>
   );
