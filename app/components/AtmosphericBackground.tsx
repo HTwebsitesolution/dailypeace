@@ -123,52 +123,52 @@ export default function AtmosphericBackground({
   };
 
   return (
-    <Animated.View style={{ flex: 1 }}>
+    <Animated.View style={{ flex: 1, backgroundColor: "#0B1016" }}>
       <ImageBackground
         source={currentBackground.image}
         resizeMode="cover"
         style={{ 
           flex: 1, 
-          backgroundColor: "#0B1016",
           width: screenWidth,
           height: screenHeight,
         }}
         imageStyle={{
-          ...getAmbientFocusStyle(),
+          opacity: 0.3, // Much lower opacity for background image
           transform: [
             { scale: scaleAnim },
             { rotate: rotationTransform }
           ],
         }}
       >
-        {/* Strong overlay for better text readability */}
+        {/* Hero overlay strong - very strong dark overlay for maximum text readability */}
         <View style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.70)', // Very strong dark overlay for text visibility
+          backgroundColor: 'rgba(11,16,22,0.95)', // Very strong overlay - near black
+          pointerEvents: 'none',
+          zIndex: 0,
         }} />
         
-        {/* Additional vignette effect */}
+        {/* Vignette for center focus */}
         <View style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.20)', // Strong vignette
+          backgroundColor: 'rgba(0,0,0,0.25)',
+          pointerEvents: 'none',
+          zIndex: 0,
         }} />
         
-        {/* Content overlay */}
+        {/* Content layer - ensures content is above overlays */}
         <Animated.View style={{ 
-          flex: 1, 
-          backgroundColor: "rgba(11, 16, 22, 0.05)", // Minimal content overlay
-          opacity: fadeAnim.interpolate({
-            inputRange: [0.2, 1],
-            outputRange: [0.1, 0.05], // Very subtle dynamic overlay
-          })
+          flex: 1,
+          zIndex: 1,
+          position: 'relative',
         }}>
           {children}
         </Animated.View>
