@@ -47,7 +47,7 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Decorative logo - behind content, z-index 0, hidden on mobile */}
-        {showDesktopLogo && (
+        {width >= 768 && (
           <View style={{
             position: 'absolute',
             top: 100,
