@@ -10,7 +10,7 @@ const logoImage = require("../../assets/DailyPeace App Logo.png");
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
   const { width } = useWindowDimensions();
-  const showLogo = width >= 768; // Show on tablets and larger screens
+  const showLogo = width >= 1024; // Show only on larger tablets and desktops
   
   const [mode, setMode] = useState<"conversational" | "biblical" | "reflective">("conversational");
   
