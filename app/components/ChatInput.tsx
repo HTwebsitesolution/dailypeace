@@ -28,6 +28,9 @@ export default function ChatInput({
       <Pressable
         onPressIn={onVoiceStart}
         onPressOut={onVoiceEnd}
+        onMouseDown={onVoiceStart}
+        onMouseUp={onVoiceEnd}
+        onMouseLeave={onVoiceEnd}
         disabled={disabled}
         style={{
           paddingHorizontal: isMobile ? 8 : 12,

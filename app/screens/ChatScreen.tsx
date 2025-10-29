@@ -224,9 +224,32 @@ export default function ChatScreen() {
     }
   };
 
-  const shareReflection = () => {
-    // TODO: Implement sharing
-    Alert.alert("Share", "Sharing functionality coming soon!");
+  const shareReflection = async () => {
+    if (!reflection) return;
+
+    const shareText = `${reflection.message}\n\n${reflection.verses.join('\n')}\n\n— Shared from Daily Peace`;
+
+    // Try native share API first (works on mobile browsers)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "A Moment of Peace",
+          text: shareText,
+        });
+        return;
+      } catch (error) {
+        console.log("Share cancelled or failed");
+      }
+    }
+
+    // Fallback: Copy to clipboard
+    try {
+      await navigator.clipboard.writeText(shareText);
+      Alert.alert("Copied!", "Message copied to clipboard 📋");
+    } catch (error) {
+      console.error("Failed to copy to clipboard:", error);
+      Alert.alert("Share", shareText);
+    }
   };
 
   const closeReflection = () => {
