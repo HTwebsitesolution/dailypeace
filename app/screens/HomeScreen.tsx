@@ -10,7 +10,8 @@ const logoImage = require("../../assets/DailyPeace App Logo.png");
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
   const { width } = useWindowDimensions();
-  const showLogo = width >= 1024; // Show only on larger tablets and desktops
+  const isMobile = width < 768;
+  const showDesktopLogo = width >= 768; // Show decorative logo on tablet/desktop
   
   const [mode, setMode] = useState<"conversational" | "biblical" | "reflective">("conversational");
   
@@ -45,14 +46,14 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Decorative logo - behind content, z-index 0, hidden on mobile */}
-        {showLogo && (
+        {showDesktopLogo && (
           <View style={{
             position: 'absolute',
             top: 100,
             left: '50%',
             marginLeft: -280, // Half of width for larger size
             zIndex: 0,
-            opacity: 0.3,
+            opacity: 0.28,
           }}>
             <Image
               source={logoImage}
@@ -62,27 +63,59 @@ export default function HomeScreen() {
           </View>
         )}
 
-        {/* Content layer - above decorative elements, z-index 10+ */}
+        {/* Content layer */}
         <View style={{ zIndex: 10, width: '100%', alignItems: 'center' }}>
-          <Animated.View
-            style={{
-              opacity: fadeAnim,
-              transform: [{ translateY: translateYAnim }],
-              marginBottom: 12,
-            }}
-          >
-            <Text style={{ 
-              fontSize: 52, 
-              fontWeight: "900", 
-              color: "#FFFFFF", 
-              marginBottom: 8, 
-              textAlign: "center",
-              textShadowColor: "rgba(0, 0, 0, 0.6)",
-              textShadowOffset: { width: 0, height: 3 },
-              textShadowRadius: 6,
-              letterSpacing: 1
-            }}>Daily Peace</Text>
-          </Animated.View>
+          {/* Mobile: Small logo badge + title in header row */}
+          {isMobile && (
+            <Animated.View
+              style={{
+                opacity: fadeAnim,
+                transform: [{ translateY: translateYAnim }],
+                marginBottom: 12,
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 12,
+              }}
+            >
+              <Image
+                source={logoImage}
+                style={{ width: 32, height: 32, borderRadius: 16 }}
+                resizeMode="cover"
+              />
+              <Text style={{ 
+                fontSize: 28, 
+                fontWeight: "900", 
+                color: "#FFFFFF",
+                textShadowColor: "rgba(0, 0, 0, 0.6)",
+                textShadowOffset: { width: 0, height: 2 },
+                textShadowRadius: 4,
+                letterSpacing: 0.5
+              }}>Daily Peace</Text>
+            </Animated.View>
+          )}
+
+          {/* Desktop: Large centered title */}
+          {!isMobile && (
+            <Animated.View
+              style={{
+                opacity: fadeAnim,
+                transform: [{ translateY: translateYAnim }],
+                marginBottom: 12,
+              }}
+            >
+              <Text style={{ 
+                fontSize: 52, 
+                fontWeight: "900", 
+                color: "#FFFFFF", 
+                marginBottom: 8, 
+                textAlign: "center",
+                textShadowColor: "rgba(0, 0, 0, 0.6)",
+                textShadowOffset: { width: 0, height: 3 },
+                textShadowRadius: 6,
+                letterSpacing: 1
+              }}>Daily Peace</Text>
+            </Animated.View>
+          )}
           
           <Animated.View
             style={{
