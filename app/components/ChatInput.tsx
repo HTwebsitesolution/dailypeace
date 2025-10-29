@@ -24,13 +24,15 @@ export default function ChatInput({
 
   return (
     <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12, paddingVertical: 12 }}>
-      {/* Mic (hold) */}
+      {/* Mic (toggle) */}
       <Pressable
-        onPressIn={onVoiceStart}
-        onPressOut={onVoiceEnd}
-        onMouseDown={onVoiceStart}
-        onMouseUp={onVoiceEnd}
-        onMouseLeave={onVoiceEnd}
+        onPress={() => {
+          if (recording) {
+            onVoiceEnd?.();
+          } else {
+            onVoiceStart?.();
+          }
+        }}
         disabled={disabled}
         style={{
           paddingHorizontal: isMobile ? 8 : 12,
@@ -38,7 +40,7 @@ export default function ChatInput({
           borderRadius: 12,
           backgroundColor: recording ? "#EF4444" : "#3B82F6"
         }}
-        accessibilityLabel="Hold to speak"
+        accessibilityLabel={recording ? "Stop recording" : "Start voice input"}
       >
         <Text style={{ 
           color: "#FFFFFF", 
