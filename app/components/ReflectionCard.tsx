@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text, Pressable, Animated } from "react-native";
+import { View, Text, Pressable, Animated, ScrollView, Platform, useWindowDimensions } from "react-native";
 
 export default function ReflectionCard({
   title = "Today's Reflection",
@@ -16,6 +16,10 @@ export default function ReflectionCard({
 }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
+  const { height: screenHeight } = useWindowDimensions();
+  const isMobile = Platform.OS === 'web' ? screenHeight < 800 : Platform.OS !== 'web';
+  // Max height: 60% of screen on mobile, no limit on desktop
+  const maxCardHeight = isMobile ? screenHeight * 0.6 : undefined;
 
   useEffect(() => {
     Animated.parallel([
@@ -48,9 +52,11 @@ export default function ReflectionCard({
         elevation: 16,
         opacity: fadeAnim,
         transform: [{ scale: scaleAnim }],
+        maxHeight: maxCardHeight,
+        overflow: 'hidden',
       }}
     >
-      {/* Header with glass strip */}
+      {/* Header with glass strip - Fixed at top */}
       <View style={{
         flexDirection: "row",
         alignItems: "center",
@@ -85,8 +91,13 @@ export default function ReflectionCard({
         ) : null}
       </View>
 
-      {/* Body */}
-      <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
+      {/* Scrollable Body */}
+      <ScrollView
+        style={{ maxHeight: maxCardHeight ? maxCardHeight - 60 : undefined }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 16 }}
+        showsVerticalScrollIndicator={true}
+        nestedScrollEnabled={true}
+      >
         <Text style={{ 
           color: "#FFFFFF", 
           fontSize: 18, 
@@ -155,7 +166,7 @@ export default function ReflectionCard({
             </Animated.View>
           ) : null}
         </View>
-      </View>
+      </ScrollView>
     </Animated.View>
   );
 }
