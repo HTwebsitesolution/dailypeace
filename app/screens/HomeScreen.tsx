@@ -94,49 +94,51 @@ export default function HomeScreen() {
             </Animated.View>
           )}
 
-          {/* Desktop: Large centered title */}
+          {/* Desktop: Large centered title + subtitle */}
           {!isMobile && (
-            <Animated.View
-              style={{
-                opacity: fadeAnim,
-                transform: [{ translateY: translateYAnim }],
-                marginBottom: 12,
-                marginTop: 24, // Extra space on desktop
-              }}
-            >
-              <Text style={{ 
-                fontSize: 52, 
-                fontWeight: "900", 
-                color: "#FFFFFF", 
-                marginBottom: 8, 
-                textAlign: "center",
-                textShadowColor: "rgba(0, 0, 0, 0.6)",
-                textShadowOffset: { width: 0, height: 3 },
-                textShadowRadius: 6,
-                letterSpacing: 1
-              }}>Daily Peace</Text>
-            </Animated.View>
+            <>
+              <Animated.View
+                style={{
+                  opacity: fadeAnim,
+                  transform: [{ translateY: translateYAnim }],
+                  marginBottom: 12,
+                  marginTop: 24, // Extra space on desktop
+                }}
+              >
+                <Text style={{ 
+                  fontSize: 52, 
+                  fontWeight: "900", 
+                  color: "#FFFFFF", 
+                  marginBottom: 8, 
+                  textAlign: "center",
+                  textShadowColor: "rgba(0, 0, 0, 0.6)",
+                  textShadowOffset: { width: 0, height: 3 },
+                  textShadowRadius: 6,
+                  letterSpacing: 1
+                }}>Daily Peace</Text>
+              </Animated.View>
+              
+              <Animated.View
+                style={{
+                  opacity: fadeAnim,
+                  transform: [{ translateY: translateYAnim }],
+                  marginBottom: 20,
+                }}
+              >
+                <Text style={{ 
+                  fontSize: 24, 
+                  color: "#FFFFFF", 
+                  marginBottom: 24, 
+                  textAlign: "center", 
+                  fontWeight: "600",
+                  textShadowColor: "rgba(0, 0, 0, 0.6)",
+                  textShadowOffset: { width: 0, height: 2 },
+                  textShadowRadius: 4,
+                  letterSpacing: 0.3
+                }}>Find peace and hope from scripture ✨</Text>
+              </Animated.View>
+            </>
           )}
-          
-          <Animated.View
-            style={{
-              opacity: fadeAnim,
-              transform: [{ translateY: translateYAnim }],
-              marginBottom: 20,
-            }}
-          >
-            <Text style={{ 
-              fontSize: 24, 
-              color: "#FFFFFF", 
-              marginBottom: 24, 
-              textAlign: "center", 
-              fontWeight: "600",
-              textShadowColor: "rgba(0, 0, 0, 0.6)",
-              textShadowOffset: { width: 0, height: 2 },
-              textShadowRadius: 4,
-              letterSpacing: 0.3
-            }}>Find peace and hope from scripture ✨</Text>
-          </Animated.View>
 
           <Animated.View
             style={{
