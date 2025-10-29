@@ -52,7 +52,7 @@ export default function ModeToggle({
               backgroundColor: active ? "#3B82F6" : "#141B23",
               width: buttonWidth
             }}
-            android_ripple={{ colorCOLOR: "#1f3a68" }}
+            android_ripple={{ color: "#1f3a68" }}
           >
             <Text style={{
               fontSize: 15,
