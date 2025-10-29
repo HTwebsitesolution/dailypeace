@@ -71,7 +71,7 @@ export default function HomeScreen() {
               style={{
                 opacity: fadeAnim,
                 transform: [{ translateY: translateYAnim }],
-                marginBottom: 12,
+                marginBottom: 8,
                 flexDirection: 'row',
                 alignItems: 'center',
                 gap: 12,
@@ -101,6 +101,7 @@ export default function HomeScreen() {
                 opacity: fadeAnim,
                 transform: [{ translateY: translateYAnim }],
                 marginBottom: 12,
+                marginTop: 24, // Extra space on desktop
               }}
             >
               <Text style={{ 
@@ -157,9 +158,9 @@ export default function HomeScreen() {
             }}
           >
             <View style={{ 
-              marginTop: 24, 
+              marginTop: isMobile ? 12 : 24,
               width: "100%", 
-              maxWidth: 400,
+              maxWidth: 820, // Increased for better desktop layout
               zIndex: 10 
             }}>
               <ReflectionCard
