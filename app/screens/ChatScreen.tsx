@@ -316,7 +316,7 @@ export default function ChatScreen() {
       enableModeRotation={true}
     >
       <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
-        <View style={{ flex: 1, paddingHorizontal: 60, position: 'relative' }}>
+        <View style={{ flex: 1, paddingHorizontal: width < 768 ? 16 : 60, position: 'relative' }}>
           {/* Use KeyboardAvoidingView only on native platforms to avoid scrolling issues on web */}
           {Platform.OS !== 'web' ? (
             <KeyboardAvoidingView
@@ -414,11 +414,13 @@ export default function ChatScreen() {
                 style={{ flex: 1, paddingHorizontal: 8 }}
                 contentContainerStyle={{ 
                   paddingVertical: 16,
+                  paddingBottom: 20,
                   ...(messages.length === 0 ? { flexGrow: 1, justifyContent: 'center' } : {})
                 }}
                 showsVerticalScrollIndicator={false}
                 scrollEnabled={true}
-                nestedScrollEnabled={Platform.OS === 'web'}
+                nestedScrollEnabled={true}
+                removeClippedSubviews={Platform.OS !== 'web'}
                 ListEmptyComponent={
                   <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 24, paddingTop: 20 }}>
                     <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
@@ -544,11 +546,13 @@ export default function ChatScreen() {
                 style={{ flex: 1, paddingHorizontal: 8 }}
                 contentContainerStyle={{ 
                   paddingVertical: 16,
+                  paddingBottom: 20,
                   ...(messages.length === 0 ? { flexGrow: 1, justifyContent: 'center' } : {})
                 }}
                 showsVerticalScrollIndicator={false}
                 scrollEnabled={true}
-                nestedScrollEnabled={Platform.OS === 'web'}
+                nestedScrollEnabled={true}
+                removeClippedSubviews={Platform.OS !== 'web'}
                 ListEmptyComponent={
                   <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 24, paddingTop: 20 }}>
                     <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
