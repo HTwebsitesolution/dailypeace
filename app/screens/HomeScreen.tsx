@@ -11,6 +11,7 @@ export default function HomeScreen() {
   const navigation = useNavigation<any>();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
+  const isDesktop = width >= 1024;
   const showDesktopLogo = width >= 768; // Show decorative logo on tablet/desktop
   
   const [mode, setMode] = useState<"conversational" | "biblical" | "reflective">("conversational");
@@ -95,7 +96,7 @@ export default function HomeScreen() {
           )}
 
           {/* Desktop: Large centered title + subtitle */}
-          {!isMobile && (
+          {isDesktop && (
             <>
               <Animated.View
                 style={{
