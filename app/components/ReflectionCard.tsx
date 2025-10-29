@@ -35,52 +35,39 @@ export default function ReflectionCard({
   return (
     <Animated.View
       style={{
-        marginHorizontal: 12,
-        marginTop: 12,
+        marginHorizontal: 16,
+        marginTop: 24,
         borderRadius: 24,
-        backgroundColor: "#020617", // Extremely dark blue-gray - almost black for maximum contrast
+        backgroundColor: "rgba(20,27,35,0.95)", // Glass-pro with high opacity for readability
+        borderWidth: 1,
+        borderColor: "rgba(255,255,255,0.15)",
         shadowColor: "#000000",
-        shadowOffset: { width: 0, height: 20 },
-        shadowOpacity: 0.7,
-        shadowRadius: 16,
-        elevation: 12,
+        shadowOffset: { width: 0, height: 16 },
+        shadowOpacity: 0.6,
+        shadowRadius: 24,
+        elevation: 16,
         opacity: fadeAnim,
         transform: [{ scale: scaleAnim }],
-        borderWidth: 1,
-        borderColor: "rgba(255,255,255,0.08)", // Subtle border for premium feel
       }}
     >
-      {/* Inner overlay for absolute text protection */}
-      <View style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        borderRadius: 24,
-        backgroundColor: 'rgba(0, 0, 0, 0.50)', // Very strong darkening layer for text protection
-      }} />
-      {/* Header */}
+      {/* Header with glass strip */}
       <View style={{
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        paddingHorizontal: 20,
-        paddingVertical: 16,
+        paddingHorizontal: 16,
+        paddingVertical: 12,
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
-        backgroundColor: "rgba(59, 130, 246, 0.95)", // More solid, vibrant blue
+        backgroundColor: "rgba(35,48,63,0.90)", // Elevated header strip
         borderBottomWidth: 1,
-        borderBottomColor: "rgba(255,255,255,0.1)"
+        borderBottomColor: "rgba(255,255,255,0.12)"
       }}>
         <Text style={{ 
           color: "#FFFFFF", 
-          fontWeight: "900", 
-          fontSize: 22, 
-          letterSpacing: 0.6,
-          textShadowColor: "rgba(0, 0, 0, 0.9)",
-          textShadowOffset: { width: 0, height: 3 },
-          textShadowRadius: 5
+          fontWeight: "700", 
+          fontSize: 18, 
+          letterSpacing: 0.4
         }}>A Moment of Peace 🙏</Text>
         {onClose ? (
           <Pressable
@@ -99,16 +86,13 @@ export default function ReflectionCard({
       </View>
 
       {/* Body */}
-      <View style={{ paddingHorizontal: 20, paddingVertical: 20, zIndex: 1 }}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
         <Text style={{ 
           color: "#FFFFFF", 
-          fontSize: 24, 
-          lineHeight: 38,
-          fontWeight: "700",
-          textShadowColor: "rgba(0, 0, 0, 1.0)",
-          textShadowOffset: { width: 0, height: 4 },
-          textShadowRadius: 8,
-          letterSpacing: 0.5
+          fontSize: 18, 
+          lineHeight: 28,
+          fontWeight: "400",
+          letterSpacing: 0.2
         }}>{message}</Text>
 
         {/* Verses */}
@@ -122,20 +106,17 @@ export default function ReflectionCard({
               }}
             >
               <View style={{
-                backgroundColor: "rgba(165, 180, 252, 0.20)", // More visible
-                paddingHorizontal: 14,
-                paddingVertical: 8,
-                borderRadius: 12,
-                borderWidth: 1.5,
-                borderColor: "rgba(165, 180, 252, 0.5)"
+                backgroundColor: "rgba(255,255,255,0.12)",
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: "rgba(255,255,255,0.12)"
               }}>
                 <Text style={{ 
-                  color: "#FFFFFF", 
-                  fontSize: 16, 
-                  fontWeight: "900",
-                  textShadowColor: "rgba(0, 0, 0, 0.7)",
-                  textShadowOffset: { width: 0, height: 2 },
-                  textShadowRadius: 4
+                  color: "#A5B4FC", 
+                  fontSize: 13, 
+                  fontWeight: "600"
                 }}>{v}</Text>
               </View>
             </Animated.View>
@@ -169,7 +150,7 @@ export default function ReflectionCard({
                 }}
                 android_ripple={{ color: "#ffffff40" }}
               >
-                <Text style={{ color: "#FFFFFF", fontWeight: "700", fontSize: 16 }}>Share this blessing 🔗</Text>
+                <Text style={{ color: "#FFFFFF", fontWeight: "600", fontSize: 16 }}>Share this blessing 🔗</Text>
               </Pressable>
             </Animated.View>
           ) : null}
