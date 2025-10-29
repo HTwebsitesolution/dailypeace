@@ -133,33 +133,21 @@ export default function AtmosphericBackground({
           height: screenHeight,
         }}
         imageStyle={{
-          opacity: 0.3, // Much lower opacity for background image
+          opacity: 0.75, // Higher opacity to show the beautiful backgrounds
           transform: [
             { scale: scaleAnim },
             { rotate: rotationTransform }
           ],
         }}
       >
-        {/* Hero overlay strong - very strong dark overlay for maximum text readability */}
+        {/* Moderate overlay for text readability while keeping images visible */}
         <View style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(11,16,22,0.95)', // Very strong overlay - near black
-          pointerEvents: 'none',
-          zIndex: 0,
-        }} />
-        
-        {/* Vignette for center focus */}
-        <View style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.25)',
+          backgroundColor: 'rgba(0,0,0,0.45)', // Moderate overlay - images show through
           pointerEvents: 'none',
           zIndex: 0,
         }} />
