@@ -252,7 +252,7 @@ export default function HomeScreen() {
             fontSize: 12,
             textAlign: 'center'
           }}>
-            © 2024 Daily Peace. Bringing Scripture into your daily life.
+            © 2025 Daily Peace. Bringing Scripture into your daily life.
           </Text>
         </View>
       </ScrollView>
