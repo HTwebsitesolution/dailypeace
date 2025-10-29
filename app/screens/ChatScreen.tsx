@@ -32,6 +32,7 @@ interface Reflection {
 
 export default function ChatScreen() {
   const nav = useNavigation<any>();
+  const { width } = useWindowDimensions();
   const { settings } = useSettings();
   const [mode, setMode] = useState<Mode>(settings.defaultMode);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -278,26 +279,29 @@ export default function ChatScreen() {
                 </Animated.View>
               </View>
             </View>
-            <View style={{ position: "absolute", left: 20, top: 56 }}>
-              <Animated.View style={{ 
-                opacity: 1, 
-                transform: [{ scale: logoAnim }], 
-                shadowColor: '#EAF2FF',
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: logoAnim.interpolate({ inputRange: [0.95, 1.05], outputRange: [0.3, 0.6] }), 
-                shadowRadius: 10,
-                elevation: 5
-              }}>
-                <Image 
-                  source={logo} 
-                  style={{ 
-                    width: 120, 
-                    height: 120, 
-                    resizeMode: 'contain'
-                  }} 
-                />
-              </Animated.View>
-            </View>
+            {/* Decorative logo - hidden on mobile to prevent overlap */}
+            {width >= 768 && (
+              <View style={{ position: "absolute", left: 20, top: 56 }}>
+                <Animated.View style={{ 
+                  opacity: 1, 
+                  transform: [{ scale: logoAnim }], 
+                  shadowColor: '#EAF2FF',
+                  shadowOffset: { width: 0, height: 0 },
+                  shadowOpacity: logoAnim.interpolate({ inputRange: [0.95, 1.05], outputRange: [0.3, 0.6] }), 
+                  shadowRadius: 10,
+                  elevation: 5
+                }}>
+                  <Image 
+                    source={logo} 
+                    style={{ 
+                      width: 120, 
+                      height: 120, 
+                      resizeMode: 'contain'
+                    }} 
+                  />
+                </Animated.View>
+              </View>
+            )}
             <View style={{ alignSelf: 'center' }}>
               <Animated.View
                 style={{
