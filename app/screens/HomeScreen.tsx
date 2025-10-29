@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, Pressable, Animated, ScrollView, Image } from "react-native";
+import { View, Text, Pressable, Animated, ScrollView, Image, useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ReflectionCard from "../components/ReflectionCard";
 import ModeToggle from "../components/ModeToggle";
@@ -9,6 +9,9 @@ const logoImage = require("../../assets/DailyPeace App Logo.png");
 
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
+  const { width } = useWindowDimensions();
+  const showLogo = width >= 768; // Show on tablets and larger screens
+  
   const [mode, setMode] = useState<"conversational" | "biblical" | "reflective">("conversational");
   
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -41,21 +44,23 @@ export default function HomeScreen() {
         contentContainerStyle={{ alignItems: "center", paddingTop: 60, paddingBottom: 40, paddingHorizontal: 20 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Decorative logo - behind content, z-index 0 */}
-        <View style={{
-          position: 'absolute',
-          top: 100,
-          left: '50%',
-          marginLeft: -110, // Half of width
-          zIndex: 0,
-          opacity: 0.25,
-        }}>
-          <Image
-            source={logoImage}
-            resizeMode="contain"
-            style={{ width: 220, height: 220 }}
-          />
-        </View>
+        {/* Decorative logo - behind content, z-index 0, hidden on mobile */}
+        {showLogo && (
+          <View style={{
+            position: 'absolute',
+            top: 100,
+            left: '50%',
+            marginLeft: -280, // Half of width for larger size
+            zIndex: 0,
+            opacity: 0.3,
+          }}>
+            <Image
+              source={logoImage}
+              resizeMode="contain"
+              style={{ width: 560, height: 560 }}
+            />
+          </View>
+        )}
 
         {/* Content layer - above decorative elements, z-index 10+ */}
         <View style={{ zIndex: 10, width: '100%', alignItems: 'center' }}>
