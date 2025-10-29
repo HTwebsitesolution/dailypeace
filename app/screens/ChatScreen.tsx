@@ -412,8 +412,13 @@ export default function ChatScreen() {
                   </MessageBubble>
                 )}
                 style={{ flex: 1, paddingHorizontal: 8 }}
-                contentContainerStyle={{ paddingVertical: 16, flexGrow: messages.length === 0 ? 1 : 0 }}
+                contentContainerStyle={{ 
+                  paddingVertical: 16,
+                  ...(messages.length === 0 ? { flexGrow: 1, justifyContent: 'center' } : {})
+                }}
                 showsVerticalScrollIndicator={false}
+                scrollEnabled={true}
+                nestedScrollEnabled={Platform.OS === 'web'}
                 ListEmptyComponent={
                   <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 24, paddingTop: 20 }}>
                     <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
@@ -537,8 +542,13 @@ export default function ChatScreen() {
                   </MessageBubble>
                 )}
                 style={{ flex: 1, paddingHorizontal: 8 }}
-                contentContainerStyle={{ paddingVertical: 16, flexGrow: messages.length === 0 ? 1 : 0 }}
+                contentContainerStyle={{ 
+                  paddingVertical: 16,
+                  ...(messages.length === 0 ? { flexGrow: 1, justifyContent: 'center' } : {})
+                }}
                 showsVerticalScrollIndicator={false}
+                scrollEnabled={true}
+                nestedScrollEnabled={Platform.OS === 'web'}
                 ListEmptyComponent={
                   <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 24, paddingTop: 20 }}>
                     <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
