@@ -118,4 +118,70 @@ body{background:var(--bg);color:var(--text);}
     0%,100% { transform: translateY(0px); }
     50%     { transform: translateY(-6px); }
   }
+
+  /* ===== Strong image control + legibility ===== */
+
+  /* Stronger hero veil (top bright, bottom dark for content) */
+  .hero-overlay-strong {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to bottom,
+        rgba(0,0,0,.60) 0%,
+        rgba(0,0,0,.45) 28%,
+        rgba(11,16,22,.92) 70%,
+        rgba(11,16,22,.96) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Optional vignette for center focus */
+  .vignette-strong {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    mask-image: radial-gradient(ellipse at 50% 40%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%);
+    background: rgba(0,0,0,.35);
+  }
+
+  /* Mute the background photo slightly (prevents fighting your text) */
+  .bg-photo-tame { filter: saturate(.90) brightness(.78) contrast(1.06); }
+
+  /* CRISP TEXT (web) */
+  .text-crisp {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Premium title glow (subtle) */
+  .title-glow {
+    text-shadow:
+      0 0 10px rgba(255,255,255,0.18),
+      0 0 22px rgba(250,200,120,0.16);
+  }
+
+  /* GLASS with Safari fallback (when backdrop-filter is missing/disabled) */
+  .glass-pro {
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(20,27,35,.58);                 /* fallback base */
+    box-shadow: 0 16px 48px rgba(0,0,0,.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-pro {
+      /* No blur available (iOS older / reduced motion / perf) */
+      background: rgba(20,27,35,.88);
+      border-color: rgba(255,255,255,.08);
+    }
+  }
+
+  /* Elevated header strip for the reflection title */
+  .glass-strip {
+    background: rgba(35,48,63,.85);
+    border-bottom: 1px solid rgba(255,255,255,.10);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
 }
