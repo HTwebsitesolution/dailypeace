@@ -44,6 +44,7 @@ export default function ChatScreen() {
   const [needSeeds, setNeedSeeds] = useState<any>(null);
 
   const recordingRef = useRef<Audio.Recording | null>(null);
+  const speechRecognitionRef = useRef<any>(null);
   const flatListRef = useRef<FlatList>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const logoAnim = useRef(new Animated.Value(1)).current;
@@ -180,6 +181,44 @@ export default function ChatScreen() {
   const startRecording = async () => {
     try {
       setRecording(true);
+      
+      // Check if Web Speech API is available (web browsers)
+      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      
+      if (SpeechRecognition && typeof window !== 'undefined') {
+        // Use Web Speech API for web browsers
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.onresult = (event: any) => {
+          const transcript = Array.from(event.results)
+            .map((result: any) => result[0].transcript)
+            .join('');
+          setInputText(prev => prev + transcript + ' ');
+        };
+
+        recognition.onerror = (event: any) => {
+          console.error('Speech recognition error:', event.error);
+          if (event.error === 'no-speech') {
+            // User didn't speak, just stop recording silently
+          } else {
+            Alert.alert("Speech Recognition Error", "Could not recognize speech. Please try again.");
+          }
+          setRecording(false);
+        };
+
+        recognition.onend = () => {
+          setRecording(false);
+        };
+
+        speechRecognitionRef.current = recognition;
+        recognition.start();
+        return;
+      }
+
+      // Fallback to Expo Audio for mobile apps
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
@@ -199,6 +238,19 @@ export default function ChatScreen() {
   };
 
   const stopRecording = async () => {
+    // Stop Web Speech API if active (web browsers)
+    if (speechRecognitionRef.current) {
+      try {
+        speechRecognitionRef.current.stop();
+      } catch (error) {
+        console.log("Speech recognition stop:", error);
+      }
+      speechRecognitionRef.current = null;
+      setRecording(false);
+      return;
+    }
+
+    // Stop Expo Audio recording (mobile apps)
     if (!recordingRef.current) return;
 
     try {
