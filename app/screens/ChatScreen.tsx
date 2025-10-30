@@ -571,8 +571,8 @@ export default function ChatScreen() {
                 removeClippedSubviews={Platform.OS !== 'web'}
                 ListEmptyComponent={
                   <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 24, paddingTop: 20 }}>
-                    <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
-                      Start a conversation above, or tap the close button on the reflection to begin chatting. ✨
+                <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
+                      Start a conversation - Tap the microphone to speak your thoughts or type to begin chatting
                     </Text>
                   </View>
                 }
@@ -750,7 +750,7 @@ export default function ChatScreen() {
                 ListEmptyComponent={
                   <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 24, paddingTop: 20 }}>
                     <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
-                      Start a conversation above, or tap the close button on the reflection to begin chatting. ✨
+                      Start a conversation - Tap the microphone to speak your thoughts or type to begin chatting
                     </Text>
                   </View>
                 }
