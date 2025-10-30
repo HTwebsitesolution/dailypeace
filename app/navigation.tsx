@@ -5,12 +5,15 @@ import HomeScreen from "./screens/HomeScreen";
 import ChatScreen from "./screens/ChatScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import DisclaimerScreen from "./screens/DisclaimerScreen";
+import CollectionsScreen, { CollectionDetailScreen } from "./screens/CollectionsScreen";
 
 export type RootStackParamList = {
   Home: undefined;
   Chat: undefined;
   Settings: undefined;
   Disclaimer: undefined;
+  Collections: undefined;
+  CollectionDetail: { category: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -23,6 +26,8 @@ export default function RootNav() {
         <Stack.Screen name="Chat" component={ChatScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="Disclaimer" component={DisclaimerScreen} />
+        <Stack.Screen name="Collections" component={CollectionsScreen} />
+        <Stack.Screen name="CollectionDetail" component={CollectionDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
