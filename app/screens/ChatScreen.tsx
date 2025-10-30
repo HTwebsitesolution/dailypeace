@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { View, FlatList, KeyboardAvoidingView, Platform, Alert, Animated, Text, Pressable, Image, useWindowDimensions } from "react-native";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useSettings } from "../../lib/settings";
 import { apiGenerate, apiTranscribe } from "../../lib/api";
 import { addFavorite, getFavorites, removeFavorite } from "../../lib/verseFavorites";
@@ -33,6 +33,7 @@ interface Reflection {
 
 export default function ChatScreen() {
   const nav = useNavigation<any>();
+  const route = useRoute<any>();
   const { width } = useWindowDimensions();
   const { settings } = useSettings();
   const [mode, setMode] = useState<Mode>(settings.defaultMode);
@@ -76,6 +77,14 @@ export default function ChatScreen() {
       ).start();
     });
   }, []);
+
+  // Prefill input when navigated with a seedText (e.g., from Collections)
+  useEffect(() => {
+    const seed: string | undefined = route?.params?.seedText;
+    if (seed) {
+      setInputText(seed);
+    }
+  }, [route?.params?.seedText]);
 
   const loadDailyReflection = async () => {
     try {

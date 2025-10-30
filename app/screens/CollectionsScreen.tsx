@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { View, Text, Pressable, FlatList } from "react-native";
+import { addFavorite } from "../../lib/verseFavorites";
 
 type Entry = {
   id: string;
@@ -99,6 +100,17 @@ export function CollectionDetailScreen({ route, navigation }: any) {
                   <Text style={{ color: "#A5B4FC", fontWeight: "700", fontSize: 13 }}>{v}</Text>
                 </View>
               ))}
+            </View>
+            <View style={{ flexDirection: 'row', gap: 10, marginTop: 12 }}>
+              <Pressable onPress={() => navigation.navigate('Chat', { seedText: item.text })} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: '#3B82F6' }}>
+                <Text style={{ color: '#fff', fontWeight: '600' }}>Open in Chat</Text>
+              </Pressable>
+              <Pressable onPress={async () => { try { await navigator.clipboard.writeText(`${item.text}\n\n${item.verses.join(', ')}`); } catch {} }} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}>
+                <Text style={{ color: '#EAF2FF' }}>Copy</Text>
+              </Pressable>
+              <Pressable onPress={async () => { for (const v of item.verses) { await addFavorite({ ref: v, text: undefined, addedAt: Date.now() }); } }} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}>
+                <Text style={{ color: '#EAF2FF' }}>Save</Text>
+              </Pressable>
             </View>
           </View>
         )}
