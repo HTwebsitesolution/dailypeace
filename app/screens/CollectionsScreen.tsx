@@ -44,7 +44,12 @@ export default function CollectionsScreen({ navigation }: any) {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#0B1016", paddingHorizontal: 16, paddingTop: 24 }}>
-      <Text style={{ color: "#FFFFFF", fontSize: 22, fontWeight: "700", marginBottom: 12 }}>Collections</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        <Text style={{ color: "#FFFFFF", fontSize: 22, fontWeight: "700" }}>Collections</Text>
+        <Pressable onPress={() => navigation.navigate('Home')} style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.12)' }}>
+          <Text style={{ color: '#EAF2FF', fontWeight: '600' }}>Home</Text>
+        </Pressable>
+      </View>
       <FlatList
         data={data}
         keyExtractor={(i) => i.key}
@@ -64,15 +69,23 @@ export default function CollectionsScreen({ navigation }: any) {
   );
 }
 
-export function CollectionDetailScreen({ route }: any) {
+export function CollectionDetailScreen({ route, navigation }: any) {
   const { category } = route.params as { category: string };
   const items = (messages as Entry[]).filter((m) => m.category === category);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#0B1016", paddingHorizontal: 16, paddingTop: 24 }}>
-      <Text style={{ color: "#FFFFFF", fontSize: 22, fontWeight: "700", marginBottom: 12 }}>
-        {CATEGORY_LABEL[category] || category}
-      </Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        <Pressable onPress={() => navigation.goBack()} style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.12)' }}>
+          <Text style={{ color: '#EAF2FF', fontWeight: '600' }}>Back</Text>
+        </Pressable>
+        <Text style={{ color: "#FFFFFF", fontSize: 22, fontWeight: "700" }}>
+          {CATEGORY_LABEL[category] || category}
+        </Text>
+        <Pressable onPress={() => navigation.navigate('Home')} style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.12)' }}>
+          <Text style={{ color: '#EAF2FF', fontWeight: '600' }}>Home</Text>
+        </Pressable>
+      </View>
       <FlatList
         data={items}
         keyExtractor={(i) => i.id}
