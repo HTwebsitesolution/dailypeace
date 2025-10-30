@@ -462,7 +462,7 @@ export default function ChatScreen() {
                       }}
                     >
                       <Text style={{ color: "#9FB0C3", fontSize: 20, textAlign: "center", marginTop: 6, fontStyle: "italic" }}>
-                        Find peace and hope from scriptures ✨
+                        find strength, peace and hope from scripture
                       </Text>
                     </Animated.View>
                   </View>
@@ -640,7 +640,7 @@ export default function ChatScreen() {
                       }}
                     >
                       <Text style={{ color: "#9FB0C3", fontSize: 20, textAlign: "center", marginTop: 6, fontStyle: "italic" }}>
-                        Find peace and hope from scriptures ✨
+                        find strength, peace and hope from scripture
                       </Text>
                     </Animated.View>
                   </View>

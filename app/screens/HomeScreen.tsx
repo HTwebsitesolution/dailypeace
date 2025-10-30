@@ -160,7 +160,7 @@ export default function HomeScreen() {
                   textShadowOffset: { width: 0, height: 2 },
                   textShadowRadius: 4,
                   letterSpacing: 0.3
-                }}>Find peace and hope from scripture ✨</Text>
+                }}>find strength, peace and hope from scripture</Text>
               </Animated.View>
             </>
           )}
