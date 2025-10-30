@@ -155,6 +155,14 @@ export default function ChatScreen() {
         console.warn("[Chat] kjvIndex or needSeeds not loaded yet");
       }
 
+      // Ensure Scripture Wisdom never returns empty due to slow data hydrate
+      if (mode === "biblical" && verses.length === 0) {
+        verses = [
+          { ref: "John 14:27", text: "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid." },
+          { ref: "Philippians 4:6-7", text: "Be careful for nothing; but in every thing by prayer and supplication with thanksgiving let your requests be made known unto God. And the peace of God, which passeth all understanding, shall keep your hearts and minds through Christ Jesus." }
+        ];
+      }
+
       // Generate response with timeout
       const result = await Promise.race([
         apiGenerate(userMessage, mode, verses),
