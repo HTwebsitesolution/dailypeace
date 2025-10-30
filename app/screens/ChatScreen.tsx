@@ -6,6 +6,7 @@ import * as FileSystem from "expo-file-system";
 import { useNavigation } from "@react-navigation/native";
 import { useSettings } from "../../lib/settings";
 import { apiGenerate, apiTranscribe } from "../../lib/api";
+import { addFavorite, getFavorites, removeFavorite } from "../../lib/verseFavorites";
 import { loadKJVIndex, selectVerses } from "../../lib/verse";
 import fearAnxietySeeds from "../../assets/seeds/fear_anxiety.json";
 import { track } from "../../lib/analytics";
@@ -42,6 +43,7 @@ export default function ChatScreen() {
   const [reflection, setReflection] = useState<Reflection | null>(null);
   const [kjvIndex, setKjvIndex] = useState<Record<string, string> | null>(null);
   const [needSeeds, setNeedSeeds] = useState<any>(null);
+  const [favorites, setFavorites] = useState<{ ref: string; text?: string; addedAt: number }[]>([]);
 
   const recordingRef = useRef<Audio.Recording | null>(null);
   const speechRecognitionRef = useRef<any>(null);
@@ -53,6 +55,7 @@ export default function ChatScreen() {
     loadData();
     requestPermissions();
     loadDailyReflection();
+    loadFavorites();
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 500,
@@ -107,6 +110,13 @@ export default function ChatScreen() {
     }
   };
 
+  const loadFavorites = async () => {
+    try {
+      const list = await getFavorites();
+      setFavorites(list);
+    } catch {}
+  };
+
   const addMessage = useCallback((role: "user" | "app", content: string) => {
     const message: Message = {
       id: Date.now().toString(),
@@ -148,12 +158,32 @@ export default function ChatScreen() {
       // Generate response with timeout
       const result = await Promise.race([
         apiGenerate(userMessage, mode, verses),
-        new Promise((_, reject) => 
+        new Promise((_, reject) =>
           setTimeout(() => reject(new Error("Request timeout after 30 seconds")), 30000)
         )
       ]) as GenerateResult;
 
-      if (result.inspired_message) {
+      // Special handling: "Scripture Wisdom" maps to biblical mode
+      // The server intentionally returns no inspired_message for biblical mode
+      // (verses-only). Render the verses rather than falling back to the generic greeting.
+      if (mode === "biblical") {
+        if (verses.length > 0) {
+          const header = "Scripture Wisdom — Verses for you:";
+          const versesText = verses
+            .map(v => `• ${v.ref}\n${v.text}`)
+            .join("\n\n");
+          const closing = "Which of these speaks to your situation?";
+          const full = `${header}\n\n${versesText}\n\n${closing}`;
+
+          addMessage("app", full);
+          setReflection({
+            message: versesText,
+            verses: verses.map(v => v.ref),
+          });
+        } else {
+          addMessage("app", "Let's reflect on Scripture together. What’s on your heart today?");
+        }
+      } else if (result.inspired_message) {
         const response = result.inspired_message;
         addMessage("app", response.text);
 
@@ -308,6 +338,70 @@ export default function ChatScreen() {
     setReflection(null);
   };
 
+  const handleClearChat = () => {
+    setMessages([]);
+    setInputText("");
+    setReflection(null);
+  };
+
+  const handleRefresh = () => {
+    setReflection(null);
+    setMessages([]);
+    loadDailyReflection();
+    loadFavorites();
+  };
+
+  const handleBackHome = () => {
+    try { nav.navigate("Home"); } catch {}
+  };
+
+  const handleVersePress = async (ref: string) => {
+    try {
+      const verseText = (messages.find(m => m.role === 'app' && m.content.includes(ref))?.content || '').split(ref+"\n")[1] || '';
+      const buttons: { text: string; onPress: () => void }[] = [];
+
+      // Copy
+      buttons.push({ text: "Copy", onPress: async () => {
+        try { await navigator.clipboard.writeText(`${ref}: ${verseText}`); } catch {}
+      }});
+
+      // Save
+      buttons.push({ text: "Save", onPress: async () => {
+        await addFavorite({ ref, text: verseText, addedAt: Date.now() });
+        addMessage('app', `Saved ${ref} to Favorites ⭐`);
+        loadFavorites();
+      }});
+
+      // Explain
+      buttons.push({ text: "Explain", onPress: async () => {
+        try {
+          const r = await apiGenerate(`Explain this verse briefly and clearly for practical understanding: ${ref} — ${verseText}`, 'conversational', [] as any);
+          if ((r as any).inspired_message?.text) addMessage('app', (r as any).inspired_message.text);
+        } catch { addMessage('app', 'Sorry, I could not explain that right now.'); }
+      }});
+
+      // Apply
+      buttons.push({ text: "Apply", onPress: async () => {
+        try {
+          const r = await apiGenerate(`Give 2–3 concrete ways to apply: ${ref} — ${verseText}`, 'conversational', [] as any);
+          if ((r as any).inspired_message?.text) addMessage('app', (r as any).inspired_message.text);
+        } catch { addMessage('app', 'Sorry, I could not suggest applications right now.'); }
+      }});
+
+      // Pray
+      buttons.push({ text: "Pray", onPress: async () => {
+        try {
+          const r = await apiGenerate(`Write a 40-60 word prayer to God inspired by: ${ref} — ${verseText}`, 'conversational', [] as any);
+          if ((r as any).inspired_message?.text) addMessage('app', (r as any).inspired_message.text);
+        } catch { addMessage('app', 'Sorry, I could not generate a prayer right now.'); }
+      }});
+
+      buttons.push({ text: "Close", onPress: () => {} });
+
+      Alert.alert(ref, "Choose an action", buttons);
+    } catch {}
+  };
+
   return (
     <AtmosphericBackground 
       mode={mode} 
@@ -389,6 +483,18 @@ export default function ChatScreen() {
                     <ModeToggle value={mode} onChange={setMode} />
                   </Animated.View>
                 </View>
+                {/* Utility actions */}
+                <View style={{ flexDirection: 'row', gap: 8, marginTop: 10, justifyContent: 'center' }}>
+                  <Pressable onPress={handleClearChat} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(239,68,68,0.25)' }} android_ripple={{ color: '#ffffff30' }}>
+                    <Text style={{ color: '#FCA5A5', fontWeight: '600' }}>Clear</Text>
+                  </Pressable>
+                  <Pressable onPress={handleRefresh} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(59,130,246,0.25)' }} android_ripple={{ color: '#ffffff30' }}>
+                    <Text style={{ color: '#93C5FD', fontWeight: '600' }}>Refresh</Text>
+                  </Pressable>
+                  <Pressable onPress={handleBackHome} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }} android_ripple={{ color: '#ffffff30' }}>
+                    <Text style={{ color: '#EAF2FF', fontWeight: '600' }}>Home</Text>
+                  </Pressable>
+                </View>
               </View>
 
               {/* Daily Reflection */}
@@ -398,7 +504,41 @@ export default function ChatScreen() {
                   verses={reflection.verses}
                   onShare={shareReflection}
                   onClose={closeReflection}
+                  onVersePress={handleVersePress}
                 />
+              )}
+
+              {/* Favorites - Quiet Reflection */}
+              {mode === 'reflective' && favorites.length > 0 && (
+                <View style={{ marginTop: 16, paddingHorizontal: 12 }}>
+                  <Text style={{ color: '#EAF2FF', fontWeight: '700', fontSize: 16, marginBottom: 8 }}>Your Favorites</Text>
+                  {favorites.map(f => (
+                    <View key={f.ref} style={{
+                      backgroundColor: 'rgba(255,255,255,0.06)',
+                      borderColor: 'rgba(255,255,255,0.12)',
+                      borderWidth: 1,
+                      borderRadius: 12,
+                      padding: 12,
+                      marginBottom: 8
+                    }}>
+                      <Text style={{ color: '#A5B4FC', fontWeight: '700' }}>{f.ref}</Text>
+                      {!!f.text && (
+                        <Text numberOfLines={3} style={{ color: '#EAF2FF', marginTop: 6, lineHeight: 20 }}>{f.text}</Text>
+                      )}
+                      <View style={{ flexDirection: 'row', gap: 12, marginTop: 10 }}>
+                        <Pressable onPress={() => setInputText(prev => (prev ? prev + `\n${f.ref}: ` : `${f.ref}: `))} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: '#3B82F6' }}>
+                          <Text style={{ color: '#fff' }}>Insert</Text>
+                        </Pressable>
+                        <Pressable onPress={async () => { try { await navigator.clipboard.writeText(`${f.ref}: ${f.text || ''}`); } catch {} }} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}>
+                          <Text style={{ color: '#EAF2FF' }}>Copy</Text>
+                        </Pressable>
+                        <Pressable onPress={async () => { await removeFavorite(f.ref); loadFavorites(); }} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(239,68,68,0.25)' }}>
+                          <Text style={{ color: '#FCA5A5' }}>Remove</Text>
+                        </Pressable>
+                      </View>
+                    </View>
+                  ))}
+                </View>
               )}
 
               {/* Messages */}
@@ -521,6 +661,18 @@ export default function ChatScreen() {
                     <ModeToggle value={mode} onChange={setMode} />
                   </Animated.View>
                 </View>
+                {/* Utility actions (web branch) */}
+                <View style={{ flexDirection: 'row', gap: 8, marginTop: 10, justifyContent: 'center' }}>
+                  <Pressable onPress={handleClearChat} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(239,68,68,0.25)' }}>
+                    <Text style={{ color: '#FCA5A5', fontWeight: '600' }}>Clear</Text>
+                  </Pressable>
+                  <Pressable onPress={handleRefresh} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(59,130,246,0.25)' }}>
+                    <Text style={{ color: '#93C5FD', fontWeight: '600' }}>Refresh</Text>
+                  </Pressable>
+                  <Pressable onPress={handleBackHome} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}>
+                    <Text style={{ color: '#EAF2FF', fontWeight: '600' }}>Home</Text>
+                  </Pressable>
+                </View>
               </View>
 
               {/* Daily Reflection */}
@@ -530,7 +682,41 @@ export default function ChatScreen() {
                   verses={reflection.verses}
                   onShare={shareReflection}
                   onClose={closeReflection}
+                  onVersePress={handleVersePress}
                 />
+              )}
+
+              {/* Favorites - Quiet Reflection (web branch) */}
+              {mode === 'reflective' && favorites.length > 0 && (
+                <View style={{ marginTop: 16, paddingHorizontal: 12 }}>
+                  <Text style={{ color: '#EAF2FF', fontWeight: '700', fontSize: 16, marginBottom: 8 }}>Your Favorites</Text>
+                  {favorites.map(f => (
+                    <View key={f.ref} style={{
+                      backgroundColor: 'rgba(255,255,255,0.06)',
+                      borderColor: 'rgba(255,255,255,0.12)',
+                      borderWidth: 1,
+                      borderRadius: 12,
+                      padding: 12,
+                      marginBottom: 8
+                    }}>
+                      <Text style={{ color: '#A5B4FC', fontWeight: '700' }}>{f.ref}</Text>
+                      {!!f.text && (
+                        <Text numberOfLines={3} style={{ color: '#EAF2FF', marginTop: 6, lineHeight: 20 }}>{f.text}</Text>
+                      )}
+                      <View style={{ flexDirection: 'row', gap: 12, marginTop: 10 }}>
+                        <Pressable onPress={() => setInputText(prev => (prev ? prev + `\n${f.ref}: ` : `${f.ref}: `))} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: '#3B82F6' }}>
+                          <Text style={{ color: '#fff' }}>Insert</Text>
+                        </Pressable>
+                        <Pressable onPress={async () => { try { await navigator.clipboard.writeText(`${f.ref}: ${f.text || ''}`); } catch {} }} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}>
+                          <Text style={{ color: '#EAF2FF' }}>Copy</Text>
+                        </Pressable>
+                        <Pressable onPress={async () => { await removeFavorite(f.ref); loadFavorites(); }} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(239,68,68,0.25)' }}>
+                          <Text style={{ color: '#FCA5A5' }}>Remove</Text>
+                        </Pressable>
+                      </View>
+                    </View>
+                  ))}
+                </View>
               )}
 
               {/* Messages */}

@@ -7,12 +7,14 @@ export default function ReflectionCard({
   verses,
   onShare,
   onClose,
+  onVersePress,
 }: {
   title?: string;
   message: string;
   verses: string[];
   onShare?: () => void;
   onClose?: () => void;
+  onVersePress?: (ref: string) => void;
 }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
@@ -116,20 +118,20 @@ export default function ReflectionCard({
                 transform: [{ scale: scaleAnim }],
               }}
             >
-              <View style={{
+              <Pressable onPress={() => onVersePress && onVersePress(v)} style={{
                 backgroundColor: "rgba(255,255,255,0.12)",
                 paddingHorizontal: 8,
                 paddingVertical: 4,
                 borderRadius: 8,
                 borderWidth: 1,
                 borderColor: "rgba(255,255,255,0.12)"
-              }}>
+              }} android_ripple={{ color: '#ffffff30' }}>
                 <Text style={{ 
                   color: "#A5B4FC", 
                   fontSize: 13, 
                   fontWeight: "600"
                 }}>{v}</Text>
-              </View>
+              </Pressable>
             </Animated.View>
           ))}
         </View>
