@@ -7,7 +7,7 @@ import AtmosphericBackground from "../components/AtmosphericBackground";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import OnboardingModal from "../components/OnboardingModal";
 
-const logoImage = require("../../assets/DailyPeace App Logo.png");
+const logoImage = require("../../assets/Bible Circle Daily Peace Logo.png");
 
 export default function HomeScreen() {
   const navigation = useNavigation<any>();

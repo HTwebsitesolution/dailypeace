@@ -17,7 +17,7 @@ import ChatInput from "../components/ChatInput";
 import ReflectionCard from "../components/ReflectionCard";
 import AtmosphericBackground from "../components/AtmosphericBackground";
 
-const logo = require("../../assets/DailyPeace App Logo.png");
+const logo = require("../../assets/Bible Circle Daily Peace Logo.png");
 
 interface Message {
   id: string;
