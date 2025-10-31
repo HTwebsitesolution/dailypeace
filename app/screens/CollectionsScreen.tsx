@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { View, Text, Pressable, FlatList, Share, Alert, Platform, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { addFavorite } from "../../lib/verseFavorites";
+import { addFavorite, getFavorites } from "../../lib/verseFavorites";
 
 type Entry = {
   id: string;
@@ -75,6 +75,15 @@ export function CollectionDetailScreen({ route, navigation }: any) {
   const { category } = route.params as { category: string };
   const items = (messages as Entry[]).filter((m) => m.category === category);
 
+  const [favoriteRefs, setFavoriteRefs] = useState<Set<string>>(new Set());
+  const refreshFavorites = async () => {
+    try {
+      const list = await getFavorites();
+      setFavoriteRefs(new Set(list.map(f => f.ref)));
+    } catch {}
+  };
+  useEffect(() => { refreshFavorites(); }, []);
+
   // Clipboard helper: prefer expo-clipboard when available
   let clipboardSetStringAsync: null | ((text: string) => Promise<void>) = null;
   try {
@@ -139,6 +148,7 @@ export function CollectionDetailScreen({ route, navigation }: any) {
         await addFavorite({ ref: v, text: undefined, addedAt: Date.now() });
       }
       Alert.alert("Saved", "Verses saved to favorites.");
+      refreshFavorites();
     } catch (e) {
       Alert.alert("Oops", "Couldn't save right now. Please try again.");
     }
@@ -200,12 +210,19 @@ export function CollectionDetailScreen({ route, navigation }: any) {
         keyExtractor={(i) => i.id}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         renderItem={({ item }) => {
+          const savedCount = item.verses.filter(v => favoriteRefs.has(v)).length;
+          const anySaved = savedCount > 0;
           return (
             <View style={{ position: 'relative', borderRadius: 16, backgroundColor: '#141B23', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', paddingHorizontal: 16, paddingVertical: 16, marginVertical: 4 }} pointerEvents="auto">
               {/* Decorative overlay example (ensure it never captures clicks) */}
               {/* <Image source={require('../../assets/images/logo-dove.png')} style={{ position: 'absolute', right: -10, bottom: -10, width: 180, height: 180, opacity: 0.06, zIndex: 0, pointerEvents: 'none' }} /> */}
 
               <Text style={{ color: '#FFFFFF', fontSize: 16, lineHeight: 22, marginBottom: 12 }}>{item.text}</Text>
+              {anySaved && (
+                <View style={{ alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, backgroundColor: 'rgba(34,197,94,0.18)', borderWidth: 1, borderColor: 'rgba(34,197,94,0.35)', marginBottom: 8 }}>
+                  <Text style={{ color: '#86EFAC', fontWeight: '700', fontSize: 12 }}>Saved</Text>
+                </View>
+              )}
 
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
                 {item.verses.map((v) => (
@@ -245,7 +262,7 @@ export function CollectionDetailScreen({ route, navigation }: any) {
                   onPress={() => saveVerses(item.verses)}
                   style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
                 >
-                  <Text style={{ color: '#EAF2FF' }}>Save</Text>
+                  <Text style={{ color: '#EAF2FF' }}>{anySaved ? `Save More` : `Save`}</Text>
                 </TouchableOpacity>
               </View>
             </View>

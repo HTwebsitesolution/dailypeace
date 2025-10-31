@@ -69,6 +69,12 @@ export default function HomeScreen() {
           >
             <Text style={{ color: '#EAF2FF', fontWeight: '600' }}>Collections</Text>
           </Pressable>
+          <Pressable
+            onPress={() => navigation.navigate('Favorites')}
+            style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}
+          >
+            <Text style={{ color: '#EAF2FF', fontWeight: '600' }}>Favorites</Text>
+          </Pressable>
         </View>
         {/* Decorative logo - behind content, z-index 0, hidden on mobile */}
         {width >= 768 && (
