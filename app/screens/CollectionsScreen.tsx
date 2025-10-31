@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
-import { View, Text, Pressable, FlatList, Share, Alert, Platform } from "react-native";
+import { View, Text, Pressable, FlatList, Share, Alert, Platform, TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { addFavorite } from "../../lib/verseFavorites";
 
 type Entry = {
@@ -74,8 +75,24 @@ export function CollectionDetailScreen({ route, navigation }: any) {
   const { category } = route.params as { category: string };
   const items = (messages as Entry[]).filter((m) => m.category === category);
 
+  // Clipboard helper: prefer expo-clipboard when available
+  let clipboardSetStringAsync: null | ((text: string) => Promise<void>) = null;
+  try {
+    // @ts-ignore - lazy require so web/builds without the module won't fail
+    const Clipboard = require("expo-clipboard");
+    if (Clipboard?.setStringAsync) clipboardSetStringAsync = Clipboard.setStringAsync;
+  } catch {}
+
   const copyText = async (text: string) => {
     const payload = `${text}`;
+    // 0) expo-clipboard if present
+    if (clipboardSetStringAsync) {
+      try {
+        await clipboardSetStringAsync(payload);
+        Alert.alert("Copied", "Text copied to clipboard.");
+        return;
+      } catch {}
+    }
     // 1) Try modern Clipboard API on secure web contexts
     try {
       const nav: any = (globalThis as any)?.navigator;
@@ -154,16 +171,16 @@ export function CollectionDetailScreen({ route, navigation }: any) {
                 </View>
               ))}
             </View>
-            <View style={{ flexDirection: 'row', gap: 10, marginTop: 12 }}>
-              <Pressable onPress={() => navigation.navigate('Chat', { seedText: item.text })} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: '#3B82F6' }}>
+            <View style={{ flexDirection: 'row', gap: 10, marginTop: 12, zIndex: 10 }}>
+              <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('Chat', { seedText: item.text })} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: '#3B82F6' }}>
                 <Text style={{ color: '#fff', fontWeight: '600' }}>Open in Chat</Text>
-              </Pressable>
-              <Pressable onPress={() => copyText(`${item.text}\n\n${item.verses.join(', ')}`)} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.8} onPress={() => copyText(`${item.text}\n\n${item.verses.join(' · ')}`)} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
                 <Text style={{ color: '#EAF2FF' }}>Copy</Text>
-              </Pressable>
-              <Pressable onPress={() => saveVerses(item.verses)} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.8} onPress={() => saveVerses(item.verses)} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
                 <Text style={{ color: '#EAF2FF' }}>Save</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </View>
         )}
