@@ -22,9 +22,9 @@ export default function SettingsCard({
       style={style}
     >
       <View className="flex-1 pr-3">
-        <Text className="text-white font-semibold">{title}</Text>
+        <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>{title}</Text>
         {subtitle ? (
-          <Text className="mt-0.5" style={{ color: "#EAF2FF" }}>{subtitle}</Text>
+          <Text style={{ color: "#EAF2FF", marginTop: 2 }}>{subtitle}</Text>
         ) : null}
       </View>
       {right}
