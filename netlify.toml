@@ -1,4 +1,4 @@
-
+# Netlify build configuration for Daily Peace
 [build]
   publish = "web-dist"
   command = "npx expo export --platform web --output-dir web-dist && mkdir -p web-dist/icons && cp assets/icon.png web-dist/icons/icon-192.png && cp assets/icon.png web-dist/icons/icon-512.png && cp assets/icon.png web-dist/icons/maskable-512.png && cp public/manifest.json web-dist/manifest.json && printf '# API routes\n/api/* /.netlify/functions/:splat 200\n\n# SPA fallback\n/* /index.html 200\n' > web-dist/_redirects"
