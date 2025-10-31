@@ -163,7 +163,7 @@ export function CollectionDetailScreen({ route, navigation }: any) {
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         renderItem={({ item }) => {
           return (
-            <View style={{ position: 'relative', borderRadius: 16, backgroundColor: '#141B23', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', paddingHorizontal: 16, paddingVertical: 16, marginVertical: 4 }}>
+            <View style={{ position: 'relative', borderRadius: 16, backgroundColor: '#141B23', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', paddingHorizontal: 16, paddingVertical: 16, marginVertical: 4 }} pointerEvents="auto">
               {/* Decorative overlay example (ensure it never captures clicks) */}
               {/* <Image source={require('../../assets/images/logo-dove.png')} style={{ position: 'absolute', right: -10, bottom: -10, width: 180, height: 180, opacity: 0.06, zIndex: 0, pointerEvents: 'none' }} /> */}
 
