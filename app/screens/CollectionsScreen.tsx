@@ -72,6 +72,19 @@ export default function CollectionsScreen({ navigation }: any) {
 }
 
 export function CollectionDetailScreen({ route, navigation }: any) {
+  const WebButton = ({ onPress, children, style }: { onPress: () => void; children: React.ReactNode; style?: any }) => {
+    if (Platform.OS === 'web') {
+      return (
+        // @ts-ignore onClick exists on RNW elements
+        <View role="button" tabIndex={0} onClick={onPress} style={[{ cursor: 'pointer' }, style]} pointerEvents="auto">
+          {children}
+        </View>
+      );
+    }
+    return (
+      <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={style} />
+    ) as any;
+  };
   const { category } = route.params as { category: string };
   const items = (messages as Entry[]).filter((m) => m.category === category);
 
@@ -180,33 +193,24 @@ export function CollectionDetailScreen({ route, navigation }: any) {
               style={{ flexDirection: 'row', gap: 10, marginTop: 12, zIndex: 1000, position: 'relative' }}
               pointerEvents="auto"
             >
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onStartShouldSetResponderCapture={() => true}
-                onPressIn={() => console.log('Open in Chat pressIn')}
+              <WebButton
                 onPress={() => { console.log('Open in Chat clicked'); navigation.navigate('Chat', { seedText: item.text }); }}
                 style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: '#3B82F6', position: 'relative', zIndex: 1001 }}
               >
                 <Text style={{ color: '#fff', fontWeight: '600' }}>Open in Chat</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onStartShouldSetResponderCapture={() => true}
-                onPressIn={() => console.log('Copy pressIn')}
+              </WebButton>
+              <WebButton
                 onPress={() => { console.log('Copy clicked'); copyText(`${item.text}\n\n${item.verses.join(' · ')}`); }}
                 style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', position: 'relative', zIndex: 1001 }}
               >
                 <Text style={{ color: '#EAF2FF' }}>Copy</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onStartShouldSetResponderCapture={() => true}
-                onPressIn={() => console.log('Save pressIn')}
+              </WebButton>
+              <WebButton
                 onPress={() => { console.log('Save clicked'); saveVerses(item.verses); }}
                 style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', position: 'relative', zIndex: 1001 }}
               >
                 <Text style={{ color: '#EAF2FF' }}>Save</Text>
-              </TouchableOpacity>
+              </WebButton>
             </View>
           </View>
         )}
