@@ -162,7 +162,7 @@ export function CollectionDetailScreen({ route, navigation }: any) {
         keyExtractor={(i) => i.id}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         renderItem={({ item }) => (
-          <View style={{ borderRadius: 16, backgroundColor: "#141B23", borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", paddingHorizontal: 16, paddingVertical: 16 }}>
+          <View style={{ borderRadius: 16, backgroundColor: "#141B23", borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", paddingHorizontal: 16, paddingVertical: 16 }} pointerEvents="auto">
             <Text style={{ color: "#FFFFFF", fontSize: 16, lineHeight: 22 }}>{item.text}</Text>
             <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
               {item.verses.map((v) => (
@@ -171,14 +171,14 @@ export function CollectionDetailScreen({ route, navigation }: any) {
                 </View>
               ))}
             </View>
-            <View style={{ flexDirection: 'row', gap: 10, marginTop: 12, zIndex: 10 }}>
-              <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('Chat', { seedText: item.text })} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: '#3B82F6' }}>
+            <View style={{ flexDirection: 'row', gap: 10, marginTop: 12, zIndex: 10, position: 'relative' }} pointerEvents="auto">
+              <TouchableOpacity activeOpacity={0.8} onPress={() => { console.log('Open in Chat clicked'); navigation.navigate('Chat', { seedText: item.text }); }} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: '#3B82F6' }}>
                 <Text style={{ color: '#fff', fontWeight: '600' }}>Open in Chat</Text>
               </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.8} onPress={() => copyText(`${item.text}\n\n${item.verses.join(' · ')}`)} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
+              <TouchableOpacity activeOpacity={0.8} onPress={() => { console.log('Copy clicked'); copyText(`${item.text}\n\n${item.verses.join(' · ')}`); }} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
                 <Text style={{ color: '#EAF2FF' }}>Copy</Text>
               </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.8} onPress={() => saveVerses(item.verses)} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
+              <TouchableOpacity activeOpacity={0.8} onPress={() => { console.log('Save clicked'); saveVerses(item.verses); }} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
                 <Text style={{ color: '#EAF2FF' }}>Save</Text>
               </TouchableOpacity>
             </View>
