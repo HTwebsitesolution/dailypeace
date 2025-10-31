@@ -2,17 +2,19 @@ import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import * as Splash from "expo-splash-screen";
 import { Asset } from "expo-asset";
-import AnimatedSplash from "./components/AnimatedSplash";
+import SplashOverlay from "./components/SplashOverlay";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import HomeScreen from "./screens/HomeScreen";
+import IntroScreen from "./screens/IntroScreen";
 import OnboardingModal from "./components/OnboardingModal";
 
 Splash.preventAutoHideAsync().catch(() => {});
 
 export default function SplashGate() {
   const [isReady, setIsReady] = useState(false);
-  const [animatedDone, setAnimatedDone] = useState(false);
+  const [splashDone, setSplashDone] = useState(false);
+  const [showIntro, setShowIntro] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   const prepare = useCallback(async () => {
@@ -20,8 +22,11 @@ export default function SplashGate() {
     await Asset.loadAsync([
       require("../assets/branding/icons/icon-ios.png"),
       require("../assets/images/hero-ocean.png"),
+      require("../assets/images/logo-dove.png"),
     ]);
+    const intro = await AsyncStorage.getItem("@dp/intro_seen");
     const ob = await AsyncStorage.getItem("@dp/onboarding_done");
+    setShowIntro(intro !== "1");
     setShowOnboarding(ob !== "1");
     setIsReady(true);
     await Splash.hideAsync();
@@ -35,9 +40,11 @@ export default function SplashGate() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#0B1016" }}>
-      {!animatedDone && <AnimatedSplash onFinish={() => setAnimatedDone(true)} />}
+      {!splashDone && <SplashOverlay duration={1200} onDone={() => setSplashDone(true)} />}
 
-      {animatedDone && (
+      {splashDone && showIntro ? (
+        <IntroScreen onProceed={() => setShowIntro(false)} />
+      ) : (
         <>
           <HomeScreen />
           <OnboardingModal visible={showOnboarding} onDone={() => setShowOnboarding(false)} />
