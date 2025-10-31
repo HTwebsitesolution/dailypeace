@@ -5,9 +5,9 @@
     "scheme": "dailypeace",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/branding/icons/icon-ios.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/branding/splash/splash-dailypeace.png",
       "resizeMode": "contain",
       "backgroundColor": "#0B1016"
     },
@@ -17,16 +17,20 @@
     },
     "android": {
       "package": "com.yourcompany.dailypeace",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/branding/icons/icon-android.png",
+        "backgroundColor": "#0B1016"
+      },
       "useNextNotificationsApi": true
     },
     "web": {
-      "favicon": "./assets/DailyPeace App Logo.png"
+      "favicon": "./assets/branding/icons/favicon.png"
     },
     "plugins": [
       [
         "expo-notifications",
         {
-          "icon": "./assets/icon.png",
+          "icon": "./assets/branding/icons/icon-ios.png",
           "color": "#2F80ED",
           "mode": "production"
         }
