@@ -78,30 +78,34 @@ export function CollectionDetailScreen({ route, navigation }: any) {
     const payload = `${text}`;
     // 1) Try modern Clipboard API on secure web contexts
     try {
-      if (typeof navigator !== 'undefined' && (navigator as any).clipboard && (window as any).isSecureContext) {
-        await (navigator as any).clipboard.writeText(payload);
+      const nav: any = (globalThis as any)?.navigator;
+      const isSecure = Boolean((globalThis as any)?.isSecureContext);
+      if (nav && nav.clipboard && isSecure) {
+        await nav.clipboard.writeText(payload);
         Alert.alert("Copied", "Text copied to clipboard.");
         return;
       }
     } catch {}
     // 2) Try navigator.share on web
     try {
-      if (typeof navigator !== 'undefined' && (navigator as any).share) {
-        await (navigator as any).share({ text: payload, title: 'Daily Peace' });
+      const nav: any = (globalThis as any)?.navigator;
+      if (nav && nav.share) {
+        await nav.share({ text: payload, title: 'Daily Peace' });
         return;
       }
     } catch {}
     // 3) Legacy fallback for web: hidden textarea + execCommand
     try {
-      if (typeof document !== 'undefined') {
-        const textarea = document.createElement('textarea');
+      const doc: any = (globalThis as any)?.document;
+      if (doc && doc.createElement) {
+        const textarea = doc.createElement('textarea');
         textarea.value = payload;
         textarea.style.position = 'fixed';
         textarea.style.left = '-9999px';
-        document.body.appendChild(textarea);
+        doc.body.appendChild(textarea);
         textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
+        doc.execCommand('copy');
+        doc.body.removeChild(textarea);
         Alert.alert("Copied", "Text copied to clipboard.");
         return;
       }
