@@ -123,44 +123,42 @@ export default function AtmosphericBackground({
   };
 
   return (
-    <Animated.View style={{ flex: 1, backgroundColor: "#0B1016" }}>
-      <ImageBackground
-        source={currentBackground.image}
-        resizeMode="cover"
-        style={{ 
-          flex: 1, 
-          width: screenWidth,
-          height: screenHeight,
-        }}
-        imageStyle={{
-          opacity: 0.75, // Higher opacity to show the beautiful backgrounds
-          transform: [
-            { scale: scaleAnim },
-            { rotate: rotationTransform }
-          ],
-        }}
-      >
-        {/* Moderate overlay for text readability while keeping images visible */}
-        <View style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.45)', // Moderate overlay - images show through
-          pointerEvents: 'none',
-          zIndex: 0,
-        }} />
-        
-        {/* Content layer - ensures content is above overlays */}
-        <Animated.View style={{ 
-          flex: 1,
-          zIndex: 1,
-          position: 'relative',
-        }}>
-          {children}
-        </Animated.View>
-      </ImageBackground>
+    <Animated.View style={{ flex: 1, backgroundColor: "#0B1016", position: 'relative' }}>
+      {/* Background layer (non-interactive) */}
+      <View style={{ position: 'absolute', inset: 0 as any }} pointerEvents="none">
+        <ImageBackground
+          source={currentBackground.image}
+          resizeMode="cover"
+          style={{ 
+            flex: 1, 
+            width: screenWidth,
+            height: screenHeight,
+          }}
+          imageStyle={{
+            opacity: 0.75,
+            transform: [
+              { scale: scaleAnim },
+              { rotate: rotationTransform }
+            ],
+          }}
+        >
+          {/* Readability overlay - clicks pass through */}
+          <View style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.45)',
+            pointerEvents: 'none',
+          }} />
+        </ImageBackground>
+      </View>
+
+      {/* Foreground content (interactive) */}
+      <Animated.View style={{ flex: 1, position: 'relative', zIndex: 1, pointerEvents: 'auto' }}>
+        {children}
+      </Animated.View>
     </Animated.View>
   );
 }
