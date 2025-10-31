@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { View, Text, Pressable, FlatList, Share, Alert, Platform, TouchableOpacity, Image } from "react-native";
+import { View, Text, Pressable, FlatList, Share, Alert, Platform, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { addFavorite } from "../../lib/verseFavorites";
 
@@ -177,10 +177,10 @@ export function CollectionDetailScreen({ route, navigation }: any) {
                 ))}
               </View>
 
-              <View style={{ position: 'relative', zIndex: 20, flexDirection: 'row', flexWrap: 'wrap', gap: 12, paddingTop: 8 }}>
+              <View style={{ position: 'relative', zIndex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 12, paddingTop: 8 }}>
                 <TouchableOpacity
                   activeOpacity={0.85}
-                  onPress={() => { console.log('Open in Chat pressed', item.id); navigation.navigate('Chat', { seedText: item.text }); }}
+                  onPress={() => navigation.navigate('Chat', { seedText: item.text })}
                   style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, backgroundColor: '#3B82F6' }}
                 >
                   <Text style={{ color: '#fff', fontWeight: '600' }}>Open in Chat</Text>
@@ -188,7 +188,7 @@ export function CollectionDetailScreen({ route, navigation }: any) {
 
                 <TouchableOpacity
                   activeOpacity={0.85}
-                  onPress={() => { console.log('Copy pressed', item.id); copyText(`${item.text}\n\n${item.verses.join(' · ')}`); }}
+                  onPress={() => copyText(`${item.text}\n\n${item.verses.join(' · ')}`)}
                   style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
                 >
                   <Text style={{ color: '#EAF2FF' }}>Copy</Text>
@@ -196,7 +196,7 @@ export function CollectionDetailScreen({ route, navigation }: any) {
 
                 <TouchableOpacity
                   activeOpacity={0.85}
-                  onPress={() => { console.log('Save pressed', item.id); saveVerses(item.verses); }}
+                  onPress={() => saveVerses(item.verses)}
                   style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
                 >
                   <Text style={{ color: '#EAF2FF' }}>Save</Text>
@@ -206,14 +206,6 @@ export function CollectionDetailScreen({ route, navigation }: any) {
           );
         }}
       />
-
-      {/* Floating debug button to verify global click handling */}
-      <TouchableOpacity
-        onPress={() => { console.log('DEBUG floating button clicked'); Alert.alert('Debug', 'Floating button click works'); }}
-        style={{ position: 'fixed' as any, right: 16, bottom: 16, backgroundColor: '#10B981', paddingHorizontal: 12, paddingVertical: 10, borderRadius: 12, zIndex: 99999 }}
-      >
-        <Text style={{ color: '#fff', fontWeight: '700' }}>Debug Click</Text>
-      </TouchableOpacity>
     </View>
   );
 }
