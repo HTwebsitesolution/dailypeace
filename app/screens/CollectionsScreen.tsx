@@ -144,6 +144,44 @@ export function CollectionDetailScreen({ route, navigation }: any) {
     }
   };
 
+	const shareContent = async (text: string, verses: string[]) => {
+		const payload = `${text}\n\n${verses.join(' · ')}`;
+		// 1) Web share sheet when available
+		try {
+			const nav: any = (globalThis as any)?.navigator;
+			if (nav && nav.share) {
+				await nav.share({ title: 'Daily Peace', text: payload });
+				return;
+			}
+		} catch {}
+		// 2) Native share sheet (iOS/Android)
+		try {
+			if (Platform.OS !== 'web') {
+				await Share.share({ message: payload, title: 'Daily Peace' });
+				return;
+			}
+		} catch {}
+		// 3) Fallback: copy to clipboard and notify
+		try {
+			if (clipboardSetStringAsync) {
+				await clipboardSetStringAsync(payload);
+				Alert.alert('Copied', 'Content copied. Paste it into your app.');
+				return;
+			}
+			const nav: any = (globalThis as any)?.navigator;
+			const isSecure = Boolean((globalThis as any)?.isSecureContext);
+			if (nav && nav.clipboard && isSecure) {
+				await nav.clipboard.writeText(payload);
+				Alert.alert('Copied', 'Content copied. Paste it into your app.');
+				return;
+			}
+		} catch {}
+		// 4) Final fallback: RN Share without assumptions
+		try {
+			await Share.share({ message: payload, title: 'Daily Peace' });
+		} catch {}
+	};
+
   return (
     <View style={{ flex: 1, backgroundColor: "#0B1016", paddingHorizontal: 16, paddingTop: 24 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
@@ -193,6 +231,14 @@ export function CollectionDetailScreen({ route, navigation }: any) {
                 >
                   <Text style={{ color: '#EAF2FF' }}>Copy</Text>
                 </TouchableOpacity>
+
+					<TouchableOpacity
+						activeOpacity={0.85}
+						onPress={() => shareContent(item.text, item.verses)}
+						style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
+					>
+						<Text style={{ color: '#EAF2FF' }}>Share</Text>
+					</TouchableOpacity>
 
                 <TouchableOpacity
                   activeOpacity={0.85}
