@@ -167,7 +167,7 @@ function Header({ title, onBack }: { title: string; onBack: () => void }) {
 function Section({ title, children }: { title:string; children: React.ReactNode }) {
   return (
     <View style={{ gap: 8 }}>
-      <Text style={{ color: "#9FB0C3", fontWeight: "600" }}>{title}</Text>
+      <Text style={{ color: "#EAF2FF", fontWeight: "700" }}>{title}</Text>
       <View style={{ gap: 10 }}>{children}</View>
     </View>
   );

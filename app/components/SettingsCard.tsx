@@ -23,7 +23,9 @@ export default function SettingsCard({
     >
       <View className="flex-1 pr-3">
         <Text className="text-white font-semibold">{title}</Text>
-        {subtitle ? <Text className="text-muted mt-0.5">{subtitle}</Text> : null}
+        {subtitle ? (
+          <Text className="mt-0.5" style={{ color: "#EAF2FF" }}>{subtitle}</Text>
+        ) : null}
       </View>
       {right}
     </Container>
