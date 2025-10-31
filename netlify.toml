@@ -1,7 +1,18 @@
 
 [build]
   publish = "web-dist"
-  command = "npx expo export --platform web --output-dir web-dist && echo '# API routes\n/api/* /.netlify/functions/:splat 200\n\n# SPA fallback\n/* /index.html 200' > web-dist/_redirects"
+  command = "npx expo export --platform web --output-dir web-dist && \
+    # Ensure PWA icons + manifest exist in published folder \
+    mkdir -p web-dist/icons && \
+    cp assets/icon.png web-dist/icons/icon-192.png && \
+    cp assets/icon.png web-dist/icons/icon-512.png && \
+    cp assets/icon.png web-dist/icons/maskable-512.png && \
+    # Copy custom manifest.json (references /icons/*) \
+    cp public/manifest.json web-dist/manifest.json && \
+    # Inject manifest link tag into exported index.html if missing \
+    (grep -q 'rel=\"manifest\"' web-dist/index.html || sed -i '/<title>/a \\    <link rel=\"manifest\" href=\"/manifest.json\" />' web-dist/index.html) && \
+    # Write redirects (functions + SPA) \
+    echo '# API routes\n/api/* /.netlify/functions/:splat 200\n\n# SPA fallback\n/* /index.html 200' > web-dist/_redirects"
 
 [build.environment]
   NODE_VERSION = "18"
