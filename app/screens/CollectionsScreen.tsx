@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { View, Text, Pressable, FlatList } from "react-native";
+import { View, Text, Pressable, FlatList, Share, Alert, Platform } from "react-native";
 import { addFavorite } from "../../lib/verseFavorites";
 
 type Entry = {
@@ -74,6 +74,33 @@ export function CollectionDetailScreen({ route, navigation }: any) {
   const { category } = route.params as { category: string };
   const items = (messages as Entry[]).filter((m) => m.category === category);
 
+  const copyText = async (text: string) => {
+    const payload = `${text}`;
+    try {
+      // Web: use Clipboard API when available and in secure context
+      if (typeof navigator !== 'undefined' && (navigator as any).clipboard && (window as any).isSecureContext) {
+        await (navigator as any).clipboard.writeText(payload);
+        Alert.alert("Copied", "Text copied to clipboard.");
+        return;
+      }
+    } catch {}
+    // Fallback: open share sheet (works on native + web)
+    try {
+      await Share.share({ message: payload, title: "Daily Peace" });
+    } catch {}
+  };
+
+  const saveVerses = async (verses: string[]) => {
+    try {
+      for (const v of verses) {
+        await addFavorite({ ref: v, text: undefined, addedAt: Date.now() });
+      }
+      Alert.alert("Saved", "Verses saved to favorites.");
+    } catch (e) {
+      Alert.alert("Oops", "Couldn't save right now. Please try again.");
+    }
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#0B1016", paddingHorizontal: 16, paddingTop: 24 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
@@ -105,10 +132,10 @@ export function CollectionDetailScreen({ route, navigation }: any) {
               <Pressable onPress={() => navigation.navigate('Chat', { seedText: item.text })} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: '#3B82F6' }}>
                 <Text style={{ color: '#fff', fontWeight: '600' }}>Open in Chat</Text>
               </Pressable>
-              <Pressable onPress={async () => { try { await navigator.clipboard.writeText(`${item.text}\n\n${item.verses.join(', ')}`); } catch {} }} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}>
+              <Pressable onPress={() => copyText(`${item.text}\n\n${item.verses.join(', ')}`)} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}>
                 <Text style={{ color: '#EAF2FF' }}>Copy</Text>
               </Pressable>
-              <Pressable onPress={async () => { for (const v of item.verses) { await addFavorite({ ref: v, text: undefined, addedAt: Date.now() }); } }} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}>
+              <Pressable onPress={() => saveVerses(item.verses)} style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}>
                 <Text style={{ color: '#EAF2FF' }}>Save</Text>
               </Pressable>
             </View>
