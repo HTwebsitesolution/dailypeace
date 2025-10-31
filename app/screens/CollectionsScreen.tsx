@@ -177,7 +177,7 @@ export function CollectionDetailScreen({ route, navigation }: any) {
         renderItem={({ item }) => (
           <View
             style={{ borderRadius: 16, backgroundColor: "#141B23", borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", paddingHorizontal: 16, paddingVertical: 16 }}
-            pointerEvents="auto"
+            pointerEvents="box-none"
             onStartShouldSetResponder={() => false}
             onMoveShouldSetResponder={() => false}
           >
@@ -190,8 +190,8 @@ export function CollectionDetailScreen({ route, navigation }: any) {
               ))}
             </View>
             <View
-              style={{ flexDirection: 'row', gap: 10, marginTop: 12, zIndex: 1000, position: 'relative' }}
-              pointerEvents="auto"
+              style={{ flexDirection: 'row', gap: 10, marginTop: 12, zIndex: 2147483647, position: 'relative' }}
+              pointerEvents="box-only"
             >
               <WebButton
                 onPress={() => { console.log('Open in Chat clicked'); navigation.navigate('Chat', { seedText: item.text }); }}
