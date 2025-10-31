@@ -21,7 +21,6 @@ export default function SplashGate() {
     await Asset.loadAsync([
       require("../assets/branding/icons/icon-ios.png"),
       require("../assets/images/hero-ocean.png"),
-      require("../assets/images/logo-dove.png"),
     ]);
     const intro = await AsyncStorage.getItem("@dp/intro_seen");
     const ob = await AsyncStorage.getItem("@dp/onboarding_done");

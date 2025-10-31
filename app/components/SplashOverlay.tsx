@@ -48,7 +48,7 @@ export default function SplashOverlay({
       pointerEvents="none"
     >
       <Animated.Image
-        source={require("../../assets/images/logo-dove.png")}
+        source={require("../../assets/branding/icons/icon-ios.png")}
         resizeMode="contain"
         style={{
           width: 180,
