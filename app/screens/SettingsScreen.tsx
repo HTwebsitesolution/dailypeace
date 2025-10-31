@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Switch, Pressable, Alert } from "react-native";
+import { View, Text, Switch, Pressable, Alert, Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
 import { useNavigation } from "@react-navigation/native";
 import { useSettings } from "../../lib/settings";
@@ -30,13 +31,26 @@ export default function SettingsScreen() {
   }
 
   async function toggleDailyReminder() {
+    // Web: simulate toggle and persist preference, since native notifications aren't supported
+    if (Platform.OS === 'web') {
+      if (notifEnabled) {
+        setNotifEnabled(false);
+        setNotifSchedule(prev => ({ ...prev, enabled: false }));
+        await AsyncStorage.setItem('daily_notification_time', JSON.stringify({ hour: notifSchedule.hour, minute: notifSchedule.minute, enabled: false }));
+      } else {
+        setNotifEnabled(true);
+        setNotifSchedule(prev => ({ ...prev, enabled: true }));
+        await AsyncStorage.setItem('daily_notification_time', JSON.stringify({ hour: notifSchedule.hour, minute: notifSchedule.minute, enabled: true }));
+        Alert.alert("Note", "Daily reminders are available on mobile apps. Preference saved.");
+      }
+      return;
+    }
+
     if (notifEnabled) {
-      // Disable notifications
       await notifications.cancelDailyNotifications();
       setNotifEnabled(false);
       setNotifSchedule(prev => ({ ...prev, enabled: false }));
     } else {
-      // Enable notifications
       const perm = await Notifications.requestPermissionsAsync();
       if (!perm.granted) {
         Alert.alert(
@@ -46,7 +60,6 @@ export default function SettingsScreen() {
         );
         return;
       }
-      
       await notifications.scheduleDailyVerse(notifSchedule.hour, notifSchedule.minute);
       setNotifEnabled(true);
       setNotifSchedule(prev => ({ ...prev, enabled: true }));
