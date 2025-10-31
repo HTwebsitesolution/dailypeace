@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { View, Text, Pressable, FlatList, Share, Alert, Platform, TouchableOpacity } from "react-native";
+import { View, Text, Pressable, FlatList, Share, Alert, Platform, TouchableOpacity, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { addFavorite } from "../../lib/verseFavorites";
 
@@ -72,19 +72,6 @@ export default function CollectionsScreen({ navigation }: any) {
 }
 
 export function CollectionDetailScreen({ route, navigation }: any) {
-  const WebButton = ({ onPress, children, style }: { onPress: () => void; children: React.ReactNode; style?: any }) => {
-    if (Platform.OS === 'web') {
-      return (
-        // @ts-ignore onClick exists on RNW elements
-        <View role="button" tabIndex={0} onClick={onPress} style={[{ cursor: 'pointer' }, style]} pointerEvents="auto">
-          {children}
-        </View>
-      );
-    }
-    return (
-      <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={style} />
-    ) as any;
-  };
   const { category } = route.params as { category: string };
   const items = (messages as Entry[]).filter((m) => m.category === category);
 
@@ -174,46 +161,50 @@ export function CollectionDetailScreen({ route, navigation }: any) {
         data={items}
         keyExtractor={(i) => i.id}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-        renderItem={({ item }) => (
-          <View
-            style={{ borderRadius: 16, backgroundColor: "#141B23", borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", paddingHorizontal: 16, paddingVertical: 16 }}
-            pointerEvents="box-none"
-            onStartShouldSetResponder={() => false}
-            onMoveShouldSetResponder={() => false}
-          >
-            <Text style={{ color: "#FFFFFF", fontSize: 16, lineHeight: 22 }}>{item.text}</Text>
-            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
-              {item.verses.map((v) => (
-                <View key={v} style={{ paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, backgroundColor: "rgba(255,255,255,0.1)", borderWidth: 1, borderColor: "rgba(255,255,255,0.1)" }}>
-                  <Text style={{ color: "#A5B4FC", fontWeight: "700", fontSize: 13 }}>{v}</Text>
-                </View>
-              ))}
+        renderItem={({ item }) => {
+          return (
+            <View style={{ position: 'relative', borderRadius: 16, backgroundColor: '#141B23', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', paddingHorizontal: 16, paddingVertical: 16, marginVertical: 4 }}>
+              {/* Decorative overlay example (ensure it never captures clicks) */}
+              {/* <Image source={require('../../assets/images/logo-dove.png')} style={{ position: 'absolute', right: -10, bottom: -10, width: 180, height: 180, opacity: 0.06, zIndex: 0, pointerEvents: 'none' }} /> */}
+
+              <Text style={{ color: '#FFFFFF', fontSize: 16, lineHeight: 22, marginBottom: 12 }}>{item.text}</Text>
+
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                {item.verses.map((v) => (
+                  <View key={v} style={{ paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
+                    <Text style={{ color: '#A5B4FC', fontWeight: '700', fontSize: 13 }}>{v}</Text>
+                  </View>
+                ))}
+              </View>
+
+              <View style={{ position: 'relative', zIndex: 20, flexDirection: 'row', flexWrap: 'wrap', gap: 12, paddingTop: 8 }}>
+                <TouchableOpacity
+                  activeOpacity={0.85}
+                  onPress={() => { console.log('Open in Chat pressed', item.id); navigation.navigate('Chat', { seedText: item.text }); }}
+                  style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, backgroundColor: '#3B82F6' }}
+                >
+                  <Text style={{ color: '#fff', fontWeight: '600' }}>Open in Chat</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  activeOpacity={0.85}
+                  onPress={() => { console.log('Copy pressed', item.id); copyText(`${item.text}\n\n${item.verses.join(' · ')}`); }}
+                  style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
+                >
+                  <Text style={{ color: '#EAF2FF' }}>Copy</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  activeOpacity={0.85}
+                  onPress={() => { console.log('Save pressed', item.id); saveVerses(item.verses); }}
+                  style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
+                >
+                  <Text style={{ color: '#EAF2FF' }}>Save</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View
-              style={{ flexDirection: 'row', gap: 10, marginTop: 12, zIndex: 2147483647, position: 'relative' }}
-              pointerEvents="box-only"
-            >
-              <WebButton
-                onPress={() => { console.log('Open in Chat clicked'); navigation.navigate('Chat', { seedText: item.text }); }}
-                style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: '#3B82F6', position: 'relative', zIndex: 1001 }}
-              >
-                <Text style={{ color: '#fff', fontWeight: '600' }}>Open in Chat</Text>
-              </WebButton>
-              <WebButton
-                onPress={() => { console.log('Copy clicked'); copyText(`${item.text}\n\n${item.verses.join(' · ')}`); }}
-                style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', position: 'relative', zIndex: 1001 }}
-              >
-                <Text style={{ color: '#EAF2FF' }}>Copy</Text>
-              </WebButton>
-              <WebButton
-                onPress={() => { console.log('Save clicked'); saveVerses(item.verses); }}
-                style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', position: 'relative', zIndex: 1001 }}
-              >
-                <Text style={{ color: '#EAF2FF' }}>Save</Text>
-              </WebButton>
-            </View>
-          </View>
-        )}
+          );
+        }}
       />
     </View>
   );
