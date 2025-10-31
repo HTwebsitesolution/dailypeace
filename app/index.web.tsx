@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { SafeAreaView, StatusBar } from "react-native";
-import RootNav from "./navigation";
+import SplashGate from "./SplashGate";
 import { SettingsProvider } from "../lib/settings";
 
 // Import premium CSS for web
@@ -37,7 +37,7 @@ export default function App() {
     <SettingsProvider>
       <SafeAreaView style={{ flex:1, backgroundColor:"#0B1016" }}>
         <StatusBar barStyle="light-content" />
-        <RootNav />
+        <SplashGate />
       </SafeAreaView>
     </SettingsProvider>
   );

@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { SafeAreaView, StatusBar, Platform } from "react-native";
 import Constants from "expo-constants";
-import RootNav from "./navigation";
+import SplashGate from "./SplashGate";
 import { SettingsProvider } from "../lib/settings";
 import { analytics } from "../lib/analytics";
 import { notifications } from "../lib/notifications";
@@ -22,7 +22,7 @@ export default function App() {
     <SettingsProvider>
       <SafeAreaView style={{ flex:1, backgroundColor:"#0B1016" }}>
         <StatusBar barStyle="light-content" />
-        <RootNav />
+        <SplashGate />
       </SafeAreaView>
     </SettingsProvider>
   );

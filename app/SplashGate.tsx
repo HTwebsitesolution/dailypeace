@@ -4,8 +4,7 @@ import * as Splash from "expo-splash-screen";
 import { Asset } from "expo-asset";
 import SplashOverlay from "./components/SplashOverlay";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import HomeScreen from "./screens/HomeScreen";
+import RootNav from "./navigation";
 import IntroScreen from "./screens/IntroScreen";
 import OnboardingModal from "./components/OnboardingModal";
 
@@ -46,7 +45,7 @@ export default function SplashGate() {
         <IntroScreen onProceed={() => setShowIntro(false)} />
       ) : (
         <>
-          <HomeScreen />
+          <RootNav />
           <OnboardingModal visible={showOnboarding} onDone={() => setShowOnboarding(false)} />
         </>
       )}
