@@ -129,6 +129,7 @@ export default function AtmosphericBackground({
         <ImageBackground
           source={currentBackground.image}
           resizeMode="cover"
+          pointerEvents="none"
           style={{ 
             flex: 1, 
             width: screenWidth,
