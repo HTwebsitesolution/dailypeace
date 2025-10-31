@@ -76,15 +76,37 @@ export function CollectionDetailScreen({ route, navigation }: any) {
 
   const copyText = async (text: string) => {
     const payload = `${text}`;
+    // 1) Try modern Clipboard API on secure web contexts
     try {
-      // Web: use Clipboard API when available and in secure context
       if (typeof navigator !== 'undefined' && (navigator as any).clipboard && (window as any).isSecureContext) {
         await (navigator as any).clipboard.writeText(payload);
         Alert.alert("Copied", "Text copied to clipboard.");
         return;
       }
     } catch {}
-    // Fallback: open share sheet (works on native + web)
+    // 2) Try navigator.share on web
+    try {
+      if (typeof navigator !== 'undefined' && (navigator as any).share) {
+        await (navigator as any).share({ text: payload, title: 'Daily Peace' });
+        return;
+      }
+    } catch {}
+    // 3) Legacy fallback for web: hidden textarea + execCommand
+    try {
+      if (typeof document !== 'undefined') {
+        const textarea = document.createElement('textarea');
+        textarea.value = payload;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        Alert.alert("Copied", "Text copied to clipboard.");
+        return;
+      }
+    } catch {}
+    // 4) Native/web fallback: React Native Share API
     try {
       await Share.share({ message: payload, title: "Daily Peace" });
     } catch {}
