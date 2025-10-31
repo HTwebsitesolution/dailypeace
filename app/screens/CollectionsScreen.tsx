@@ -206,6 +206,14 @@ export function CollectionDetailScreen({ route, navigation }: any) {
           );
         }}
       />
+
+      {/* Floating debug button to verify global click handling */}
+      <TouchableOpacity
+        onPress={() => { console.log('DEBUG floating button clicked'); Alert.alert('Debug', 'Floating button click works'); }}
+        style={{ position: 'fixed' as any, right: 16, bottom: 16, backgroundColor: '#10B981', paddingHorizontal: 12, paddingVertical: 10, borderRadius: 12, zIndex: 99999 }}
+      >
+        <Text style={{ color: '#fff', fontWeight: '700' }}>Debug Click</Text>
+      </TouchableOpacity>
     </View>
   );
 }
