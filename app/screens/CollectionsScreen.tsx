@@ -2,6 +2,7 @@ import React, { useMemo, useEffect, useState } from "react";
 import { View, Text, Pressable, FlatList, Share, Alert, Platform, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { addFavorite, getFavorites } from "../../lib/verseFavorites";
+import { APP_LINK } from "../../lib/config";
 
 type Entry = {
   id: string;
@@ -155,7 +156,7 @@ export function CollectionDetailScreen({ route, navigation }: any) {
   };
 
 	const shareContent = async (text: string, verses: string[]) => {
-		const payload = `${text}\n\n${verses.join(' · ')}`;
+		const payload = `${text}\n\n${verses.join(' · ')}\n\nGet the app: ${APP_LINK}`;
 		// 1) Web share sheet when available
 		try {
 			const nav: any = (globalThis as any)?.navigator;

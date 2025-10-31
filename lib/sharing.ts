@@ -3,14 +3,15 @@ import * as Sharing from 'expo-sharing';
 import { captureRef } from 'react-native-view-shot';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { track } from './analytics';
+import { APP_LINK } from './config';
 
 export const sharing = {
   // Share a text reflection
   async shareReflection(reflection: string, verse?: string) {
     try {
       const shareText = verse 
-        ? `${reflection}\n\n"${verse}"\n\nShared from Daily Peace app 🙏`
-        : `${reflection}\n\nShared from Daily Peace app 🙏`;
+        ? `${reflection}\n\n"${verse}"\n\nShared from Daily Peace app 🙏\nGet the app: ${APP_LINK}`
+        : `${reflection}\n\nShared from Daily Peace app 🙏\nGet the app: ${APP_LINK}`;
 
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(shareText);

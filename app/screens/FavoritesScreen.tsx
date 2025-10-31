@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, Pressable, Alert, Share, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { getFavorites, removeFavorite, FavoriteVerse } from "../../lib/verseFavorites";
+import { APP_LINK } from "../../lib/config";
 
 export default function FavoritesScreen() {
   const navigation = useNavigation<any>();
@@ -21,7 +22,8 @@ export default function FavoritesScreen() {
   }, [navigation]);
 
   const shareFav = async (f: FavoriteVerse) => {
-    const payload = f.text ? `${f.ref}: ${f.text}` : f.ref;
+    const base = f.text ? `${f.ref}: ${f.text}` : f.ref;
+    const payload = `${base}\n\nGet the app: ${APP_LINK}`;
     // Prefer web share if available
     try {
       const nav: any = (globalThis as any)?.navigator;
