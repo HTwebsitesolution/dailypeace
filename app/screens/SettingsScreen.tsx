@@ -135,7 +135,7 @@ export default function SettingsScreen() {
 
         {notifEnabled && (
           <View style={{ backgroundColor:"#1a2332", padding:12, borderRadius:12 }}>
-            <Text style={{ color:"#9FB0C3", fontSize:12, lineHeight:16 }}>
+            <Text style={{ color:"#EAF2FF", fontSize:12, lineHeight:16 }}>
               ✨ Daily inspirational messages with Scripture verses will be delivered at your chosen time.
               Notifications include encouraging words from Jesus and biblical wisdom to start your day with peace.
             </Text>
