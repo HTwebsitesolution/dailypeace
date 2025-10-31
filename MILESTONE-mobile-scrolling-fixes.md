@@ -134,3 +134,4 @@ const maxCardHeight = isMobile ? screenHeight * 0.6 : undefined;
 **User Acceptance:** ✅ Scrolling works well on mobile devices
 
 
+
