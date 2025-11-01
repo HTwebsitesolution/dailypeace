@@ -26,6 +26,9 @@ const CATEGORY_LABEL: Record<string, string> = {
   courage_faith_action: "Courage & Faith in Action",
   rest_renewal: "Rest & Renewal",
   love_community: "Love & Community",
+  grief_loss: "Peace in Grief",
+  waiting_patience: "Strength in Waiting",
+  gratitude_wonder: "Gratitude & Wonder",
 };
 
 export default function CollectionsScreen({ navigation }: any) {
