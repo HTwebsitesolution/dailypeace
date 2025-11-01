@@ -22,8 +22,8 @@ export default function ReflectionCard({
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const scrollRef = useRef<ScrollView>(null);
-  const { height: screenHeight } = useWindowDimensions();
-  const isMobile = Platform.OS === 'web' ? screenHeight < 800 : true;
+  const { height: screenHeight, width } = useWindowDimensions();
+  const isMobile = width < 768;
   // Max height: 50% of screen on mobile to ensure chat input is visible, no limit on desktop
   const maxCardHeight = isMobile ? screenHeight * 0.5 : undefined;
   const componentKey = `reflection_${message.substring(0, 50).replace(/\s+/g, '_')}`;
