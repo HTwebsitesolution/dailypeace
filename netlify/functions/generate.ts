@@ -1,4 +1,3 @@
-
 import type { Handler } from "@netlify/functions";
 import OpenAI from "openai";
 
@@ -6,6 +5,7 @@ declare const process: {
   env: {
     [key: string]: string | undefined;
     OPENAI_API_KEY?: string;
+    PERPLEXITY_API_KEY?: string;
   };
 };
 
@@ -55,6 +55,118 @@ Disclaimer: "AI-generated reflection inspired by Scripture (not a divine message
   return ""; // biblical mode returns verses only
 }
 
+const TIMEOUT_MS = 12000;
+
+async function withTimeout<T>(p: Promise<T>, ms = TIMEOUT_MS): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error("timeout")), ms);
+    p.then(v => { clearTimeout(t); resolve(v); })
+     .catch(e => { clearTimeout(t); reject(e); });
+  });
+}
+
+/* ---------- PRIMARY: OPENAI ---------- */
+async function callOpenAI(
+  systemPrompt: string, 
+  userPrompt: string, 
+  mode: Mode
+): Promise<any> {
+  const openaiApiKey = process.env.OPENAI_API_KEY;
+  if (!openaiApiKey) {
+    throw new Error("OPENAI_API_KEY environment variable is not set");
+  }
+  
+  const client = new OpenAI({ apiKey: openaiApiKey });
+  const resp = await withTimeout(
+    client.chat.completions.create({
+      model: "gpt-4o-mini",
+      temperature: 0.7,
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ]
+    })
+  );
+  
+  const json = resp.choices[0]?.message?.content || "{}";
+  return JSON.parse(json);
+}
+
+/* ---------- SECONDARY: PERPLEXITY (FAILOVER) ---------- */
+async function callPerplexity(
+  systemPrompt: string,
+  userPrompt: string,
+  mode: Mode
+): Promise<any> {
+  const perplexityKey = process.env.PERPLEXITY_API_KEY;
+  if (!perplexityKey) {
+    throw new Error("PERPLEXITY_API_KEY environment variable is not set");
+  }
+
+  // Build simplified prompt for Perplexity (it doesn't support JSON mode like GPT)
+  const simplePrompt = `${systemPrompt}\n\n${userPrompt}\n\nReturn your response as natural text. Do not include URLs, sources, or citation marks.`;
+  
+  const response = await withTimeout(
+    fetch("https://api.perplexity.ai/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${perplexityKey}`,
+      },
+      body: JSON.stringify({
+        model: "sonar-medium",
+        temperature: 0.7,
+        max_tokens: 500,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+      }),
+    })
+  );
+
+  if (!response.ok) {
+    throw new Error(`perplexity:${response.status}`);
+  }
+
+  const data = await response.json();
+  const text = (data.choices?.[0]?.message?.content || "")
+    .replace(/\[[0-9]+\]/g, "")
+    .replace(/https?:\/\/\S+/g, "")
+    .replace(/<[^>]*>/g, "")
+    .trim();
+
+  // Extract citations if present in verses from the prompt
+  const citations: string[] = [];
+  const verseMatches = text.match(/\b([A-Z][a-z]+)\s+\d+:\d+/g);
+  if (verseMatches) {
+    citations.push(...verseMatches);
+  }
+
+  return {
+    text,
+    citations: citations.length > 0 ? citations : [],
+    disclaimer: "AI-generated reflection inspired by Scripture (not a divine message).",
+  };
+}
+
+/* ---------- ROUTER WITH FAILOVER ---------- */
+async function generateWithFallback(
+  systemPrompt: string,
+  userPrompt: string,
+  mode: Mode
+): Promise<any> {
+  try {
+    return await callOpenAI(systemPrompt, userPrompt, mode);
+  } catch (e: any) {
+    const shouldFailover = /timeout|429|5\d\d|ENOTFOUND|ECONNRESET/i.test(String(e.message));
+    if (!shouldFailover) throw e;
+    console.log("[Generate] OpenAI failed, trying Perplexity fallback:", e.message);
+    return await callPerplexity(systemPrompt, userPrompt, mode);
+  }
+}
+
 export const handler: Handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return cors(200, {});
   if (event.httpMethod !== "POST") return cors(405, { error: "POST only" });
@@ -74,24 +186,14 @@ export const handler: Handler = async (event) => {
       });
     }
 
-    const openaiApiKey = process.env.OPENAI_API_KEY;
-    if (!openaiApiKey) {
-      throw new Error("OPENAI_API_KEY environment variable is not set");
-    }
-    const client = new OpenAI({ apiKey: openaiApiKey });
     const systemPrompt = getSystemPrompt(body.mode || "conversational", body.user_text);
-    const resp = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      temperature: 0.7,
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: `User: ${body.user_text}\nScripture supplied:\n${verseContext}\nUse only these verses for grounding.` }
-      ]
-    });
-
-    const json = resp.choices[0]?.message?.content || "{}";
-    const parsedResponse = JSON.parse(json);
+    const userPrompt = `User: ${body.user_text}\nScripture supplied:\n${verseContext}\nUse only these verses for grounding.`;
+    
+    const parsedResponse = await generateWithFallback(
+      systemPrompt,
+      userPrompt,
+      body.mode || "conversational"
+    );
     
     return cors(200, { 
       inspired_message: parsedResponse,
