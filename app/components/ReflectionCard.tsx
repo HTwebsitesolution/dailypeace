@@ -96,7 +96,7 @@ export default function ReflectionCard({
       {/* Scrollable Body */}
       <ScrollView
         style={{ maxHeight: maxCardHeight ? maxCardHeight - 60 : undefined }}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 16, paddingBottom: 32 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 16, paddingBottom: 48 }}
         showsVerticalScrollIndicator={true}
         nestedScrollEnabled={true}
       >
