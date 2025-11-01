@@ -121,12 +121,16 @@ export default function ReadAloud({ text, lang = "en-US", autoCandidate = false 
       queueRef.current = chunkText(text);
       indexRef.current = 0;
       const blob = await fetchAudioBlob(queueRef.current[0]);
-      if (Platform.OS === "web") await playChunkWeb(blob);
-      else await playChunkNative(blob);
+      if (Platform.OS === "web") {
+        await playChunkWeb(blob);
+      } else {
+        await playChunkNative(blob);
+      }
       setPlaying(true);
     } catch (e) {
       console.error("TTS playback error:", e);
       setSpeaking(false);
+      setPlaying(false);
     } finally {
       setLoading(false);
     }
