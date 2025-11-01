@@ -21,12 +21,12 @@ const KEY = {
 };
 
 const OPENAI_VOICES = [
-  { id: "alloy", name: "Alloy" },
-  { id: "echo", name: "Echo" },
-  { id: "fable", name: "Fable" },
-  { id: "onyx", name: "Onyx" },
-  { id: "nova", name: "Nova" },
-  { id: "shimmer", name: "Shimmer" },
+  { id: "alloy", name: "Esther" },
+  { id: "echo", name: "Joseph" },
+  { id: "fable", name: "Matthew" },
+  { id: "onyx", name: "Paul" },
+  { id: "nova", name: "Becky" },
+  { id: "shimmer", name: "Anna" },
 ];
 
 let _state: TTSState = { ...DEFAULTS };

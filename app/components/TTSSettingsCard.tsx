@@ -52,20 +52,20 @@ export default function TTSSettingsCard() {
       <View style={{ marginTop: 16 }}>
         <Text style={{ color: "#FFFFFF", marginBottom: 8 }}>Voice</Text>
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-          {SUGGESTED_VOICES.map((v) => (
+          {voices.map((v) => (
             <Pressable
-              key={v}
-              onPress={() => handleVoiceSelect(v)}
+              key={v.id}
+              onPress={() => handleVoiceSelect(v.id)}
               style={{
                 paddingHorizontal: 12,
                 paddingVertical: 8,
                 borderRadius: 12,
                 borderWidth: 1,
-                borderColor: s.voice === v ? "rgba(59,130,246,0.5)" : "rgba(255,255,255,0.1)",
-                backgroundColor: s.voice === v ? "rgba(59,130,246,0.3)" : "rgba(255,255,255,0.1)"
+                borderColor: s.voice === v.id ? "rgba(59,130,246,0.5)" : "rgba(255,255,255,0.1)",
+                backgroundColor: s.voice === v.id ? "rgba(59,130,246,0.3)" : "rgba(255,255,255,0.1)"
               }}
             >
-              <Text style={{ color: "#FFFFFF" }}>{v}</Text>
+              <Text style={{ color: "#FFFFFF" }}>{v.name}</Text>
             </Pressable>
           ))}
         </View>
