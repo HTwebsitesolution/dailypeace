@@ -11,17 +11,26 @@ export default function SplashOverlay({
   const [visible, setVisible] = useState(true);
   const opacity = new Animated.Value(0);
   const scale = new Animated.Value(0.95);
+  const pulse = new Animated.Value(1);
 
   useEffect(() => {
-    // fade in
+    // fade in with gentle pulse
     Animated.parallel([
       Animated.timing(opacity, { toValue: 1, duration: 300, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
       Animated.timing(scale, { toValue: 1, duration: 300, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
     ]).start();
 
+    // gentle pulse during display
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulse, { toValue: 1.03, duration: 700, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+        Animated.timing(pulse, { toValue: 1, duration: 700, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+      ])
+    ).start();
+
     const t = setTimeout(() => {
       // fade out
-      Animated.timing(opacity, { toValue: 0, duration: 450, easing: Easing.in(Easing.cubic), useNativeDriver: true })
+      Animated.timing(opacity, { toValue: 0, duration: 400, easing: Easing.in(Easing.cubic), useNativeDriver: true })
         .start(() => {
           setVisible(false);
           onDone && onDone();
@@ -53,7 +62,7 @@ export default function SplashOverlay({
         style={{
           width: 300,
           height: 300,
-          transform: [{ scale }],
+          transform: [{ scale: Animated.multiply(scale, pulse) }],
           opacity: 0.96,
         }}
       />
