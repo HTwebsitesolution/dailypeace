@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, Pressable, Animated, ScrollView, Platform, useWindowDimensions } from "react-native";
 import { hapticConfirm } from "../../lib/haptics";
+import { getScrollPosition, saveScrollPosition, loadScrollPositions } from "../../lib/scrollPersistence";
 
 export default function ReflectionCard({
   title = "Today's Reflection",
@@ -19,12 +20,24 @@ export default function ReflectionCard({
 }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
+  const scrollRef = useRef<ScrollView>(null);
   const { height: screenHeight } = useWindowDimensions();
   const isMobile = Platform.OS === 'web' ? screenHeight < 800 : Platform.OS !== 'web';
   // Max height: 60% of screen on mobile, no limit on desktop
   const maxCardHeight = isMobile ? screenHeight * 0.6 : undefined;
+  const componentKey = `reflection_${message.substring(0, 50).replace(/\s+/g, '_')}`;
 
   useEffect(() => {
+    // Load scroll positions on mount
+    loadScrollPositions().then(() => {
+      const savedPosition = getScrollPosition(componentKey);
+      if (savedPosition > 0 && scrollRef.current) {
+        setTimeout(() => {
+          scrollRef.current?.scrollTo({ y: savedPosition, animated: false });
+        }, 100);
+      }
+    });
+
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -38,6 +51,13 @@ export default function ReflectionCard({
       }),
     ]).start();
   }, []);
+
+  const handleScroll = (event: any) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    if (offsetY > 0) {
+      saveScrollPosition(componentKey, offsetY);
+    }
+  };
 
   return (
     <Animated.View
@@ -96,10 +116,13 @@ export default function ReflectionCard({
 
       {/* Scrollable Body */}
       <ScrollView
+        ref={scrollRef}
         style={{ maxHeight: maxCardHeight ? maxCardHeight - 60 : undefined }}
         contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 16, paddingBottom: 48 }}
         showsVerticalScrollIndicator={true}
         nestedScrollEnabled={true}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
       >
         <Text style={{ 
           color: "#FFFFFF", 
