@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, Platform } from "react-native";
 import { getState, subscribe, setAuto, setVoice, getVoices, TTSState } from "../../lib/tts";
+import VoiceTestPanel from "./VoiceTestPanel";
 
 export default function TTSSettingsCard() {
   const [s, setS] = useState<TTSState>(getState());
@@ -55,6 +56,9 @@ export default function TTSSettingsCard() {
           ))}
         </View>
       </View>
+
+      {/* Voice Test Panel */}
+      <VoiceTestPanel voice={s.voice} />
     </View>
   );
 }
