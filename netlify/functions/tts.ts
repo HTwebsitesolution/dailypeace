@@ -1,11 +1,14 @@
 // netlify/functions/tts.ts
 import type { Handler } from "@netlify/functions";
 import crypto from "crypto";
+import OpenAI from "openai";
 
 const OPENAI_KEY = process.env.OPENAI_API_KEY!;
 const OPENAI_TTS_MODEL = "tts-1"; // OpenAI TTS model
 const DEFAULT_VOICE = "alloy";              // try "alloy", "echo", "fable", "onyx", "nova", "shimmer"
 const MAX_CHARS = 1400;                     // bound latency/cost
+
+const openai = new OpenAI({ apiKey: OPENAI_KEY });
 
 function clean(text: string) {
   return (text || "").replace(/\s+/g, " ").trim().slice(0, MAX_CHARS);
@@ -15,17 +18,13 @@ function etagFor(payload: string) {
 }
 
 async function openaiTTS(text: string, voice: string) {
-  const r = await fetch("https://api.openai.com/v1/audio/speech", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${OPENAI_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: OPENAI_TTS_MODEL,
-      voice,              // e.g. "alloy", "echo", "fable", "onyx", "nova", "shimmer"
-      input: text,
-    }),
+  const response = await openai.audio.speech.create({
+    model: OPENAI_TTS_MODEL,
+    voice: voice as any,
+    input: text,
   });
-  if (!r.ok) throw new Error(`openai:${r.status}`);
-  return new Uint8Array(await r.arrayBuffer());
+  const buffer = Buffer.from(await response.arrayBuffer());
+  return buffer;
 }
 
 export const handler: Handler = async (event) => {
@@ -54,7 +53,7 @@ export const handler: Handler = async (event) => {
       statusCode: 200,
       isBase64Encoded: true,
       headers,
-      body: Buffer.from(audio).toString("base64"),
+      body: audio.toString("base64"),
     };
   } catch (err: any) {
     return { statusCode: 500, body: JSON.stringify({ error: err?.message || "tts-failed" }) };
