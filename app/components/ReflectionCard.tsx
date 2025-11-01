@@ -133,9 +133,6 @@ export default function ReflectionCard({
           letterSpacing: 0.2
         }}>{message}</Text>
 
-        {/* Read Aloud */}
-        <ReadAloud text={message} autoCandidate />
-
         {/* Verses */}
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 16 }}>
           {verses.map((v, index) => (
@@ -163,6 +160,9 @@ export default function ReflectionCard({
             </Animated.View>
           ))}
         </View>
+
+        {/* Read Aloud */}
+        <ReadAloud text={message} autoCandidate />
 
         {/* Actions */}
         <View style={{ flexDirection: "row", gap: 32, marginTop: 16 }}>

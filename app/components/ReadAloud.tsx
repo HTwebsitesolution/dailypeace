@@ -35,7 +35,7 @@ export default function ReadAloud({ text, lang = "en-US", autoCandidate = false 
   };
 
   return (
-    <View className="flex-row items-center gap-8 mt-2">
+    <View className="flex-row items-center gap-8">
       <Pressable 
         onPress={toggle} 
         className="px-3 py-2 rounded-xl bg-white/10 border border-white/10"
