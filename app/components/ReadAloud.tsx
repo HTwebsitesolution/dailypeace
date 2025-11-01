@@ -83,7 +83,7 @@ export default function ReadAloud({ text, lang = "en-US", autoCandidate = false 
 
   async function playChunkWeb(blob: Blob) {
     const url = URL.createObjectURL(blob);
-    const audio = new Audio(url) as any as HTMLAudioElement;
+    const audio = new (window as any).Audio(url) as HTMLAudioElement;
     audioRef.current = audio;
     audio.onended = onEnded;
     await audio.play();

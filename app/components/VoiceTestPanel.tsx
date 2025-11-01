@@ -58,7 +58,7 @@ export default function VoiceTestPanel({ voice = "alloy" }: { voice?: string }) 
       const uri = URL.createObjectURL(blob);
 
       if (Platform.OS === "web") {
-        const audio = new Audio(uri) as any as HTMLAudioElement;
+        const audio = new (window as any).Audio(uri) as HTMLAudioElement;
         audio.onended = () => setPlaying(false);
         audio.onerror = (e) => console.error("Audio playback error:", e);
         await audio.play();
