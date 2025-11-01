@@ -18,10 +18,21 @@ export default function SettingsCard({
   return (
     <Container
       onPress={onPress as any}
-      className="bg-surface rounded-2xl px-4 py-3 mb-2 flex-row items-center justify-between"
-      style={style}
+      style={[
+        {
+          backgroundColor: "#141B23",
+          borderRadius: 16,
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          marginBottom: 8,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between"
+        },
+        style
+      ]}
     >
-      <View className="flex-1 pr-3">
+      <View style={{ flex: 1, paddingRight: 12 }}>
         <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>{title}</Text>
         {subtitle ? (
           <Text style={{ color: "#EAF2FF", marginTop: 2 }}>{subtitle}</Text>
