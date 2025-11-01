@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { Audio } from "expo-av";
-import { subscribe, getState, setAuto, TTSState, initAudioMode } from "../../lib/tts";
+import { subscribe, getState, setAuto, TTSState, initAudioMode, stop as globalStop, setSpeaking } from "../../lib/tts";
 import { hapticPress } from "../../lib/haptics";
 
 const TTS_ENDPOINT = "/.netlify/functions/tts";
@@ -64,6 +64,7 @@ export default function ReadAloud({ text, lang = "en-US", autoCandidate = false 
       }
     } catch {}
     setPlaying(false);
+    setSpeaking(false);
   }
 
   async function fetchAudioBlob(t: string) {
@@ -72,7 +73,11 @@ export default function ReadAloud({ text, lang = "en-US", autoCandidate = false 
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: t, voice: s.voice }),
     });
-    if (!r.ok) throw new Error(`tts:${r.status}`);
+    if (!r.ok) {
+      const errorText = await r.text();
+      console.error("TTS fetch error:", r.status, errorText);
+      throw new Error(`tts:${r.status}: ${errorText}`);
+    }
     return await r.blob();
   }
 
@@ -98,6 +103,7 @@ export default function ReadAloud({ text, lang = "en-US", autoCandidate = false 
     indexRef.current += 1;
     if (indexRef.current >= queueRef.current.length) {
       setPlaying(false);
+      setSpeaking(false);
       return;
     }
     const next = queueRef.current[indexRef.current];
@@ -110,6 +116,7 @@ export default function ReadAloud({ text, lang = "en-US", autoCandidate = false 
     if (!text?.trim()) return;
     await stopAll();
     setLoading(true);
+    setSpeaking(true);
     try {
       queueRef.current = chunkText(text);
       indexRef.current = 0;
@@ -119,6 +126,7 @@ export default function ReadAloud({ text, lang = "en-US", autoCandidate = false 
       setPlaying(true);
     } catch (e) {
       console.error("TTS playback error:", e);
+      setSpeaking(false);
     } finally {
       setLoading(false);
     }

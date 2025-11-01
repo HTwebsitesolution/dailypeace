@@ -82,69 +82,22 @@ export async function getVoices(): Promise<Array<{ id: string; name: string }>> 
   return OPENAI_VOICES;
 }
 
-export async function speak(text: string, lang = "en-US") {
-  if (!text?.trim()) return;
-  await stop(); // ensure no overlap
-  
-  _state.speaking = true; 
-  notify();
-
-  try {
-    // Fetch audio from OpenAI TTS endpoint
-    const { sound } = await Audio.Sound.createAsync(
-      { uri: await fetchTTSAudio(text) },
-      { shouldPlay: true }
-    );
-    
-    _currentSound = sound;
-    
-    sound.setOnPlaybackStatusUpdate((status) => {
-      if (status.isLoaded && status.didJustFinish) {
-        _state.speaking = false;
-        notify();
-        sound.unloadAsync().catch(() => {});
-      }
-    });
-  } catch (error) {
-    console.error("TTS playback error:", error);
-    _state.speaking = false;
-    notify();
-  }
-}
-
-async function fetchTTSAudio(text: string): Promise<string> {
-  const response = await fetch("/.netlify/functions/tts", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text, voice: _state.voice }),
-  });
-  
-  if (!response.ok) throw new Error(`TTS API: ${response.status}`);
-  
-  // For web, read as blob and create data URL
-  if (Platform.OS === 'web') {
-    const blob = await response.blob();
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  }
-  
-  // For native, return the URL directly (expo-av can handle URLs)
-  return response.url;
-}
-
+// Global stop function for external use (e.g., ChatScreen to stop on mic start)
 export async function stop() {
-  if (_currentSound) {
-    try {
+  try {
+    if (_currentSound) {
       await _currentSound.stopAsync();
       await _currentSound.unloadAsync();
-    } catch {}
-    _currentSound = null;
-  }
+      _currentSound = null;
+    }
+  } catch {}
   _state.speaking = false;
+  notify();
+}
+
+// Expose setSpeaking for ReadAloud to update state
+export function setSpeaking(speaking: boolean) {
+  _state.speaking = speaking;
   notify();
 }
 
