@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Switch, Pressable, Alert, Platform } from "react-native";
+import { View, Text, Switch, Pressable, Alert, Platform, ScrollView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
 import { useNavigation } from "@react-navigation/native";
@@ -100,66 +100,68 @@ export default function SettingsScreen() {
   const modes: Mode[] = ["conversational", "biblical", "reflective"];
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#0B1016", paddingTop: 56, paddingHorizontal: 16, gap: 16 }}>
-      <Header title="Settings" onBack={() => nav.goBack()} />
+    <View style={{ flex: 1, backgroundColor: "#0B1016" }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingTop: 56, paddingHorizontal: 16, gap: 16, paddingBottom: 40 }}>
+        <Header title="Settings" onBack={() => nav.goBack()} />
 
-      <Section title="Default Mode">
-        <View style={{ flexDirection:"row", gap:8 }}>
-          {modes.map(m => (
-            <Pressable key={m} onPress={() => setSetting("defaultMode", m)}
-              style={{ paddingVertical:8, paddingHorizontal:12, borderRadius:16, backgroundColor: settings.defaultMode===m ? "#2F80ED" : "#141B23" }}>
-              <Text style={{ color:"#EAF2FF" }}>{m[0].toUpperCase()+m.slice(1)}</Text>
-            </Pressable>
-          ))}
-        </View>
-      </Section>
-
-      <Section title="Voice & Audio">
-        <TTSSettingsCard />
-        <SettingsCard
-          title="Store voice recordings"
-          subtitle="Voice recordings not stored by default"
-          right={<Switch value={settings.storeVoiceRecordings} onValueChange={(v) => setSetting("storeVoiceRecordings", v)} />}
-        />
-      </Section>
-
-      <Section title="Daily Reminder">
-        <SettingsCard
-          title="Daily peace notifications"
-          subtitle="8:00 AM local time"
-          right={<Switch value={notifEnabled} onValueChange={toggleDailyReminder} />}
-        />
-
-        {notifEnabled && (
-          <SettingsCard
-            title="Reminder time"
-            subtitle={
-              notifSchedule.hour === 12 ? "12:00 PM" :
-              notifSchedule.hour > 12 ? `${notifSchedule.hour - 12}:00 PM` :
-              notifSchedule.hour === 0 ? "12:00 AM" :
-              `${notifSchedule.hour}:00 AM`
-            }
-            onPress={changeNotificationTime}
-          />
-        )}
-
-        {notifEnabled && (
-          <View style={{ backgroundColor:"#1a2332", padding:12, borderRadius:12 }}>
-            <Text style={{ color:"#EAF2FF", fontSize:12, lineHeight:16 }}>
-              ✨ Daily inspirational messages with Scripture verses will be delivered at your chosen time.
-              Notifications include encouraging words from Jesus and biblical wisdom to start your day with peace.
-            </Text>
+        <Section title="Default Mode">
+          <View style={{ flexDirection:"row", gap:8 }}>
+            {modes.map(m => (
+              <Pressable key={m} onPress={() => setSetting("defaultMode", m)}
+                style={{ paddingVertical:8, paddingHorizontal:12, borderRadius:16, backgroundColor: settings.defaultMode===m ? "#2F80ED" : "#141B23" }}>
+                <Text style={{ color:"#EAF2FF" }}>{m[0].toUpperCase()+m.slice(1)}</Text>
+              </Pressable>
+            ))}
           </View>
-        )}
-      </Section>
+        </Section>
 
-      <Section title="About & Privacy">
-        <SettingsCard
-          title="View Disclaimer"
-          subtitle="AI-generated reflection inspired by Scripture (not a divine message). Voice recordings are transcribed and (by default) not stored."
-          onPress={() => nav.navigate("Disclaimer")}
-        />
-      </Section>
+        <Section title="Voice & Audio">
+          <TTSSettingsCard />
+          <SettingsCard
+            title="Store voice recordings"
+            subtitle="Voice recordings not stored by default"
+            right={<Switch value={settings.storeVoiceRecordings} onValueChange={(v) => setSetting("storeVoiceRecordings", v)} />}
+          />
+        </Section>
+
+        <Section title="Daily Reminder">
+          <SettingsCard
+            title="Daily peace notifications"
+            subtitle="8:00 AM local time"
+            right={<Switch value={notifEnabled} onValueChange={toggleDailyReminder} />}
+          />
+
+          {notifEnabled && (
+            <SettingsCard
+              title="Reminder time"
+              subtitle={
+                notifSchedule.hour === 12 ? "12:00 PM" :
+                notifSchedule.hour > 12 ? `${notifSchedule.hour - 12}:00 PM` :
+                notifSchedule.hour === 0 ? "12:00 AM" :
+                `${notifSchedule.hour}:00 AM`
+              }
+              onPress={changeNotificationTime}
+            />
+          )}
+
+          {notifEnabled && (
+            <View style={{ backgroundColor:"#1a2332", padding:12, borderRadius:12 }}>
+              <Text style={{ color:"#EAF2FF", fontSize:12, lineHeight:16 }}>
+                ✨ Daily inspirational messages with Scripture verses will be delivered at your chosen time.
+                Notifications include encouraging words from Jesus and biblical wisdom to start your day with peace.
+              </Text>
+            </View>
+          )}
+        </Section>
+
+        <Section title="About & Privacy">
+          <SettingsCard
+            title="View Disclaimer"
+            subtitle="AI-generated reflection inspired by Scripture (not a divine message). Voice recordings are transcribed and (by default) not stored."
+            onPress={() => nav.navigate("Disclaimer")}
+          />
+        </Section>
+      </ScrollView>
     </View>
   );
 }

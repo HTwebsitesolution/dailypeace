@@ -112,23 +112,24 @@ export default function VoiceTestPanel({ voice = "alloy" }: { voice?: string }) 
         onPress={playTest}
         disabled={loading}
         style={{
-          width: "100%",
-          paddingVertical: 12,
-          borderRadius: 999,
+          paddingVertical: 10,
+          paddingHorizontal: 20,
+          borderRadius: 12,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: playing ? "#4F46E5" : "rgba(59,130,246,0.8)",
           shadowColor: "#4F46E5",
-          shadowOffset: { width: 0, height: 4 },
+          shadowOffset: { width: 0, height: 2 },
           shadowOpacity: playing ? 0.5 : 0.4,
-          shadowRadius: 12
+          shadowRadius: 8,
+          alignSelf: "flex-start"
         }}
       >
         {loading ? (
           <ActivityIndicator color="#fff" />
         ) : (
-          <Text style={{ color: "#FFFFFF", fontWeight: "600", fontSize: 16 }}>
+          <Text style={{ color: "#FFFFFF", fontWeight: "600", fontSize: 14 }}>
             {playing ? "Playing..." : "Play Sample"}
           </Text>
         )}
