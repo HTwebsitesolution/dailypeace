@@ -7,7 +7,7 @@ const SUGGESTED_VOICES = ["alloy", "echo", "fable", "onyx", "nova", "shimmer"];
 
 export default function TTSSettingsCard() {
   const [s, setS] = useState<TTSState>(getState());
-  const [voices, setVoices] = useState<Array<{ id: string; name: string }>>([]);
+  const [voices, setVoices] = useState<Array<{ id: string; name: string; description?: string }>>([]);
   const [customVoice, setCustomVoice] = useState("");
 
   useEffect(() => {
@@ -65,7 +65,10 @@ export default function TTSSettingsCard() {
                 backgroundColor: s.voice === v.id ? "rgba(59,130,246,0.3)" : "rgba(255,255,255,0.1)"
               }}
             >
-              <Text style={{ color: "#FFFFFF" }}>{v.name}</Text>
+              <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>{v.name}</Text>
+              {v.description && (
+                <Text style={{ color: "rgba(255,255,255,0.6)", fontSize: 10, marginTop: 2 }}>{v.description}</Text>
+              )}
             </Pressable>
           ))}
         </View>

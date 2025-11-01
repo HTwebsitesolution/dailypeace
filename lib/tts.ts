@@ -21,12 +21,12 @@ const KEY = {
 };
 
 const OPENAI_VOICES = [
-  { id: "alloy", name: "Esther" },
-  { id: "echo", name: "Joseph" },
-  { id: "fable", name: "Matthew" },
-  { id: "onyx", name: "Paul" },
-  { id: "nova", name: "Becky" },
-  { id: "shimmer", name: "Anna" },
+  { id: "alloy", name: "Esther", description: "Warm & wise" },
+  { id: "echo", name: "Joseph", description: "Calm & steady" },
+  { id: "fable", name: "Matthew", description: "Clear & thoughtful" },
+  { id: "onyx", name: "Paul", description: "Deep & resonant" },
+  { id: "nova", name: "Becky", description: "Bright & encouraging" },
+  { id: "shimmer", name: "Anna", description: "Gentle & peaceful" },
 ];
 
 let _state: TTSState = { ...DEFAULTS };
@@ -78,7 +78,7 @@ export async function setVoice(voiceId: string) {
   notify();
 }
 
-export async function getVoices(): Promise<Array<{ id: string; name: string }>> {
+export async function getVoices(): Promise<Array<{ id: string; name: string; description?: string }>> {
   return OPENAI_VOICES;
 }
 
