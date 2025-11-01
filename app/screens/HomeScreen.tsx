@@ -6,6 +6,8 @@ import ReflectionCard from "../components/ReflectionCard";
 import ModeToggle from "../components/ModeToggle";
 import AtmosphericBackground from "../components/AtmosphericBackground";
 import OnboardingModal from "../components/OnboardingModal";
+import FeedbackModal from "../components/FeedbackModal";
+import FeedbackButton from "../components/FeedbackButton";
 
 const logoImage = require("../../assets/Bible Circle Daily Peace Logo.png");
 
@@ -37,6 +39,8 @@ export default function HomeScreen() {
   }, []);
 
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+
   useEffect(() => {
     (async () => {
       try {
@@ -266,6 +270,8 @@ export default function HomeScreen() {
           </Text>
         </View>
       </ScrollView>
+      <FeedbackButton onPress={() => setShowFeedback(true)} />
+      <FeedbackModal visible={showFeedback} onClose={() => setShowFeedback(false)} />
     </AtmosphericBackground>
   );
 }
