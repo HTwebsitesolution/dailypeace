@@ -24,8 +24,8 @@ export default function ReflectionCard({
   const scrollRef = useRef<ScrollView>(null);
   const { height: screenHeight } = useWindowDimensions();
   const isMobile = Platform.OS === 'web' ? screenHeight < 800 : true;
-  // Max height: 60% of screen on mobile, no limit on desktop
-  const maxCardHeight = isMobile ? screenHeight * 0.6 : undefined;
+  // Max height: 50% of screen on mobile to ensure chat input is visible, no limit on desktop
+  const maxCardHeight = isMobile ? screenHeight * 0.5 : undefined;
   const componentKey = `reflection_${message.substring(0, 50).replace(/\s+/g, '_')}`;
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function ReflectionCard({
     <Animated.View
       style={{
         marginHorizontal: 16,
-        marginTop: 24,
+        marginTop: isMobile ? 12 : 24,
         borderRadius: 24,
         backgroundColor: "rgba(20,27,35,0.95)", // Glass-pro with high opacity for readability
         borderWidth: 1,
@@ -86,7 +86,7 @@ export default function ReflectionCard({
         alignItems: "center",
         justifyContent: "space-between",
         paddingHorizontal: 16,
-        paddingVertical: 12,
+        paddingVertical: isMobile ? 8 : 12,
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
         backgroundColor: "rgba(35,48,63,0.90)", // Elevated header strip
@@ -96,7 +96,7 @@ export default function ReflectionCard({
         <Text style={{ 
           color: "#FFFFFF", 
           fontWeight: "700", 
-          fontSize: 18, 
+          fontSize: isMobile ? 16 : 18, 
           letterSpacing: 0.4
         }}>A Moment of Peace 🙏</Text>
         {onClose ? (
@@ -119,7 +119,7 @@ export default function ReflectionCard({
       <ScrollView
         ref={scrollRef}
         style={{ maxHeight: maxCardHeight ? maxCardHeight - 60 : undefined }}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 16, paddingBottom: 48 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: isMobile ? 12 : 16, paddingBottom: 48 }}
         showsVerticalScrollIndicator={true}
         nestedScrollEnabled={true}
         onScroll={handleScroll}
@@ -127,8 +127,8 @@ export default function ReflectionCard({
       >
         <Text style={{ 
           color: "#FFFFFF", 
-          fontSize: 18, 
-          lineHeight: 28,
+          fontSize: isMobile ? 16 : 18, 
+          lineHeight: isMobile ? 24 : 28,
           fontWeight: "400",
           letterSpacing: 0.2
         }}>{message}</Text>
