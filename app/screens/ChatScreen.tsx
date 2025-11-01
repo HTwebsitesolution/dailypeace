@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { View, FlatList, KeyboardAvoidingView, Platform, Alert, Animated, Text, Pressable, Image, useWindowDimensions } from "react-native";
+import { View, FlatList, KeyboardAvoidingView, Platform, Alert, Animated, Text, Pressable, Image, useWindowDimensions, RefreshControl } from "react-native";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -41,6 +41,7 @@ export default function ChatScreen() {
   const [inputText, setInputText] = useState("");
   const [recording, setRecording] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [reflection, setReflection] = useState<Reflection | null>(null);
   const [kjvIndex, setKjvIndex] = useState<Record<string, string> | null>(null);
   const [needSeeds, setNeedSeeds] = useState<any>(null);
@@ -368,6 +369,15 @@ export default function ChatScreen() {
     loadFavorites();
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await handleRefresh();
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const handleBackHome = () => {
     try { nav.navigate("Home"); } catch {}
   };
@@ -578,6 +588,14 @@ export default function ChatScreen() {
                 scrollEnabled={true}
                 nestedScrollEnabled={true}
                 removeClippedSubviews={Platform.OS !== 'web'}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    tintColor="#9FB0C3"
+                    colors={["#9FB0C3"]}
+                  />
+                }
                 ListEmptyComponent={
                   <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 24, paddingTop: 20 }}>
                 <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
@@ -756,6 +774,14 @@ export default function ChatScreen() {
                 scrollEnabled={true}
                 nestedScrollEnabled={true}
                 removeClippedSubviews={Platform.OS !== 'web'}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    tintColor="#9FB0C3"
+                    colors={["#9FB0C3"]}
+                  />
+                }
                 ListEmptyComponent={
                   <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 24, paddingTop: 20 }}>
                     <Text style={{ color: "#9FB0C3", fontSize: 16, textAlign: "center", lineHeight: 24 }}>
