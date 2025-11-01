@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Image, Animated, Easing, Platform } from "react-native";
 
 export default function SplashOverlay({
-  duration = 1500,
+  duration = 1000,
   onDone,
 }: {
   duration?: number;
