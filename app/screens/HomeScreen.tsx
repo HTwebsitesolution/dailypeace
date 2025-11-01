@@ -4,8 +4,6 @@ import { useNavigation } from "@react-navigation/native";
 import ReflectionCard from "../components/ReflectionCard";
 import ModeToggle from "../components/ModeToggle";
 import AtmosphericBackground from "../components/AtmosphericBackground";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import OnboardingModal from "../components/OnboardingModal";
 
 const logoImage = require("../../assets/Bible Circle Daily Peace Logo.png");
 
@@ -36,18 +34,6 @@ export default function HomeScreen() {
     ]).start();
   }, []);
 
-  const [showOnboarding, setShowOnboarding] = React.useState(false);
-  React.useEffect(() => {
-    (async () => {
-      try {
-        const done = await AsyncStorage.getItem("@dp/onboarding_done");
-        setShowOnboarding(done !== "1");
-      } catch {
-        setShowOnboarding(false);
-      }
-    })();
-  }, []);
-
   return (
     <AtmosphericBackground 
       mode={mode} 
@@ -60,7 +46,6 @@ export default function HomeScreen() {
         contentContainerStyle={{ alignItems: "center", paddingTop: 60, paddingBottom: 40, paddingHorizontal: 20 }}
         showsVerticalScrollIndicator={false}
       >
-        <OnboardingModal visible={showOnboarding} onDone={() => setShowOnboarding(false)} />
         {/* Top-right quick actions */}
         <View style={{ position: 'absolute', right: 12, top: 16, flexDirection: 'row', gap: 8 }}>
           <Pressable
