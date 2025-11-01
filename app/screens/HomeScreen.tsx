@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, Pressable, Animated, ScrollView, Image, useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import ReflectionCard from "../components/ReflectionCard";
 import ModeToggle from "../components/ModeToggle";
 import AtmosphericBackground from "../components/AtmosphericBackground";
+import OnboardingModal from "../components/OnboardingModal";
 
 const logoImage = require("../../assets/Bible Circle Daily Peace Logo.png");
 
@@ -34,6 +36,20 @@ export default function HomeScreen() {
     ]).start();
   }, []);
 
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  useEffect(() => {
+    (async () => {
+      try {
+        const introSeen = await AsyncStorage.getItem("@dp/intro_seen");
+        const onboardingDone = await AsyncStorage.getItem("@dp/onboarding_done");
+        // Only show onboarding if intro was seen but onboarding wasn't done
+        setShowOnboarding(introSeen === "1" && onboardingDone !== "1");
+      } catch {
+        setShowOnboarding(false);
+      }
+    })();
+  }, []);
+
   return (
     <AtmosphericBackground 
       mode={mode} 
@@ -46,6 +62,7 @@ export default function HomeScreen() {
         contentContainerStyle={{ alignItems: "center", paddingTop: 60, paddingBottom: 40, paddingHorizontal: 20 }}
         showsVerticalScrollIndicator={false}
       >
+        <OnboardingModal visible={showOnboarding} onDone={() => setShowOnboarding(false)} />
         {/* Top-right quick actions */}
         <View style={{ position: 'absolute', right: 12, top: 16, flexDirection: 'row', gap: 8 }}>
           <Pressable
