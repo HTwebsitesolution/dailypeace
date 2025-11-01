@@ -6,6 +6,7 @@ import SplashGate from "./SplashGate";
 import { SettingsProvider } from "../lib/settings";
 import { analytics } from "../lib/analytics";
 import { notifications } from "../lib/notifications";
+import { initAudioMode, loadPrefs } from "../lib/tts";
 
 // Import premium CSS for web only
 if (Platform.OS === 'web') {
@@ -17,6 +18,8 @@ export default function App() {
   useEffect(() => { 
     analytics();
     notifications.initialize();
+    initAudioMode();
+    loadPrefs();
   }, []);
   return (
     <SettingsProvider>

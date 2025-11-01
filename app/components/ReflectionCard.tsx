@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { View, Text, Pressable, Animated, ScrollView, Platform, useWindowDimensions } from "react-native";
 import { hapticConfirm } from "../../lib/haptics";
 import { getScrollPosition, saveScrollPosition, loadScrollPositions } from "../../lib/scrollPersistence";
+import ReadAloud from "./ReadAloud";
 
 export default function ReflectionCard({
   title = "Today's Reflection",
@@ -22,7 +23,7 @@ export default function ReflectionCard({
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const scrollRef = useRef<ScrollView>(null);
   const { height: screenHeight } = useWindowDimensions();
-  const isMobile = Platform.OS === 'web' ? screenHeight < 800 : Platform.OS !== 'web';
+  const isMobile = Platform.OS === 'web' ? screenHeight < 800 : true;
   // Max height: 60% of screen on mobile, no limit on desktop
   const maxCardHeight = isMobile ? screenHeight * 0.6 : undefined;
   const componentKey = `reflection_${message.substring(0, 50).replace(/\s+/g, '_')}`;
@@ -131,6 +132,9 @@ export default function ReflectionCard({
           fontWeight: "400",
           letterSpacing: 0.2
         }}>{message}</Text>
+
+        {/* Read Aloud */}
+        <ReadAloud text={message} autoCandidate />
 
         {/* Verses */}
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 16 }}>

@@ -8,6 +8,7 @@ import { notifications } from "../../lib/notifications";
 import type { Mode } from "../../lib/types";
 import { track } from "../../lib/analytics";
 import SettingsCard from "../components/SettingsCard";
+import TTSSettingsCard from "../components/TTSSettingsCard";
 
 export default function SettingsScreen() {
   const nav = useNavigation<any>();
@@ -114,11 +115,9 @@ export default function SettingsScreen() {
       </Section>
 
       <Section title="Voice & Audio">
-        <SettingsCard
-          title="Read replies aloud"
-          subtitle="Text-to-speech playback"
-          right={<Switch value={settings.ttsEnabled} onValueChange={(v) => setSetting("ttsEnabled", v)} />}
-        />
+        <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
+          <TTSSettingsCard />
+        </View>
         <SettingsCard
           title="Store voice recordings"
           subtitle="Voice recordings not stored by default"

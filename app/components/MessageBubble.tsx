@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { View, Text, Animated } from "react-native";
+import ReadAloud from "./ReadAloud";
 
 export function MessageBubble({ role, children }:{ role:"user"|"app"; children: React.ReactNode }) {
   const isUser = role==="user";
@@ -41,6 +42,9 @@ export function MessageBubble({ role, children }:{ role:"user"|"app"; children: 
         backgroundColor: isUser ? "#3B82F6" : "#141B23"
       }}>
         <Text style={{ color: "#FFFFFF", fontSize: 16, lineHeight: 24 }}>{children}</Text>
+        {!isUser && typeof children === 'string' && (
+          <ReadAloud text={children} autoCandidate />
+        )}
       </View>
     </Animated.View>
   );

@@ -16,6 +16,7 @@ import { MessageBubble } from "../components/MessageBubble";
 import ChatInput from "../components/ChatInput";
 import ReflectionCard from "../components/ReflectionCard";
 import AtmosphericBackground from "../components/AtmosphericBackground";
+import { stop as stopTTS } from "../../lib/tts";
 
 const logo = require("../../assets/Bible Circle Daily Peace Logo.png");
 
@@ -228,6 +229,8 @@ export default function ChatScreen() {
 
   const startRecording = async () => {
     try {
+      // Stop any TTS playback when user starts recording
+      stopTTS();
       setRecording(true);
       
       // Check if Web Speech API is available (web browsers)

@@ -27,10 +27,22 @@ function safeNotifications() {
   }
 }
 
+// Safe TTS initialization for web
+function safeTTSInit() {
+  try {
+    const { initAudioMode, loadPrefs } = require("../lib/tts");
+    initAudioMode();
+    loadPrefs();
+  } catch (error) {
+    console.log("TTS not available on web");
+  }
+}
+
 export default function App() {
   useEffect(() => { 
     safeAnalytics();
     safeNotifications();
+    safeTTSInit();
   }, []);
   
   return (
