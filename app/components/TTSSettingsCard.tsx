@@ -16,6 +16,11 @@ export default function TTSSettingsCard() {
     <View className="rounded-2xl bg-[#141B23] border border-white/10 p-4">
       <Text className="text-white font-semibold text-lg">Read Aloud</Text>
       <Text className="text-[#9FB0C3] mt-1">On-device text-to-speech for replies.</Text>
+      {Platform.OS === 'web' && (
+        <Text className="text-[#9FB0C3] mt-2 text-xs italic">
+          💡 Tip: Voice quality varies by browser. Try Chrome or Edge for best results.
+        </Text>
+      )}
 
       <View className="flex-row items-center gap-3 mt-3">
         <Pressable
