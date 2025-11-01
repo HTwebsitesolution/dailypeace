@@ -47,7 +47,7 @@ export default function ReadAloud({ text, lang = "en-US", autoCandidate = false 
     if (autoCandidate && s.auto && text?.trim()) playAll();
     return () => stopAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text, s.auto, lang]);
+  }, [text, s.auto, s.voice, lang]);
 
   useEffect(() => () => stopAll(), []);
 
