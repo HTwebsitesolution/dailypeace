@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Pressable, Platform, Slider } from "react-native";
+import { View, Text, Pressable, Platform } from "react-native";
+import Slider from "@react-native-community/slider";
 import { getState, subscribe, setAuto, setRate, setPitch, setVoice, getVoices, TTSState } from "../../lib/tts";
 
 export default function TTSSettingsCard() {
