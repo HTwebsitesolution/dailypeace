@@ -39,7 +39,7 @@ export default function SplashOverlay({
       style={{
         position: "absolute",
         inset: 0 as any,
-        backgroundColor: "#0B1016",
+        backgroundColor: "#FFFFFF",
         justifyContent: "center",
         alignItems: "center",
         opacity,
