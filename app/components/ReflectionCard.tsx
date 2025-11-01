@@ -80,10 +80,7 @@ export default function ReflectionCard({
         }}>A Moment of Peace 🙏</Text>
         {onClose ? (
           <Pressable
-            onPress={() => {
-              hapticPress();
-              onClose();
-            }}
+            onPress={onClose}
             style={{
               paddingHorizontal: 8,
               paddingVertical: 4,
