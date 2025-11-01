@@ -21,7 +21,7 @@ export default function IntroScreen({ onProceed }: { onProceed: () => void }) {
       <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: "center", justifyContent: "center", paddingHorizontal: 20, paddingVertical: 40 }}>
         {/* Logo + wordmark */}
         <Image
-          source={require("../../assets/branding/icons/icon-ios.png")}
+          source={require("../../assets/Bible Circle Daily Peace Logo.png")}
           resizeMode="contain"
           style={{ width: 96, height: 96, marginBottom: 16, opacity: 0.92 }}
         />

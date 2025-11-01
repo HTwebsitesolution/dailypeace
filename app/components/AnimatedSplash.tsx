@@ -91,7 +91,7 @@ export default function AnimatedSplash({
           }}
         />
         <Animated.Image
-          source={require("../../assets/branding/icons/icon-ios.png")}
+          source={require("../../assets/Bible Circle Daily Peace Logo.png")}
           resizeMode="contain"
           style={{ width: 180, height: 180, transform: [{ scale }] }}
         />
