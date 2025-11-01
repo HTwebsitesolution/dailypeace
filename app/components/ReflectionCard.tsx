@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, Pressable, Animated, ScrollView, Platform, useWindowDimensions } from "react-native";
+import { hapticConfirm } from "../../lib/haptics";
 
 export default function ReflectionCard({
   title = "Today's Reflection",
@@ -79,7 +80,10 @@ export default function ReflectionCard({
         }}>A Moment of Peace 🙏</Text>
         {onClose ? (
           <Pressable
-            onPress={onClose}
+            onPress={() => {
+              hapticPress();
+              onClose();
+            }}
             style={{
               paddingHorizontal: 8,
               paddingVertical: 4,
@@ -149,7 +153,10 @@ export default function ReflectionCard({
               }}
             >
               <Pressable
-                onPress={onShare}
+                onPress={() => {
+                  hapticConfirm();
+                  onShare();
+                }}
                 style={{
                   backgroundColor: "#3B82F6",
                   paddingHorizontal: 16,

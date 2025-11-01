@@ -3,6 +3,7 @@ import { View, Text, Pressable, FlatList, Share, Alert, Platform, TouchableOpaci
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { addFavorite, getFavorites } from "../../lib/verseFavorites";
 import { APP_LINK } from "../../lib/config";
+import { hapticPress, hapticSuccess, hapticError } from "../../lib/haptics";
 
 type Entry = {
   id: string;
@@ -94,11 +95,13 @@ export function CollectionDetailScreen({ route, navigation }: any) {
   } catch {}
 
   const copyText = async (text: string) => {
+    hapticPress();
     const payload = `${text}`;
     // 0) expo-clipboard if present
     if (clipboardSetStringAsync) {
       try {
         await clipboardSetStringAsync(payload);
+        hapticSuccess();
         Alert.alert("Copied", "Text copied to clipboard.");
         return;
       } catch {}
@@ -144,24 +147,29 @@ export function CollectionDetailScreen({ route, navigation }: any) {
   };
 
   const saveVerses = async (verses: string[]) => {
+    hapticPress();
     try {
       for (const v of verses) {
         await addFavorite({ ref: v, text: undefined, addedAt: Date.now() });
       }
+      hapticSuccess();
       Alert.alert("Saved", "Verses saved to favorites.");
       refreshFavorites();
     } catch (e) {
+      hapticError();
       Alert.alert("Oops", "Couldn't save right now. Please try again.");
     }
   };
 
 	const shareContent = async (text: string, verses: string[]) => {
+		hapticPress();
 		const payload = `${text}\n\n${verses.join(' · ')}\n\nGet the app: ${APP_LINK}`;
 		// 1) Web share sheet when available
 		try {
 			const nav: any = (globalThis as any)?.navigator;
 			if (nav && nav.share) {
 				await nav.share({ title: 'Daily Peace', text: payload });
+				hapticSuccess();
 				return;
 			}
 		} catch {}
@@ -169,6 +177,7 @@ export function CollectionDetailScreen({ route, navigation }: any) {
 		try {
 			if (Platform.OS !== 'web') {
 				await Share.share({ message: payload, title: 'Daily Peace' });
+				hapticSuccess();
 				return;
 			}
 		} catch {}

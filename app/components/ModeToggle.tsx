@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Pressable, Text, Animated, useWindowDimensions } from "react-native";
+import { hapticSelect } from "../../lib/haptics";
 
 export type Mode = "conversational" | "biblical" | "reflective";
 
@@ -21,6 +22,7 @@ export default function ModeToggle({
   const modes: Mode[] = ["conversational", "biblical", "reflective"];
 
   const handlePress = (mode: Mode) => {
+    hapticSelect();
     onChange(mode);
   };
 

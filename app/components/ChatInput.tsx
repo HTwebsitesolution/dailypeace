@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { View, TextInput, Pressable, Text, useWindowDimensions } from "react-native";
+import { hapticPress, hapticConfirm } from "../../lib/haptics";
 
 export default function ChatInput({
   value,
@@ -27,6 +28,7 @@ export default function ChatInput({
       {/* Mic (toggle) */}
       <Pressable
         onPress={() => {
+          hapticPress();
           if (recording) {
             onVoiceEnd?.();
           } else {
@@ -78,7 +80,10 @@ export default function ChatInput({
 
       {/* Send */}
       <Pressable
-        onPress={onSend}
+        onPress={() => {
+          hapticConfirm();
+          onSend();
+        }}
         disabled={disabled || !value.trim()}
         style={{
           paddingHorizontal: isMobile ? 12 : 16,

@@ -22,6 +22,7 @@
     "expo-asset": "~10.0.10",
     "expo-av": "~14.0.5",
     "expo-file-system": "~17.0.1",
+    "expo-haptics": "~13.0.1",
     "expo-linear-gradient": "~13.0.2",
     "expo-notifications": "~0.28.19",
     "expo-sharing": "~12.0.1",
