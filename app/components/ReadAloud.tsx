@@ -42,7 +42,7 @@ export default function ReadAloud({ text, lang = "en-US", autoCandidate = false 
         accessibilityLabel={s.speaking ? "Pause reading" : "Read to me"}
         accessibilityRole="button"
       >
-        <Text className="text-white">{s.speaking ? "Pause" : "Read to me"}</Text>
+        <Text style={{ color: "#FFFFFF" }}>{s.speaking ? "Pause" : "Read to me"}</Text>
       </Pressable>
       <Pressable
         onPress={toggleAuto}
@@ -50,7 +50,7 @@ export default function ReadAloud({ text, lang = "en-US", autoCandidate = false 
         accessibilityLabel={s.auto ? "Auto-read on" : "Auto-read off"}
         accessibilityRole="button"
       >
-        <Text className="text-white">{s.auto ? "Auto-read: On" : "Auto-read: Off"}</Text>
+        <Text style={{ color: "#FFFFFF" }}>{s.auto ? "Auto-read: On" : "Auto-read: Off"}</Text>
       </Pressable>
     </View>
   );
