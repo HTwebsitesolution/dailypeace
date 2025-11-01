@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Image, Animated, Easing, Platform } from "react-native";
 
 export default function SplashOverlay({
-  duration = 1200,
+  duration = 1500,
   onDone,
 }: {
   duration?: number;
@@ -48,11 +48,11 @@ export default function SplashOverlay({
       pointerEvents="none"
     >
       <Animated.Image
-        source={require("../../assets/branding/icons/icon-ios.png")}
+        source={require("../../assets/Bible Circle Daily Peace Logo.png")}
         resizeMode="contain"
         style={{
-          width: 180,
-          height: 180,
+          width: 300,
+          height: 300,
           transform: [{ scale }],
           opacity: 0.96,
         }}
