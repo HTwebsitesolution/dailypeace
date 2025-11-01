@@ -65,6 +65,28 @@ async function withTimeout<T>(p: Promise<T>, ms = TIMEOUT_MS): Promise<T> {
   });
 }
 
+/* ---------- MODERATION CHECK ---------- */
+async function checkModeration(text: string): Promise<boolean> {
+  try {
+    const openaiApiKey = process.env.OPENAI_API_KEY;
+    if (!openaiApiKey) return true; // Skip if no key
+    
+    const mod = await fetch("https://api.openai.com/v1/moderations", {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json", 
+        Authorization: `Bearer ${openaiApiKey}` 
+      },
+      body: JSON.stringify({ input: text })
+    });
+    const modResult = await mod.json();
+    return !modResult.results?.[0]?.flagged; // Return true if not flagged
+  } catch (e) {
+    console.warn("[Moderation] Check failed, allowing content:", e);
+    return true; // Fail open if moderation check fails
+  }
+}
+
 /* ---------- PRIMARY: OPENAI ---------- */
 async function callOpenAI(
   systemPrompt: string, 
@@ -90,7 +112,15 @@ async function callOpenAI(
   );
   
   const json = resp.choices[0]?.message?.content || "{}";
-  return JSON.parse(json);
+  const parsed = JSON.parse(json);
+  
+  // Optional moderation check on response text
+  const isSafe = await checkModeration(parsed.text || "");
+  if (!isSafe) {
+    throw new Error("moderation flagged");
+  }
+  
+  return parsed;
 }
 
 /* ---------- SECONDARY: PERPLEXITY (FAILOVER) ---------- */
@@ -144,11 +174,19 @@ async function callPerplexity(
     citations.push(...verseMatches);
   }
 
-  return {
+  const result = {
     text,
     citations: citations.length > 0 ? citations : [],
     disclaimer: "AI-generated reflection inspired by Scripture (not a divine message).",
   };
+  
+  // Optional moderation check on Perplexity response
+  const isSafe = await checkModeration(text);
+  if (!isSafe) {
+    throw new Error("moderation flagged");
+  }
+  
+  return result;
 }
 
 /* ---------- ROUTER WITH FAILOVER ---------- */
