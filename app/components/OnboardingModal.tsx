@@ -167,10 +167,7 @@ export default function OnboardingModal({ visible, onDone }: { visible: boolean;
           </View>
 
           {/* Footer */}
-          <View style={{ paddingHorizontal: 20, paddingVertical: 12, borderTopWidth: 1, borderTopColor: "rgba(255,255,255,0.1)", flexDirection: "row", justifyContent: "space-between", borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
-            <Pressable onPress={() => setStep((s) => Math.max(1, (s - 1) as 1))} disabled={step === 1} style={{ paddingHorizontal: 16, paddingVertical: 8, borderRadius: 12, backgroundColor: step === 1 ? "#FFFFFF0D" : "#FFFFFF1A" }}>
-              <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>Back</Text>
-            </Pressable>
+          <View style={{ paddingHorizontal: 20, paddingVertical: 12, borderTopWidth: 1, borderTopColor: "rgba(255,255,255,0.1)", flexDirection: "row", justifyContent: "flex-end", borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
             {step < 3 ? (
               <Pressable disabled={!canProceed} onPress={() => setStep((s) => (s + 1) as 2 | 3)} style={{ paddingHorizontal: 16, paddingVertical: 8, borderRadius: 12, backgroundColor: canProceed ? "#3B82F6" : "#3B82F633" }}>
                 <Text style={{ color: "#FFFFFF", fontWeight: "700" }}>Next</Text>
