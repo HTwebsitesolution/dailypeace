@@ -48,7 +48,11 @@ export default function VoiceTestPanel({ voice = "alloy" }: { voice?: string }) 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: sample, voice }),
       });
-      if (!res.ok) throw new Error("TTS error");
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("Voice test TTS fetch error:", res.status, errorText);
+        throw new Error(`TTS:${res.status}: ${errorText}`);
+      }
 
       const blob = await res.blob();
       const uri = URL.createObjectURL(blob);
@@ -56,6 +60,7 @@ export default function VoiceTestPanel({ voice = "alloy" }: { voice?: string }) 
       if (Platform.OS === "web") {
         const audio = new Audio(uri) as any as HTMLAudioElement;
         audio.onended = () => setPlaying(false);
+        audio.onerror = (e) => console.error("Audio playback error:", e);
         await audio.play();
         setPlaying(true);
       } else {
