@@ -61,23 +61,6 @@ export default function HomeScreen() {
             <Text style={{ color: '#EAF2FF', fontWeight: '600' }}>Favorites</Text>
           </Pressable>
         </View>
-        {/* Decorative logo - behind content, z-index 0, hidden on mobile */}
-        {width >= 768 && (
-          <View style={{
-            position: 'absolute',
-            top: 100,
-            left: '50%',
-            marginLeft: -280, // Half of width for larger size
-            zIndex: 0,
-            opacity: 0.28,
-          }}>
-            <Image
-              source={logoImage}
-              resizeMode="contain"
-              style={{ width: 560, height: 560 }}
-            />
-          </View>
-        )}
 
         {/* Content layer */}
         <View style={{ zIndex: 10, width: '100%', alignItems: 'center' }}>
@@ -238,11 +221,6 @@ export default function HomeScreen() {
           zIndex: 10
         }}>
           <View style={{ alignItems: 'center', marginBottom: 16 }}>
-            <Image
-              source={logoImage}
-              style={{ width: 48, height: 48, borderRadius: 24, marginBottom: 12 }}
-              resizeMode="cover"
-            />
             <Text style={{ 
               color: '#EAF2FF', 
               fontSize: 20,
