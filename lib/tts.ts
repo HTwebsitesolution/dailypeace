@@ -1,34 +1,37 @@
 // lib/tts.ts
 import { Platform } from "react-native";
-import * as Speech from "expo-speech";
 import { Audio } from "expo-av";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type TTSState = {
   speaking: boolean;
   auto: boolean;
-  rate: number;   // 0.5 - 1.5 typical
-  pitch: number;  // 0.8 - 1.2 typical
-  voice?: string; // voice identifier (platform-specific)
+  voice: string; // OpenAI voice identifier
 };
 
 const DEFAULTS: TTSState = {
   speaking: false,
   auto: false,
-  rate: 0.98,
-  pitch: 1.0,
-  voice: undefined,
+  voice: "alloy",
 };
 
 const KEY = {
   AUTO: "@dp/tts_auto",
-  RATE: "@dp/tts_rate",
-  PITCH: "@dp/tts_pitch",
   VOICE: "@dp/tts_voice",
 };
 
+const OPENAI_VOICES = [
+  { id: "alloy", name: "Alloy" },
+  { id: "echo", name: "Echo" },
+  { id: "fable", name: "Fable" },
+  { id: "onyx", name: "Onyx" },
+  { id: "nova", name: "Nova" },
+  { id: "shimmer", name: "Shimmer" },
+];
+
 let _state: TTSState = { ...DEFAULTS };
 let _listeners: Array<(s: TTSState) => void> = [];
+let _currentSound: Audio.Sound | null = null;
 
 function notify() { _listeners.forEach((fn) => fn({ ..._state })); }
 
@@ -54,15 +57,11 @@ export async function initAudioMode() {
 }
 
 export async function loadPrefs() {
-  const [auto, rate, pitch, voice] = await Promise.all([
+  const [auto, voice] = await Promise.all([
     AsyncStorage.getItem(KEY.AUTO),
-    AsyncStorage.getItem(KEY.RATE),
-    AsyncStorage.getItem(KEY.PITCH),
     AsyncStorage.getItem(KEY.VOICE),
   ]);
   _state.auto = auto === "1";
-  if (rate) _state.rate = Math.max(0.5, Math.min(1.5, parseFloat(rate)));
-  if (pitch) _state.pitch = Math.max(0.5, Math.min(1.5, parseFloat(pitch)));
   if (voice) _state.voice = voice;
   notify();
 }
@@ -73,82 +72,80 @@ export async function setAuto(on: boolean) {
   notify();
 }
 
-export async function setRate(rate: number) {
-  _state.rate = Math.max(0.5, Math.min(1.5, rate));
-  await AsyncStorage.setItem(KEY.RATE, String(_state.rate));
-  notify();
-}
-
-export async function setPitch(pitch: number) {
-  _state.pitch = Math.max(0.5, Math.min(1.5, pitch));
-  await AsyncStorage.setItem(KEY.PITCH, String(_state.pitch));
-  notify();
-}
-
-export async function setVoice(voiceId?: string) {
+export async function setVoice(voiceId: string) {
   _state.voice = voiceId;
-  if (voiceId) await AsyncStorage.setItem(KEY.VOICE, voiceId);
-  else await AsyncStorage.removeItem(KEY.VOICE);
+  await AsyncStorage.setItem(KEY.VOICE, voiceId);
   notify();
 }
 
 export async function getVoices(): Promise<Array<{ id: string; name: string }>> {
-  try {
-    if (Platform.OS === "web") {
-      const synth = (globalThis as any).speechSynthesis;
-      if (!synth) return [];
-      const list = synth.getVoices() || [];
-      return list.map((v: any) => ({ id: v.name, name: v.name }));
-    } else {
-      const voices = await Speech.getAvailableVoicesAsync();
-      return (voices || []).map((v) => ({ id: v.identifier ?? v.name ?? "", name: v.name ?? v.identifier ?? "" }));
-    }
-  } catch {
-    return [];
-  }
+  return OPENAI_VOICES;
 }
-
-let _stopHook: (() => void) | null = null;
 
 export async function speak(text: string, lang = "en-US") {
   if (!text?.trim()) return;
-  stop(); // ensure no overlap
-  _state.speaking = true; notify();
+  await stop(); // ensure no overlap
+  
+  _state.speaking = true; 
+  notify();
 
-  if (Platform.OS === "web" && !(Speech as any).speak) {
-    const synth = (globalThis as any).speechSynthesis;
-    if (!synth) { _state.speaking = false; notify(); return; }
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = lang;
-    utter.rate = _state.rate;
-    utter.pitch = _state.pitch;
-    if (_state.voice) {
-      const v = synth.getVoices().find((x: any) => x.name === _state.voice);
-      if (v) utter.voice = v;
-    }
-    utter.onend = () => { _state.speaking = false; notify(); };
-    utter.onerror = () => { _state.speaking = false; notify(); };
-    synth.speak(utter);
-    _stopHook = () => { try { synth.cancel(); } catch {} };
-    return;
+  try {
+    // Fetch audio from OpenAI TTS endpoint
+    const { sound } = await Audio.Sound.createAsync(
+      { uri: await fetchTTSAudio(text) },
+      { shouldPlay: true }
+    );
+    
+    _currentSound = sound;
+    
+    sound.setOnPlaybackStatusUpdate((status) => {
+      if (status.isLoaded && status.didJustFinish) {
+        _state.speaking = false;
+        notify();
+        sound.unloadAsync().catch(() => {});
+      }
+    });
+  } catch (error) {
+    console.error("TTS playback error:", error);
+    _state.speaking = false;
+    notify();
   }
-
-  // expo-speech path (native & web with polyfill)
-  Speech.speak(text, {
-    language: lang,
-    rate: _state.rate,
-    pitch: _state.pitch,
-    voice: _state.voice,
-    onDone: () => { _state.speaking = false; notify(); },
-    onStopped: () => { _state.speaking = false; notify(); },
-    onError: () => { _state.speaking = false; notify(); },
-  });
-  _stopHook = () => { try { Speech.stop(); } catch {} };
 }
 
-export function stop() {
-  if (_stopHook) { _stopHook(); _stopHook = null; }
-  _state.speaking = false; notify();
+async function fetchTTSAudio(text: string): Promise<string> {
+  const response = await fetch("/.netlify/functions/tts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, voice: _state.voice }),
+  });
+  
+  if (!response.ok) throw new Error(`TTS API: ${response.status}`);
+  
+  // For web, read as blob and create data URL
+  if (Platform.OS === 'web') {
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+  
+  // For native, return the URL directly (expo-av can handle URLs)
+  return response.url;
+}
+
+export async function stop() {
+  if (_currentSound) {
+    try {
+      await _currentSound.stopAsync();
+      await _currentSound.unloadAsync();
+    } catch {}
+    _currentSound = null;
+  }
+  _state.speaking = false;
+  notify();
 }
 
 export function getState(): TTSState { return { ..._state }; }
