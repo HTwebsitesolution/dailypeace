@@ -13,27 +13,34 @@ export default function TTSSettingsCard() {
   }, []);
 
   return (
-    <View className="rounded-2xl bg-[#141B23] border border-white/10 p-4">
-      <Text className="text-white font-semibold text-lg">Read Aloud</Text>
-      <Text className="text-[#9FB0C3] mt-1">On-device text-to-speech for replies.</Text>
+    <View style={{ borderRadius: 16, backgroundColor: "#141B23", borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", padding: 16 }}>
+      <Text style={{ color: "#FFFFFF", fontWeight: "600", fontSize: 18 }}>Read Aloud</Text>
+      <Text style={{ color: "#9FB0C3", marginTop: 4 }}>On-device text-to-speech for replies.</Text>
       {Platform.OS === 'web' && (
-        <Text className="text-[#9FB0C3] mt-2 text-xs italic">
+        <Text style={{ color: "#9FB0C3", marginTop: 8, fontSize: 12, fontStyle: "italic" }}>
           💡 Tip: Voice quality varies by browser. Try Chrome or Edge for best results.
         </Text>
       )}
 
-      <View className="flex-row items-center gap-3 mt-3">
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 12, marginTop: 12 }}>
         <Pressable
           onPress={() => setAuto(!s.auto)}
-          className={`px-3 py-2 rounded-xl border ${s.auto ? "bg-primary/30 border-primary" : "bg-white/10 border-white/10"}`}
+          style={{
+            paddingHorizontal: 12,
+            paddingVertical: 8,
+            borderRadius: 12,
+            borderWidth: 1,
+            borderColor: s.auto ? "rgba(59,130,246,0.5)" : "rgba(255,255,255,0.1)",
+            backgroundColor: s.auto ? "rgba(59,130,246,0.3)" : "rgba(255,255,255,0.1)"
+          }}
         >
-          <Text className="text-white">{s.auto ? "Auto-read: On" : "Auto-read: Off"}</Text>
+          <Text style={{ color: "#FFFFFF" }}>{s.auto ? "Auto-read: On" : "Auto-read: Off"}</Text>
         </Pressable>
       </View>
 
       {/* Rate */}
-      <View className="mt-4">
-        <Text className="text-white">Rate: {s.rate.toFixed(2)}</Text>
+      <View style={{ marginTop: 16 }}>
+        <Text style={{ color: "#FFFFFF" }}>Rate: {s.rate.toFixed(2)}</Text>
         <Slider
           minimumValue={0.6}
           maximumValue={1.4}
@@ -46,8 +53,8 @@ export default function TTSSettingsCard() {
       </View>
 
       {/* Pitch */}
-      <View className="mt-4">
-        <Text className="text-white">Pitch: {s.pitch.toFixed(2)}</Text>
+      <View style={{ marginTop: 16 }}>
+        <Text style={{ color: "#FFFFFF" }}>Pitch: {s.pitch.toFixed(2)}</Text>
         <Slider
           minimumValue={0.8}
           maximumValue={1.2}
@@ -60,27 +67,41 @@ export default function TTSSettingsCard() {
       </View>
 
       {/* Voice picker (best-effort per platform) */}
-      <View className="mt-4">
-        <Text className="text-white mb-2">Voice</Text>
-        <View className="flex-row flex-wrap gap-2">
+      <View style={{ marginTop: 16 }}>
+        <Text style={{ color: "#FFFFFF", marginBottom: 8 }}>Voice</Text>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
           <Pressable
             onPress={() => setVoice(undefined)}
-            className={`px-3 py-2 rounded-xl border ${!s.voice ? "bg-primary/30 border-primary" : "bg-white/10 border-white/10"}`}
+            style={{
+              paddingHorizontal: 12,
+              paddingVertical: 8,
+              borderRadius: 12,
+              borderWidth: 1,
+              borderColor: !s.voice ? "rgba(59,130,246,0.5)" : "rgba(255,255,255,0.1)",
+              backgroundColor: !s.voice ? "rgba(59,130,246,0.3)" : "rgba(255,255,255,0.1)"
+            }}
           >
-            <Text className="text-white">System default</Text>
+            <Text style={{ color: "#FFFFFF" }}>System default</Text>
           </Pressable>
           {voices.slice(0, 8).map((v) => (
             <Pressable
               key={v.id}
               onPress={() => setVoice(v.id)}
-              className={`px-3 py-2 rounded-xl border ${s.voice === v.id ? "bg-primary/30 border-primary" : "bg-white/10 border-white/10"}`}
+              style={{
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: s.voice === v.id ? "rgba(59,130,246,0.5)" : "rgba(255,255,255,0.1)",
+                backgroundColor: s.voice === v.id ? "rgba(59,130,246,0.3)" : "rgba(255,255,255,0.1)"
+              }}
             >
-              <Text className="text-white">{v.name}</Text>
+              <Text style={{ color: "#FFFFFF" }}>{v.name}</Text>
             </Pressable>
           ))}
         </View>
         {voices.length === 0 && (
-          <Text className="text-[#9FB0C3] mt-2">
+          <Text style={{ color: "#9FB0C3", marginTop: 8 }}>
             Voices may be managed in system settings on this device.
           </Text>
         )}

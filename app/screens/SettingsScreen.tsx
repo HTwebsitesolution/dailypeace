@@ -115,9 +115,7 @@ export default function SettingsScreen() {
       </Section>
 
       <Section title="Voice & Audio">
-        <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
-          <TTSSettingsCard />
-        </View>
+        <TTSSettingsCard />
         <SettingsCard
           title="Store voice recordings"
           subtitle="Voice recordings not stored by default"
