@@ -17,7 +17,7 @@ export default function SplashGate() {
   const prepare = useCallback(async () => {
     // Preload logo and hero assets
     await Asset.loadAsync([
-      require("../assets/branding/icons/icon-ios.png"),
+      require("../assets/Bible Circle Daily Peace Logo.png"),
       require("../assets/images/hero-ocean.png"),
     ]);
     const intro = await AsyncStorage.getItem("@dp/intro_seen");
