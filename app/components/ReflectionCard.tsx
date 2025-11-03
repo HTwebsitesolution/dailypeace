@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text, Pressable, Animated, ScrollView, Platform, useWindowDimensions } from "react-native";
+import { View, Text, Pressable, Animated, ScrollView, Platform, useWindowDimensions, Image } from "react-native";
 import { hapticConfirm } from "../../lib/haptics";
 import { getScrollPosition, saveScrollPosition, loadScrollPositions } from "../../lib/scrollPersistence";
 import ReadAloud from "./ReadAloud";
+
+const logo = require("../../assets/Bible Circle Daily Peace Logo.png");
 
 export default function ReflectionCard({
   title = "Today's Reflection",
@@ -99,20 +101,27 @@ export default function ReflectionCard({
           fontSize: isMobile ? 16 : 18, 
           letterSpacing: 0.4
         }}>A Moment of Peace 🙏</Text>
-        {onClose ? (
-          <Pressable
-            onPress={onClose}
-            style={{
-              paddingHorizontal: 8,
-              paddingVertical: 4,
-              borderRadius: 12,
-              backgroundColor: "rgba(255,255,255,0.15)"
-            }}
-            android_ripple={{ color: "#ffffff30" }}
-          >
-            <Text style={{ color: "#FFFFFF" }}>✕</Text>
-          </Pressable>
-        ) : null}
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          {/* Daily Peace logo for branding in shared images */}
+          <Image 
+            source={logo} 
+            style={{ width: 32, height: 32, resizeMode: 'contain' }} 
+          />
+          {onClose ? (
+            <Pressable
+              onPress={onClose}
+              style={{
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                borderRadius: 12,
+                backgroundColor: "rgba(255,255,255,0.15)"
+              }}
+              android_ripple={{ color: "#ffffff30" }}
+            >
+              <Text style={{ color: "#FFFFFF" }}>✕</Text>
+            </Pressable>
+          ) : null}
+        </View>
       </View>
 
       {/* Scrollable Body */}
