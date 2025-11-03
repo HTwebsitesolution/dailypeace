@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { View, FlatList, KeyboardAvoidingView, Platform, Alert, Animated, Text, Pressable, Image, useWindowDimensions, RefreshControl } from "react-native";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import { captureRef } from "react-native-view-shot";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useSettings } from "../../lib/settings";
 import { apiGenerate, apiTranscribe } from "../../lib/api";
@@ -17,6 +19,7 @@ import ChatInput from "../components/ChatInput";
 import ReflectionCard from "../components/ReflectionCard";
 import AtmosphericBackground from "../components/AtmosphericBackground";
 import { stop as stopTTS } from "../../lib/tts";
+import { APP_LINK } from "../../lib/config";
 
 const logo = require("../../assets/Bible Circle Daily Peace Logo.png");
 
@@ -53,6 +56,7 @@ export default function ChatScreen() {
   const flatListRef = useRef<FlatList>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const logoAnim = useRef(new Animated.Value(1)).current;
+  const reflectionViewRef = useRef<View | null>(null);
 
   useEffect(() => {
     loadData();
@@ -330,7 +334,25 @@ export default function ChatScreen() {
   const shareReflection = async () => {
     if (!reflection) return;
 
-    const shareText = `${reflection.message}\n\n${reflection.verses.join('\n')}\n\n— Shared from Daily Peace`;
+    // Try to share an image with watermark on native platforms
+    try {
+      if (Platform.OS !== 'web' && reflectionViewRef.current && (await Sharing.isAvailableAsync())) {
+        const uri = await captureRef(reflectionViewRef.current, {
+          format: 'png',
+          quality: 0.9,
+          result: 'tmpfile',
+        });
+        await Sharing.shareAsync(uri, {
+          mimeType: 'image/png',
+          dialogTitle: 'Share your Daily Peace reflection',
+        });
+        return;
+      }
+    } catch (err) {
+      console.log('Image share failed, falling back to text:', err);
+    }
+
+    const shareText = `${reflection.message}\n\n${reflection.verses.join('\n')}\n\n— Shared from Daily Peace • ${APP_LINK}`;
 
     // Try native share API first (works on mobile browsers)
     if (navigator.share) {
@@ -529,13 +551,37 @@ export default function ChatScreen() {
 
               {/* Daily Reflection */}
               {reflection && (
-                <ReflectionCard
-                  message={reflection.message}
-                  verses={reflection.verses}
-                  onShare={shareReflection}
-                  onClose={closeReflection}
-                  onVersePress={handleVersePress}
-                />
+                <View
+                  ref={(r) => (reflectionViewRef.current = r)}
+                  collapsable={false}
+                  style={{ position: 'relative' }}
+                >
+                  <ReflectionCard
+                    message={reflection.message}
+                    verses={reflection.verses}
+                    onShare={shareReflection}
+                    onClose={closeReflection}
+                    onVersePress={handleVersePress}
+                  />
+                  {/* Watermark overlay for captured image */}
+                  <View
+                    pointerEvents="none"
+                    style={{
+                      position: 'absolute',
+                      right: 8,
+                      bottom: 8,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      paddingHorizontal: 8,
+                      paddingVertical: 4,
+                      borderRadius: 8,
+                      backgroundColor: 'rgba(0,0,0,0.35)'
+                    }}
+                  >
+                    <Image source={logo} style={{ width: 16, height: 16, marginRight: 6, resizeMode: 'contain' }} />
+                    <Text style={{ color: '#FFFFFF', fontSize: 12 }}>dailypeace.life</Text>
+                  </View>
+                </View>
               )}
 
               {/* Favorites - Quiet Reflection */}
@@ -715,13 +761,37 @@ export default function ChatScreen() {
 
               {/* Daily Reflection */}
               {reflection && (
-                <ReflectionCard
-                  message={reflection.message}
-                  verses={reflection.verses}
-                  onShare={shareReflection}
-                  onClose={closeReflection}
-                  onVersePress={handleVersePress}
-                />
+                <View
+                  ref={(r) => (reflectionViewRef.current = r)}
+                  collapsable={false}
+                  style={{ position: 'relative' }}
+                >
+                  <ReflectionCard
+                    message={reflection.message}
+                    verses={reflection.verses}
+                    onShare={shareReflection}
+                    onClose={closeReflection}
+                    onVersePress={handleVersePress}
+                  />
+                  {/* Watermark overlay for captured image (web branch) */}
+                  <View
+                    pointerEvents="none"
+                    style={{
+                      position: 'absolute',
+                      right: 8,
+                      bottom: 8,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      paddingHorizontal: 8,
+                      paddingVertical: 4,
+                      borderRadius: 8,
+                      backgroundColor: 'rgba(0,0,0,0.35)'
+                    }}
+                  >
+                    <Image source={logo} style={{ width: 16, height: 16, marginRight: 6, resizeMode: 'contain' }} />
+                    <Text style={{ color: '#FFFFFF', fontSize: 12 }}>dailypeace.life</Text>
+                  </View>
+                </View>
               )}
 
               {/* Favorites - Quiet Reflection (web branch) */}
