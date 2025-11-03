@@ -1,5 +1,11 @@
 # Releases
 
+## v1.2.0 - 2025-11-03
+
+- Added backlink to dailypeace.life in shared text content
+- Added branded image sharing on native (watermark with logo + URL)
+- Improved behavior to prefer image share on native; fallback to text when unsupported
+
 ## v2.0 - 2025-10-21
 
 - Add daily reflection display in the Chat Screen with dismiss and share functionality
