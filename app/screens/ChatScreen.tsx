@@ -39,6 +39,7 @@ export default function ChatScreen() {
   const nav = useNavigation<any>();
   const route = useRoute<any>();
   const { width } = useWindowDimensions();
+  const isMobile = width < 768;
   const { settings } = useSettings();
   const [mode, setMode] = useState<Mode>(settings.defaultMode);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -665,8 +666,8 @@ export default function ChatScreen() {
                 />
               </View>
 
-              {/* Settings Button */}
-              <View style={{ position: "absolute", right: -40, top: 56 }}>
+              {/* Settings Button (mobile-native repositioned) */}
+              <View style={{ position: "absolute", right: isMobile ? 12 : -40, top: isMobile ? 20 : 56 }}>
                 <Pressable
                   onPress={() => nav.navigate("Settings")}
                   style={{ padding: 8, borderRadius: 8 }}
@@ -875,12 +876,11 @@ export default function ChatScreen() {
                 />
               </View>
 
-              {/* Settings Button */}
-              <View style={{ position: "absolute", right: -40, top: 56 }}>
+              {/* Settings Button (web; reposition on narrow screens) */}
+              <View style={{ position: "absolute", right: isMobile ? 12 : -40, top: isMobile ? 20 : 56 }}>
                 <Pressable
                   onPress={() => nav.navigate("Settings")}
                   style={{ padding: 8, borderRadius: 8 }}
-                  android_ripple={{ color: "rgba(255,255,255,0.1)" }}
                 >
                   <Text style={{ color: "#9FB0C3", fontSize: 18 }}>⚙️</Text>
                 </Pressable>
