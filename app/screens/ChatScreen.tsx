@@ -61,7 +61,6 @@ export default function ChatScreen() {
   useEffect(() => {
     loadData();
     requestPermissions();
-    loadDailyReflection();
     loadFavorites();
     Animated.timing(fadeAnim, {
       toValue: 1,
@@ -390,7 +389,6 @@ export default function ChatScreen() {
   const handleRefresh = () => {
     setReflection(null);
     setMessages([]);
-    loadDailyReflection();
     loadFavorites();
   };
 
@@ -550,39 +548,7 @@ export default function ChatScreen() {
               </View>
 
               {/* Daily Reflection */}
-              {reflection && (
-                <View
-                  ref={(r) => (reflectionViewRef.current = r)}
-                  collapsable={false}
-                  style={{ position: 'relative' }}
-                >
-                  <ReflectionCard
-                    message={reflection.message}
-                    verses={reflection.verses}
-                    onShare={shareReflection}
-                    onClose={closeReflection}
-                    onVersePress={handleVersePress}
-                  />
-                  {/* Watermark overlay for captured image */}
-                  <View
-                    pointerEvents="none"
-                    style={{
-                      position: 'absolute',
-                      right: 8,
-                      bottom: 8,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      paddingHorizontal: 8,
-                      paddingVertical: 4,
-                      borderRadius: 8,
-                      backgroundColor: 'rgba(0,0,0,0.35)'
-                    }}
-                  >
-                    <Image source={logo} style={{ width: 16, height: 16, marginRight: 6, resizeMode: 'contain' }} />
-                    <Text style={{ color: '#FFFFFF', fontSize: 12 }}>dailypeace.life</Text>
-                  </View>
-                </View>
-              )}
+              {/* Reflection card removed on chat page to keep focus on composing */}
 
               {/* Favorites - Quiet Reflection */}
               {mode === 'reflective' && favorites.length > 0 && (
@@ -760,39 +726,7 @@ export default function ChatScreen() {
               </View>
 
               {/* Daily Reflection */}
-              {reflection && (
-                <View
-                  ref={(r) => (reflectionViewRef.current = r)}
-                  collapsable={false}
-                  style={{ position: 'relative' }}
-                >
-                  <ReflectionCard
-                    message={reflection.message}
-                    verses={reflection.verses}
-                    onShare={shareReflection}
-                    onClose={closeReflection}
-                    onVersePress={handleVersePress}
-                  />
-                  {/* Watermark overlay for captured image (web branch) */}
-                  <View
-                    pointerEvents="none"
-                    style={{
-                      position: 'absolute',
-                      right: 8,
-                      bottom: 8,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      paddingHorizontal: 8,
-                      paddingVertical: 4,
-                      borderRadius: 8,
-                      backgroundColor: 'rgba(0,0,0,0.35)'
-                    }}
-                  >
-                    <Image source={logo} style={{ width: 16, height: 16, marginRight: 6, resizeMode: 'contain' }} />
-                    <Text style={{ color: '#FFFFFF', fontSize: 12 }}>dailypeace.life</Text>
-                  </View>
-                </View>
-              )}
+              {/* Reflection card removed on chat page (web branch) */}
 
               {/* Favorites - Quiet Reflection (web branch) */}
               {mode === 'reflective' && favorites.length > 0 && (
