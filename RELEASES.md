@@ -1,5 +1,11 @@
 # Releases
 
+## v2.1.0 - 2025-11-03
+
+- Project completion milestone: branded sharing (image watermark + backlink), UX polish
+- Restored reflection card with Share on chat, removed duplicate initial verse
+- Mobile: settings cog repositioned for better visibility on small screens
+
 ## v1.2.0 - 2025-11-03
 
 - Added backlink to dailypeace.life in shared text content
