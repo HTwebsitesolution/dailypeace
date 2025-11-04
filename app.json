@@ -13,15 +13,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.yourcompany.dailypeace"
+      "bundleIdentifier": "life.dailypeace.app"
     },
     "android": {
-      "package": "com.yourcompany.dailypeace",
+      "package": "life.dailypeace.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/branding/icons/icon-android.png",
         "backgroundColor": "#0B1016"
-      },
-      "useNextNotificationsApi": true
+      }
     },
     "web": {
       "favicon": "./assets/branding/icons/favicon.png"
@@ -38,7 +37,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "REPLACE_WITH_EAS_PROJECT_ID"
+        "projectId": "7110355b-7f81-4095-9927-1cb9680a0efa"
       },
       "SENTRY_DSN": "REPLACE_WITH_SENTRY_DSN",
       "POSTHOG_KEY": "REPLACE_WITH_POSTHOG_KEY",
@@ -46,6 +45,7 @@
     },
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "owner": "htweb"
   }
 }

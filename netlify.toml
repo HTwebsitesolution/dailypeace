@@ -1,7 +1,7 @@
 # Netlify build configuration for Daily Peace
 [build]
   publish = "web-dist"
-  command = "npx expo export --platform web --output-dir web-dist && mkdir -p web-dist/icons && cp assets/icon.png web-dist/icons/icon-192.png && cp assets/icon.png web-dist/icons/icon-512.png && cp assets/icon.png web-dist/icons/maskable-512.png && cp public/manifest.json web-dist/manifest.json && printf '# API routes\n/api/* /.netlify/functions/:splat 200\n\n# SPA fallback\n/* /index.html 200\n' > web-dist/_redirects"
+  command = "npx expo export --platform web --output-dir web-dist && mkdir -p web-dist/icons && cp assets/icon.png web-dist/icons/icon-192.png && cp assets/icon.png web-dist/icons/icon-512.png && cp assets/icon.png web-dist/icons/maskable-512.png && cp public/manifest.json web-dist/manifest.json && cp public/privacy-policy.html web-dist/privacy-policy.html && printf '# API routes\n/api/* /.netlify/functions/:splat 200\n\n# Privacy policy (serve directly)\n/privacy-policy /privacy-policy.html 200\n\n# SPA fallback\n/* /index.html 200\n' > web-dist/_redirects"
 
 [build.environment]
   NODE_VERSION = "18"
@@ -14,6 +14,11 @@
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/privacy-policy"
+  to = "/privacy-policy.html"
   status = 200
 
 [[redirects]]

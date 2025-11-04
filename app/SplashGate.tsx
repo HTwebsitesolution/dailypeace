@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, Platform } from "react-native";
+import { View } from "react-native";
 import * as Splash from "expo-splash-screen";
 import { Asset } from "expo-asset";
 import SplashOverlay from "./components/SplashOverlay";
@@ -26,25 +26,14 @@ export default function SplashGate() {
     await Splash.hideAsync();
   }, []);
 
-  // Add app-loaded class to body when splash is done (web only)
-  useEffect(() => {
-    if (splashDone && Platform.OS === 'web' && typeof document !== 'undefined') {
-      document.body.classList.add('app-loaded');
-    }
-  }, [splashDone]);
-
   useEffect(() => {
     prepare();
   }, [prepare]);
 
-  // Show white background initially to match splash screen
-  if (!isReady) return <View style={{ flex: 1, backgroundColor: "#FFFFFF" }} />;
-
-  // Keep white background during splash overlay, then switch to dark
-  const backgroundColor = splashDone ? "#0B1016" : "#FFFFFF";
+  if (!isReady) return <View style={{ flex: 1, backgroundColor: "#0B1016" }} />;
 
   return (
-    <View style={{ flex: 1, backgroundColor }}>
+    <View style={{ flex: 1, backgroundColor: "#0B1016" }}>
       {!splashDone && <SplashOverlay onDone={() => setSplashDone(true)} />}
 
       {splashDone && showIntro ? (
