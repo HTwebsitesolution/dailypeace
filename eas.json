@@ -1,0 +1,45 @@
+{
+  "cli": {
+    "version": ">= 7.8.6"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "ios": {
+        "simulator": false
+      }
+    },
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_API_BASE": "https://dailypeace.life/.netlify/functions",
+        "EXPO_PUBLIC_APP_LINK": "https://dailypeace.life"
+      },
+      "ios": {
+        "bundleIdentifier": "com.yourcompany.dailypeace"
+      },
+      "android": {
+        "package": "com.yourcompany.dailypeace"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "your-email@example.com",
+        "ascAppId": "your-app-store-connect-app-id",
+        "appleTeamId": "your-team-id"
+      },
+      "android": {
+        "serviceAccountKeyPath": "./service-account-key.json",
+        "track": "internal"
+      }
+    }
+  }
+}

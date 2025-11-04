@@ -15,7 +15,10 @@
 
 /* ---------- Base polish ---------- */
 html,body,#root{height:100%}
-body{background:var(--bg);color:var(--text);}
+/* Start with white background to match splash screen, then transition to dark after splash */
+body,#root{background:#FFFFFF;color:var(--text);}
+/* After app loads, body will have class 'app-loaded' and use dark background */
+body.app-loaded,body.app-loaded #root{background:var(--bg);}
 
 /* ---------- Utilities layer (Tailwind will keep these) ---------- */
 @layer utilities {

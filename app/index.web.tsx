@@ -44,7 +44,7 @@ export default function App() {
     safeNotifications();
     safeTTSInit();
   }, []);
-  
+
   return (
     <SettingsProvider>
       <SafeAreaView style={{ flex:1, backgroundColor:"#0B1016" }}>
