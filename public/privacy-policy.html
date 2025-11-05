@@ -1,211 +1,210 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Privacy Policy - Daily Peace</title>
-  <meta name="description" content="Privacy Policy for Daily Peace - Your spiritual guidance app. Learn how we collect, use, and protect your data." />
+  <title>Privacy Policy · Daily Peace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0B1016" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta name="description" content="Privacy Policy for Daily Peace — your companion for strength, peace, and hope from Scripture." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Privacy Policy · Daily Peace" />
+  <meta property="og:description" content="How Daily Peace handles your data: private, secure, no ads. Read the full policy." />
+  <meta property="og:image" content="/assets/branding/splash/og-image.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dailypeace.life/privacy-policy" />
+
   <style>
-    :root { --bg:#0B1016; --card:#141B23; --text:#EAF2FF; --muted:#9FB0C3; --blue:#2F80ED; }
-    *{box-sizing:border-box} 
-    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui}
-    .wrap{max-width:840px;margin:60px auto;padding:0 20px}
-    h1{font-size:32px;margin-bottom:12px;color:var(--text)}
-    h2{font-size:24px;margin-top:32px;margin-bottom:16px;color:var(--text);border-bottom:1px solid var(--card);padding-bottom:8px}
-    h3{font-size:18px;margin-top:24px;margin-bottom:12px;color:var(--text)}
-    p{margin:12px 0;color:var(--text)}
-    ul,ol{margin:12px 0;padding-left:24px;color:var(--text)}
-    li{margin:8px 0}
-    a{color:var(--blue);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .last-updated{color:var(--muted);font-size:14px;margin-bottom:32px}
-    .back-link{margin-bottom:24px;display:inline-block;color:var(--blue)}
+    :root{
+      --bg:#0B1016;        /* ocean base */
+      --bg-2:#101826;      /* card background */
+      --ink:#EAF2FF;       /* primary text */
+      --muted:#9FB0C3;     /* secondary text */
+      --line:rgba(255,255,255,0.12);
+      --brand:#2F70A6;     /* accent */
+      --brand-2:#A5B4FC;   /* soft accent */
+      --radius:20px;
+      --shadow:0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    /* Reset-ish */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", system-ui, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(47,112,166,.25), transparent 60%),
+        linear-gradient(180deg, #0B1016, #1A2330 40%, #254A7B 100%);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    a{ color: var(--brand-2); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .wrap{
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header.site{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:16px 0 8px;
+    }
+    .logo{
+      width:40px;height:40px;border-radius:12px;
+      background:rgba(255,255,255,0.08);
+      display:grid;place-items:center;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .logo img{width:100%;height:100%;object-fit:cover}
+    .titleblock small{color:var(--muted)}
+    .titleblock h1{
+      font-size:18px;margin:0 0 2px 0;letter-spacing:.2px;font-weight:700
+    }
+
+    .card{
+      background: rgba(255,255,255,0.04);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      backdrop-filter: blur(10px);
+    }
+
+    h2{
+      font-size:20px;margin:26px 0 10px;
+      padding-top:6px;border-top:1px solid var(--line);
+    }
+    h3{font-size:16px;margin:16px 0 8px;color:#fff}
+    p{color:var(--ink);opacity:.95;line-height:1.7;margin:10px 0}
+    ul{margin:8px 0 16px 20px;color:var(--ink);opacity:.95;line-height:1.7}
+    li{margin:6px 0}
+    .muted{color:var(--muted)}
+    .pill{
+      display:inline-block; padding:6px 10px; border-radius:999px;
+      border:1px solid var(--line); background:rgba(255,255,255,0.06);
+      color:var(--muted); font-size:12px; letter-spacing:.2px;
+    }
+
+    .footer{
+      margin:30px 0 20px; display:flex; justify-content:space-between; gap:12px;
+      color:var(--muted); font-size:13px; flex-wrap:wrap;
+      border-top:1px solid var(--line); padding-top:12px;
+    }
+
+    /* Mobile tweaks */
+    @media (max-width:640px){
+      .wrap{padding:16px}
+      .card{padding:18px}
+      h2{font-size:18px}
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <a href="/" class="back-link">← Back to Daily Peace</a>
-    
-    <h1>Privacy Policy</h1>
-    <p class="last-updated"><strong>Last Updated:</strong> January 2025</p>
+    <header class="site">
+      <div class="logo">
+        <!-- use your final icon -->
+        <img src="/assets/branding/icons/icon-web.png" alt="Daily Peace" />
+      </div>
+      <div class="titleblock">
+        <h1>Privacy Policy</h1>
+        <small class="muted">Daily Peace · Last updated: <span id="lastUpdated">November 2025</span></small>
+      </div>
+    </header>
 
-    <h2>1. Introduction</h2>
-    <p>
-      Welcome to Daily Peace ("we," "our," or "us"). Daily Peace is an AI-powered spiritual guidance application designed to provide comfort, wisdom, and reflection through biblical scripture and compassionate conversation.
-    </p>
-    <p>
-      This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application, web application, and related services (collectively, the "Service"). Please read this Privacy Policy carefully. If you do not agree with the terms of this Privacy Policy, please do not access or use the Service.
-    </p>
+    <main class="card" role="main">
+      <p><strong>Daily Peace</strong> ("we," "our," "us") is committed to protecting your privacy. This Privacy Policy explains how we handle your data when you use our mobile app and website (<a href="https://dailypeace.life" target="_blank" rel="noopener">dailypeace.life</a>).</p>
 
-    <h2>2. Information We Collect</h2>
-    
-    <h3>2.1 Information You Provide Directly</h3>
-    <ul>
-      <li><strong>Conversation Content:</strong> Text messages, voice recordings, and any content you input while using the Service</li>
-      <li><strong>Preferences:</strong> Your selected conversation mode (Conversational, Biblical, or Reflective), notification preferences, and other app settings</li>
-      <li><strong>Favorites:</strong> Scripture verses or reflections you choose to save</li>
-    </ul>
+      <p class="pill">Status: Free version — no ads, no in-app purchases (this release)</p>
 
-    <h3>2.2 Automatically Collected Information</h3>
-    <ul>
-      <li><strong>Usage Data:</strong> Information about how you interact with the Service, including features used, screens viewed, and time spent in the app</li>
-      <li><strong>Device Information:</strong> Device type, operating system, unique device identifiers, and mobile network information</li>
-      <li><strong>Log Data:</strong> IP address, browser type, pages visited, and access times</li>
-    </ul>
+      <h2>1. Introduction</h2>
+      <p><strong>Daily Peace</strong> is an AI-powered spiritual companion that offers Scripture-anchored reflections and gentle conversation.</p>
+      <p><strong>Currently, Daily Peace is free to use.</strong> We do not display advertisements or offer in-app purchases in this version. If we introduce subscriptions or paid features later, we will update this Policy and notify you in advance.</p>
 
-    <h3>2.3 Analytics and Error Reporting</h3>
-    <ul>
-      <li>We use analytics services to understand app usage patterns and improve user experience</li>
-      <li>Error reporting services help us identify and fix technical issues</li>
-    </ul>
+      <h2>2. Information We Collect</h2>
+      <h3>2.1 Information You Provide</h3>
+      <ul>
+        <li><strong>Conversation content:</strong> text you type and voice input you speak, used to generate responses.</li>
+        <li><strong>Preferences:</strong> modes (Conversational, Biblical, Reflective), saved favorites, and settings.</li>
+      </ul>
+      <p><em>Voice input is processed to produce a response and is not stored on our servers after processing.</em></p>
 
-    <h2>3. How We Use Your Information</h2>
-    <p>We use the information we collect for the following purposes:</p>
-    <ul>
-      <li><strong>Provide the Service:</strong> To process your conversations, generate AI responses, and deliver spiritual guidance</li>
-      <li><strong>Improve the Service:</strong> To analyze usage patterns, fix bugs, and enhance user experience</li>
-      <li><strong>Personalization:</strong> To remember your preferences and customize your experience</li>
-      <li><strong>Communication:</strong> To send you notifications (with your consent) and respond to your inquiries</li>
-      <li><strong>Legal Compliance:</strong> To comply with applicable laws and regulations</li>
-    </ul>
+      <h3>2.2 Automatically Collected</h3>
+      <ul>
+        <li>Non-identifying technical details (e.g., device type, OS version).</li>
+        <li>Anonymised usage data (e.g., screens viewed) to improve stability and experience.</li>
+      </ul>
+      <p>We do <strong>not</strong> collect personal identifiers (e.g., name, email) or use device identifiers for advertising or profiling.</p>
 
-    <h2>4. Third-Party Services</h2>
-    <p>We use the following third-party services to operate and improve our Service:</p>
+      <h2>3. How We Use Information</h2>
+      <ul>
+        <li>Provide and maintain the Service (process your inputs, generate responses).</li>
+        <li>Improve reliability and user experience (anonymised analytics, error diagnostics).</li>
+        <li>Save preferences locally on your device.</li>
+        <li>Send optional notifications if you've enabled them.</li>
+      </ul>
 
-    <h3>4.1 OpenAI</h3>
-    <ul>
-      <li><strong>Purpose:</strong> AI conversation processing and voice transcription</li>
-      <li><strong>Services Used:</strong> GPT-4 (for generating responses) and Whisper API (for voice-to-text transcription)</li>
-      <li><strong>Data Shared:</strong> Your conversation inputs and voice recordings are sent to OpenAI for processing</li>
-      <li><strong>OpenAI Privacy Policy:</strong> <a href="https://openai.com/privacy" target="_blank" rel="noopener noreferrer">https://openai.com/privacy</a></li>
-      <li><strong>Data Retention:</strong> OpenAI may retain data according to their privacy policy. We do not store voice recordings on our servers - they are processed and immediately discarded after transcription.</li>
-    </ul>
+      <h2>4. Third-Party Services</h2>
+      <h3>4.1 OpenAI</h3>
+      <p>We use OpenAI to process text and voice inputs to generate responses. Inputs are transmitted securely and processed to return results. We do not persist conversation content on our servers after processing. See <a href="https://openai.com/privacy" target="_blank" rel="noopener">OpenAI Privacy Policy</a>.</p>
+      <h3>4.2 Hosting & Infrastructure</h3>
+      <p>We use hosting providers (e.g., Netlify) to operate the Service. Requests and responses pass through this infrastructure. See their privacy statements.</p>
+      <h3>4.3 Analytics & Error Reporting</h3>
+      <p>We may use anonymised analytics (e.g., PostHog) and error tooling (e.g., Sentry) to improve performance and stability. Personal identity is not collected.</p>
 
-    <h3>4.2 Netlify</h3>
-    <ul>
-      <li><strong>Purpose:</strong> Hosting and backend infrastructure</li>
-      <li><strong>Services Used:</strong> Serverless functions, content delivery network (CDN), and hosting</li>
-      <li><strong>Data Shared:</strong> API requests and responses pass through Netlify's infrastructure</li>
-      <li><strong>Netlify Privacy Policy:</strong> <a href="https://www.netlify.com/privacy" target="_blank" rel="noopener noreferrer">https://www.netlify.com/privacy</a></li>
-    </ul>
+      <h2>5. Data Storage & Retention</h2>
+      <ul>
+        <li><strong>Local storage:</strong> Your preferences and saved items are stored on your device.</li>
+        <li><strong>Server processing:</strong> Inputs are handled in real time and not stored by us after processing.</li>
+        <li><strong>Retention:</strong> Anonymised analytics may be retained for service improvement.</li>
+      </ul>
 
-    <h3>4.3 Analytics Services</h3>
-    <ul>
-      <li><strong>PostHog:</strong> Used for app analytics and user behavior tracking</li>
-      <li><strong>Sentry:</strong> Used for error tracking and performance monitoring</li>
-      <li>These services collect anonymized usage data to help us improve the Service</li>
-    </ul>
+      <h2>6. Data Security</h2>
+      <p>We use HTTPS/TLS encryption, secure infrastructure, and limited access controls. No system can be 100% secure, but we work to protect your data.</p>
 
-    <h2>5. Data Storage and Retention</h2>
-    
-    <h3>5.1 Local Storage</h3>
-    <ul>
-      <li>Your preferences, favorites, and conversation history are stored locally on your device</li>
-      <li>This data is not transmitted to our servers unless necessary for service functionality</li>
-    </ul>
+      <h2>7. Your Rights & Choices</h2>
+      <ul>
+        <li>Access or modify preferences in the app.</li>
+        <li>Delete local data by uninstalling the app or clearing app storage.</li>
+        <li>Disable notifications in your device settings.</li>
+      </ul>
 
-    <h3>5.2 Server Storage</h3>
-    <ul>
-      <li>Voice recordings are processed in real-time and immediately deleted after transcription</li>
-      <li>We do not permanently store your personal conversations or voice recordings</li>
-      <li>API requests may be logged temporarily for troubleshooting purposes</li>
-    </ul>
+      <h2>8. Children's Privacy</h2>
+      <p>The Service is not intended for children under 13. We do not knowingly collect personal information from children under 13.</p>
 
-    <h3>5.3 Data Retention</h3>
-    <ul>
-      <li>Conversation data is processed in real-time and not stored long-term</li>
-      <li>Analytics data is retained in anonymized form for service improvement</li>
-      <li>You can delete locally stored data by uninstalling the app</li>
-    </ul>
+      <h2>9. International Transfers</h2>
+      <p>Your data may be processed in countries outside your residence (e.g., US). By using the Service, you consent to such transfers.</p>
 
-    <h2>6. Data Security</h2>
-    <p>
-      We implement appropriate technical and organizational measures to protect your information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your information, we cannot guarantee absolute security.
-    </p>
-    <p>Security measures include:</p>
-    <ul>
-      <li>Encrypted data transmission (HTTPS/TLS)</li>
-      <li>Secure server infrastructure</li>
-      <li>Limited access to personal information on a need-to-know basis</li>
-      <li>Regular security assessments</li>
-    </ul>
+      <h2>10. Changes to This Policy</h2>
+      <p>We may update this Policy from time to time. We will revise the "Last updated" date and post the updated version here. If material changes occur (e.g., adding subscriptions), we will provide notice.</p>
 
-    <h2>7. Your Rights and Choices</h2>
-    
-    <h3>7.1 Access and Control</h3>
-    <ul>
-      <li>You can access and modify your preferences within the app settings</li>
-      <li>You can delete locally stored data by clearing app data or uninstalling the app</li>
-      <li>You can opt out of notifications through your device settings</li>
-    </ul>
+      <h2>11. Contact Us</h2>
+      <p>Email: <a href="mailto:privacy@dailypeace.life">privacy@dailypeace.life</a><br/>
+         Website: <a href="https://dailypeace.life" target="_blank" rel="noopener">dailypeace.life</a></p>
 
-    <h3>7.2 Data Protection Rights</h3>
-    <p>Depending on your location, you may have the following rights:</p>
-    <ul>
-      <li><strong>Access:</strong> Request access to your personal data</li>
-      <li><strong>Rectification:</strong> Request correction of inaccurate data</li>
-      <li><strong>Erasure:</strong> Request deletion of your data</li>
-      <li><strong>Portability:</strong> Request transfer of your data</li>
-      <li><strong>Objection:</strong> Object to processing of your data</li>
-    </ul>
+      <h2>12. State-Specific Rights (California)</h2>
+      <p>California residents may have rights under CCPA/CPRA, including to know, delete, and non-discrimination. We do not sell personal information.</p>
+    </main>
 
-    <h3>7.3 Opt-Out Options</h3>
-    <ul>
-      <li>Disable analytics tracking through app settings (where available)</li>
-      <li>Disable push notifications through device settings</li>
-      <li>Stop using the Service at any time</li>
-    </ul>
-
-    <h2>8. Children's Privacy</h2>
-    <p>
-      Daily Peace is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately. If we become aware that we have collected personal information from a child under 13, we will take steps to delete such information.
-    </p>
-
-    <h2>9. International Data Transfers</h2>
-    <p>
-      Your information may be transferred to and processed in countries other than your country of residence. These countries may have data protection laws that differ from those in your country. By using our Service, you consent to the transfer of your information to these countries, including the United States where our service providers operate.
-    </p>
-
-    <h2>10. Changes to This Privacy Policy</h2>
-    <p>
-      We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date. You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
-    </p>
-
-    <h2>11. Contact Us</h2>
-    <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:</p>
-    <ul>
-      <li><strong>Email:</strong> <a href="mailto:privacy@dailypeace.life">privacy@dailypeace.life</a></li>
-      <li><strong>Website:</strong> <a href="https://dailypeace.life">https://dailypeace.life</a></li>
-    </ul>
-    <p>
-      We will respond to your inquiry within a reasonable timeframe in accordance with applicable data protection laws.
-    </p>
-
-    <h2>12. California Privacy Rights</h2>
-    <p>
-      If you are a California resident, you have additional rights under the California Consumer Privacy Act (CCPA), including:
-    </p>
-    <ul>
-      <li>The right to know what personal information we collect and how we use it</li>
-      <li>The right to delete personal information we hold about you</li>
-      <li>The right to opt-out of the sale of personal information (we do not sell personal information)</li>
-      <li>The right to non-discrimination for exercising your privacy rights</li>
-    </ul>
-
-    <h2>13. Consent</h2>
-    <p>
-      By using Daily Peace, you consent to this Privacy Policy and agree to its terms. If you do not agree to this Privacy Policy, please do not use our Service.
-    </p>
-
-    <hr style="border:none;border-top:1px solid var(--card);margin:40px 0">
-    
-    <div style="text-align:center;margin-top:40px;padding-top:20px">
-      <p style="color:var(--muted)">© 2025 Daily Peace • <a href="https://dailypeace.life">dailypeace.life</a></p>
-      <p style="color:var(--muted);font-size:14px">Bringing peace through Scripture and technology</p>
+    <div class="footer">
+      <div>© <span id="year"></span> Daily Peace</div>
+      <div><a href="/">Back to Home</a></div>
     </div>
   </div>
+
+  <script>
+    // Lightweight helpers to keep the page fresh without edits
+    document.getElementById('year').textContent = String(new Date().getFullYear());
+    // If you want dynamic last-updated, you can set it here.
+    // document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString(undefined, { year:'numeric', month:'long' });
+  </script>
 </body>
 </html>

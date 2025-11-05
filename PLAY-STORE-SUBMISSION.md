@@ -63,44 +63,69 @@ We'll update `eas.json` to build AAB format (better for Play Store).
 ### App Description
 **Short description** (80 characters max):
 ```
-AI-powered spiritual guidance app with daily reflections and Bible verses
+Find peace, calm and hope daily through Scripture and gentle conversation
 ```
 
 **Full description** (4000 characters max):
 ```
-Daily Peace - Your Companion for Spiritual Guidance
+🕊️ Daily Peace — Your Companion for Faith, Calm, and Spiritual Guidance
 
-Daily Peace is an AI-powered spiritual guidance app designed to provide comfort, wisdom, and reflection in your daily life. Whether you're seeking biblical wisdom, quiet reflection, or empathetic conversation, Daily Peace is here to support you.
+Find stillness, strength, and hope with Daily Peace, your AI-powered spiritual companion designed to bring comfort, wisdom, and calm into your daily life.
+Whether you seek biblical insight, quiet reflection, or gentle conversation, Daily Peace guides you toward peace of mind and a deeper connection with Scripture.
 
-Features:
+✨ AI-Powered Spiritual Conversations
 
-✨ AI-Powered Conversations
-Engage in meaningful conversations with an AI assistant trained to provide spiritual guidance, biblical insights, and compassionate support.
+Engage in meaningful dialogue with an AI that listens, comforts, and responds with faith-based encouragement. Receive scriptural wisdom and reflections inspired by the King James Bible to uplift your spirit every day.
 
 📖 Daily Reflections
-Start each day with a curated reflection message designed to inspire and guide you through life's challenges.
+
+Start your mornings with carefully chosen messages of peace and hope. Each reflection blends biblical truth with empathy and practical encouragement for real-life challenges.
 
 📚 Scripture Integration
-Access relevant Bible verses from the King James Version, carefully selected to address your questions and concerns.
+
+Explore Bible verses matched to your reflections and conversations. Whether you need strength, calm, or direction, Daily Peace connects you with the Word of God in a personal way.
 
 🎙️ Voice Input
-Speak naturally - Daily Peace uses advanced speech recognition to understand your voice input.
 
-💬 Multiple Conversation Modes
-Choose from three distinct modes:
-- Conversational: Warm, empathetic dialogue
-- Biblical: Verse-anchored responses with KJV citations
-- Reflective: Gentle prompts for prayer and meditation
+Speak naturally. Let your thoughts flow.
+Daily Peace understands your voice and turns your spoken words into heartfelt spiritual conversations.
+
+💬 Three Modes of Guidance
+
+Choose the tone that suits your moment:
+
+Conversational: Warm, understanding, and personal.
+
+Biblical: Rooted in Scripture with KJV citations.
+
+Reflective: Gentle pauses and prompts for prayer and meditation.
 
 🎨 Beautiful, Peaceful Design
-Experience a thoughtfully designed interface that promotes calm and reflection.
 
-Daily Peace is here to support you on your spiritual journey. Whether you're seeking comfort during difficult times, wisdom for decision-making, or simply a moment of reflection, this app is designed to be your companion.
+Experience a minimal, calming interface crafted to quiet distractions and nurture reflection — perfect for morning devotion, evening prayer, or peaceful moments throughout your day.
 
-Privacy and Security:
-Your conversations are private and secure. We respect your privacy and never share your personal information or conversations with third parties.
+🌿 Your Journey Toward Peace
 
-Download Daily Peace today and find your moment of peace.
+Whether you're seeking comfort in difficulty, guidance for decisions, or simply a moment of stillness, Daily Peace is your companion for spiritual growth, mindfulness, and connection with God.
+
+Join thousands discovering new ways to stay calm, centered, and spiritually grounded — every day.
+
+🌿 Enhanced Closing Section (Optimized for Conversion & Trust)
+
+Daily Peace is your companion on the journey of faith and calm.
+In moments of uncertainty, when you seek comfort, wisdom, or quiet reflection, Daily Peace is there to listen, guide, and inspire you through Scripture and gentle conversation.
+
+🔒 Privacy & Security You Can Trust
+
+Your conversations are private, secure, and never shared.
+We value your trust — everything you say stays between you and your spiritual companion. No tracking. No third-party access. Just peace of mind.
+
+🙏 Start Your Journey Today
+
+Download Daily Peace and discover a place where your faith, calm, and reflection come together — every day.
+
+✅ Keywords gently optimized for ASO:
+faith, peace, calm, Bible, Christian, prayer, reflection, devotion, hope, Scripture, wisdom.
 ```
 
 ### Privacy Policy (Required)
