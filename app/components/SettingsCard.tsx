@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, ViewStyle, Pressable } from "react-native";
+import { View, ViewStyle, Pressable } from "react-native";
+import { Text } from "@/ux/ScaledText";
 
 export default function SettingsCard({
   title,
@@ -18,12 +19,25 @@ export default function SettingsCard({
   return (
     <Container
       onPress={onPress as any}
-      className="bg-surface rounded-2xl px-4 py-3 mb-2 flex-row items-center justify-between"
-      style={style}
+      style={[
+        {
+          backgroundColor: "#141B23",
+          borderRadius: 16,
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          marginBottom: 8,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between"
+        },
+        style
+      ]}
     >
-      <View className="flex-1 pr-3">
-        <Text className="text-white font-semibold">{title}</Text>
-        {subtitle ? <Text className="text-muted mt-0.5">{subtitle}</Text> : null}
+      <View style={{ flex: 1, paddingRight: 12 }}>
+        <Text baseSize={16} style={{ fontWeight: "600" }}>{title}</Text>
+        {subtitle ? (
+          <Text baseSize={14} style={{ marginTop: 2 }}>{subtitle}</Text>
+        ) : null}
       </View>
       {right}
     </Container>

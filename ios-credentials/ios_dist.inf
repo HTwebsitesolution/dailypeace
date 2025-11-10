@@ -1,0 +1,1 @@
+[Version]\nSignature= NT$\n\n[NewRequest]\nSubject = CN=Apple Distribution\nKeyLength = 2048\nExportable = TRUE\nMachineKeySet = FALSE\nKeySpec = 1\nKeyUsage = 0xA0\nProviderName = Microsoft RSA SChannel Cryptographic Provider\nProviderType = 12\nSMIME = FALSE\nPrivateKeyArchive = FALSE\nRequestType = PKCS10\nHashAlgorithm = sha256\nSilent = TRUE

@@ -1,6 +1,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
-import { Pressable, Text, Animated } from "react-native";
+import { Pressable, Animated } from "react-native";
+import { Text } from "@/ux/ScaledText";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { apiTranscribe } from "../../lib/api";

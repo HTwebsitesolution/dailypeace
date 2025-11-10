@@ -1,9 +1,17 @@
 
 import React, { useEffect, useRef } from "react";
-import { View, Text, Animated } from "react-native";
+import { View, Animated } from "react-native";
+import ReadAloud from "./ReadAloud";
+import { Text } from "@/ux/ScaledText";
 
-export function MessageBubble({ role, children }:{ role:"user"|"app"; children: React.ReactNode }) {
-  const isUser = role==="user";
+export function MessageBubble({
+  role,
+  children,
+}: {
+  role: "user" | "app";
+  children: React.ReactNode;
+}) {
+  const isUser = role === "user";
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(isUser ? 20 : -20)).current;
 
@@ -33,14 +41,21 @@ export function MessageBubble({ role, children }:{ role:"user"|"app"; children: 
         transform: [{ translateX: slideAnim }],
       }}
     >
-      <View style={{
-        maxWidth: "85%",
-        borderRadius: 18,
-        paddingHorizontal: 12,
-        paddingVertical: 12,
-        backgroundColor: isUser ? "#3B82F6" : "#141B23"
-      }}>
-        <Text style={{ color: "#FFFFFF", fontSize: 16, lineHeight: 24 }}>{children}</Text>
+      <View
+        style={{
+          maxWidth: "85%",
+          borderRadius: 18,
+          paddingHorizontal: 12,
+          paddingVertical: 12,
+          backgroundColor: isUser ? "#3B82F6" : "#141B23",
+        }}
+      >
+        <Text baseSize={16} lineHeightMul={1.5} style={{ color: isUser ? "#FFFFFF" : "#EAF2FF" }}>
+          {children}
+        </Text>
+        {!isUser && typeof children === "string" && (
+          <ReadAloud text={children} autoCandidate />
+        )}
       </View>
     </Animated.View>
   );

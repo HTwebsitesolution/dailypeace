@@ -1,5 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text, Pressable, Animated } from "react-native";
+import { View, Pressable, Animated, ScrollView, Platform, useWindowDimensions, Image } from "react-native";
+import { hapticConfirm } from "../../lib/haptics";
+import { getScrollPosition, saveScrollPosition, loadScrollPositions } from "../../lib/scrollPersistence";
+import ReadAloud from "./ReadAloud";
+import { Text } from "@/ux/ScaledText";
+
+const logo = require("../../assets/Bible Circle Daily Peace Logo.png");
 
 export default function ReflectionCard({
   title = "Today's Reflection",
@@ -7,111 +13,200 @@ export default function ReflectionCard({
   verses,
   onShare,
   onClose,
+  onVersePress,
 }: {
   title?: string;
   message: string;
   verses: string[];
   onShare?: () => void;
   onClose?: () => void;
+  onVersePress?: (ref: string) => void;
 }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
-
+  const scrollRef = useRef<ScrollView>(null);
+  const { height: screenHeight, width } = useWindowDimensions();
+  const isMobile = width < 768;
+  // Max height: 50% of screen on mobile to ensure chat input is visible, no limit on desktop
+  const maxCardHeight = isMobile ? screenHeight * 0.5 : undefined;
+  const componentKey = `reflection_${message.substring(0, 50).replace(/\s+/g, '_')}`;
   useEffect(() => {
+    // Load scroll positions on mount
+    loadScrollPositions().then(() => {
+      const savedPosition = getScrollPosition(componentKey);
+      if (savedPosition > 0 && scrollRef.current) {
+        setTimeout(() => {
+          scrollRef.current?.scrollTo({ y: savedPosition, animated: false });
+        }, 100);
+      }
+    });
+
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 600,
+        duration: 1200,
         useNativeDriver: true,
       }),
       Animated.timing(scaleAnim, {
         toValue: 1,
-        duration: 400,
+        duration: 1200,
         useNativeDriver: true,
       }),
     ]).start();
   }, []);
 
+  const handleScroll = (event: any) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    if (offsetY > 0) {
+      saveScrollPosition(componentKey, offsetY);
+    }
+  };
+
   return (
     <Animated.View
       style={{
-        marginHorizontal: 12,
-        marginTop: 12,
-        borderRadius: 20,
-        backgroundColor: "#141B23",
+        marginHorizontal: 16,
+        marginTop: isMobile ? 12 : 24,
+        borderRadius: 24,
+        backgroundColor: "rgba(20,27,35,0.95)", // Glass-pro with high opacity for readability
+        borderWidth: 1,
+        borderColor: "rgba(255,255,255,0.15)",
         shadowColor: "#000000",
         shadowOffset: { width: 0, height: 16 },
-        shadowOpacity: 0.5,
-        shadowRadius: 12,
-        elevation: 8,
+        shadowOpacity: 0.6,
+        shadowRadius: 24,
+        elevation: 16,
         opacity: fadeAnim,
         transform: [{ scale: scaleAnim }],
+        maxHeight: maxCardHeight,
+        overflow: 'hidden',
       }}
     >
-      {/* Header */}
+      {/* Header with glass strip - Fixed at top */}
       <View style={{
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
         paddingHorizontal: 16,
-        paddingVertical: 12,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        backgroundColor: "rgba(59, 130, 246, 0.9)"
+        paddingVertical: isMobile ? 8 : 12,
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
+        backgroundColor: "rgba(35,48,63,0.90)", // Elevated header strip
+        borderBottomWidth: 1,
+        borderBottomColor: "rgba(255,255,255,0.12)"
       }}>
-        <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>A Moment of Peace 🙏</Text>
-        {onClose ? (
-          <Pressable
-            onPress={onClose}
-            style={{
-              paddingHorizontal: 8,
-              paddingVertical: 4,
-              borderRadius: 12,
-              backgroundColor: "rgba(255,255,255,0.15)"
-            }}
-            android_ripple={{ color: "#ffffff30" }}
-          >
-            <Text style={{ color: "#FFFFFF" }}>✕</Text>
-          </Pressable>
-        ) : null}
-      </View>
-
-      {/* Body */}
-      <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
-        <Text style={{ color: "#FFFFFF", fontSize: 16, lineHeight: 24 }}>{message}</Text>
-
-        {/* Verses */}
-        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 16 }}>
-          {verses.map((v) => (
-            <View key={v} style={{
-              backgroundColor: "rgba(255,255,255,0.1)",
-              paddingHorizontal: 8,
-              paddingVertical: 4,
-              borderRadius: 12
-            }}>
-              <Text style={{ color: "#A5B4FC", fontSize: 13, fontWeight: "600" }}>{v}</Text>
-            </View>
-          ))}
-        </View>
-
-        {/* Actions */}
-        <View style={{ flexDirection: "row", gap: 32, marginTop: 16 }}>
-          {onShare ? (
+        <Text
+          baseSize={isMobile ? 16 : 18}
+          style={{ fontWeight: "700", letterSpacing: 0.4 }}
+        >
+          A Moment of Peace 🙏
+        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          {/* Daily Peace logo for branding in shared images */}
+          <Image 
+            source={logo} 
+            style={{ width: 32, height: 32, resizeMode: 'contain' }} 
+          />
+          {onClose ? (
             <Pressable
-              onPress={onShare}
+              onPress={onClose}
               style={{
-                backgroundColor: "#3B82F6",
-                paddingHorizontal: 12,
-                paddingVertical: 8,
-                borderRadius: 16
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                borderRadius: 12,
+                backgroundColor: "rgba(255,255,255,0.15)"
               }}
               android_ripple={{ color: "#ffffff30" }}
             >
-              <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>Share this blessing 🔗</Text>
+              <Text baseSize={16} style={{ color: "#FFFFFF" }}>
+                ✕
+              </Text>
             </Pressable>
           ) : null}
         </View>
       </View>
+
+      {/* Scrollable Body */}
+      <ScrollView
+        ref={scrollRef}
+        style={{ maxHeight: maxCardHeight ? maxCardHeight - 60 : undefined }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: isMobile ? 12 : 16, paddingBottom: 48 }}
+        showsVerticalScrollIndicator={true}
+        nestedScrollEnabled={true}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      >
+        <Text baseSize={isMobile ? 16 : 18} numberOfLines={0} style={{ letterSpacing: 0.2 }}>
+          {message}
+        </Text>
+
+        {/* Verses */}
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 16 }}>
+          {verses.map((v, index) => (
+            <Animated.View
+              key={v}
+              style={{
+                opacity: fadeAnim,
+                transform: [{ scale: scaleAnim }],
+              }}
+            >
+              <Pressable onPress={() => onVersePress && onVersePress(v)} style={{
+                backgroundColor: "rgba(255,255,255,0.12)",
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: "rgba(255,255,255,0.12)"
+              }} android_ripple={{ color: '#ffffff30' }}>
+                <Text baseSize={13} style={{ color: "#A5B4FC", fontWeight: "600" }}>
+                  {v}
+                </Text>
+              </Pressable>
+            </Animated.View>
+          ))}
+        </View>
+
+        {/* Read Aloud */}
+        <ReadAloud text={message} autoCandidate />
+
+        {/* Actions */}
+        <View style={{ flexDirection: "row", gap: 32, marginTop: 16 }}>
+          {onShare ? (
+            <Animated.View
+              style={{
+                opacity: fadeAnim,
+                transform: [{ translateX: fadeAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-20, 0]
+                })}],
+              }}
+            >
+              <Pressable
+                onPress={() => {
+                  hapticConfirm();
+                  onShare();
+                }}
+                style={{
+                  backgroundColor: "#3B82F6",
+                  paddingHorizontal: 16,
+                  paddingVertical: 12,
+                  borderRadius: 16,
+                  shadowColor: "#3B82F6",
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.4,
+                  shadowRadius: 8,
+                  elevation: 6,
+                }}
+                android_ripple={{ color: "#ffffff40" }}
+              >
+                <Text baseSize={16} style={{ color: "#FFFFFF", fontWeight: "600" }}>
+                  Share this blessing 🔗
+                </Text>
+              </Pressable>
+            </Animated.View>
+          ) : null}
+        </View>
+      </ScrollView>
     </Animated.View>
   );
 }

@@ -1,3 +1,7 @@
+// Import gesture-handler at the top (required for React Navigation on native)
+// Metro config excludes it from web builds, so this is safe
+import 'react-native-gesture-handler';
+
 import { registerRootComponent } from 'expo';
 import App from './app/index';
 

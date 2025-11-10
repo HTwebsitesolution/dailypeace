@@ -1,5 +1,8 @@
 import React, { useRef } from "react";
-import { View, TextInput, Pressable, Text } from "react-native";
+import { View, TextInput, Pressable, useWindowDimensions } from "react-native";
+import { hapticPress, hapticConfirm } from "../../lib/haptics";
+import { Text } from "@/ux/ScaledText";
+import { useFontScale } from "@/ux/useFontScale";
 
 export default function ChatInput({
   value,
@@ -9,6 +12,8 @@ export default function ChatInput({
   onVoiceEnd,
   recording = false,
   disabled = false,
+  bottomInset = 0,
+  inputAccessoryViewID,
 }: {
   value: string;
   onChangeText: (t: string) => void;
@@ -17,26 +22,54 @@ export default function ChatInput({
   onVoiceEnd?: () => void;
   recording?: boolean;
   disabled?: boolean;
+  bottomInset?: number;
+  inputAccessoryViewID?: string;
 }) {
   const inputRef = useRef<TextInput>(null);
+  const { width } = useWindowDimensions();
+  const isMobile = width < 768;
+  const { fs } = useFontScale();
+  const inputFontSize = fs(16);
 
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12, paddingVertical: 12 }}>
-      {/* Mic (hold) */}
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 8,
+        paddingHorizontal: 12,
+        paddingTop: 12,
+        paddingBottom: 12 + Math.max(bottomInset, 0),
+      }}
+    >
+      {/* Mic (toggle) */}
       <Pressable
-        onPressIn={onVoiceStart}
-        onPressOut={onVoiceEnd}
+        onPress={() => {
+          hapticPress();
+          if (recording) {
+            onVoiceEnd?.();
+          } else {
+            onVoiceStart?.();
+          }
+        }}
         disabled={disabled}
         style={{
-          paddingHorizontal: 12,
-          paddingVertical: 12,
-          borderRadius: 16,
+          paddingHorizontal: isMobile ? 8 : 12,
+          paddingVertical: isMobile ? 10 : 12,
+          borderRadius: 12,
           backgroundColor: recording ? "#EF4444" : "#3B82F6"
         }}
-        accessibilityLabel="Hold to speak"
+        accessibilityLabel={recording ? "Stop recording" : "Start voice input"}
       >
-        <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>
-          {recording ? "🎙️ Listening with care…" : "🎤 Hold to share your voice"}
+        <Text style={{ 
+          color: "#FFFFFF", 
+          fontWeight: "600",
+          fontSize: fs(isMobile ? 14 : 16)
+        }}>
+          {isMobile 
+            ? (recording ? "🎙️" : "🎤") 
+            : (recording ? "🎙️ Listening with care…" : "🎤 Hold to share your voice")
+          }
         </Text>
       </Pressable>
 
@@ -58,23 +91,29 @@ export default function ChatInput({
           placeholderTextColor="#9FB0C3"
           editable={!disabled}
           multiline
-          style={{ color: "#FFFFFF", fontSize: 16 }}
+        inputAccessoryViewID={inputAccessoryViewID}
+          style={{ color: "#FFFFFF", fontSize: inputFontSize }}
         />
       </View>
 
       {/* Send */}
       <Pressable
-        onPress={onSend}
+        onPress={() => {
+          hapticConfirm();
+          onSend();
+        }}
         disabled={disabled || !value.trim()}
         style={{
-          paddingHorizontal: 16,
-          paddingVertical: 12,
-          borderRadius: 16,
+          paddingHorizontal: isMobile ? 12 : 16,
+          paddingVertical: isMobile ? 10 : 12,
+          borderRadius: 12,
           backgroundColor: disabled || !value.trim() ? "rgba(255,255,255,0.1)" : "#3B82F6"
         }}
         accessibilityLabel="Send message"
       >
-        <Text style={{ color: "#FFFFFF", fontWeight: "600" }}>Send 💌</Text>
+        <Text baseSize={isMobile ? 14 : 16} style={{ fontWeight: "600", textAlign: "center" }}>
+          {isMobile ? "Send" : "Send 💌"}
+        </Text>
       </Pressable>
     </View>
   );

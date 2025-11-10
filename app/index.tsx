@@ -1,34 +1,100 @@
 
-import React, { useEffect } from "react";
-import { SafeAreaView, StatusBar } from "react-native";
-import * as Sentry from "sentry-expo";
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, StatusBar, Platform } from "react-native";
 import Constants from "expo-constants";
-import RootNav from "./navigation";
+import SplashGate from "./SplashGate";
 import { SettingsProvider } from "../lib/settings";
 import { analytics } from "../lib/analytics";
 import { notifications } from "../lib/notifications";
+import { initAudioMode, loadPrefs } from "../lib/tts";
+import { AppErrorBoundary } from "./components/ErrorBoundary";
+import FallbackScreen from "./components/FallbackScreen";
 
-// Only initialize Sentry if we have a real DSN (not a placeholder)
-const sentryDsn = Constants.expoConfig?.extra?.SENTRY_DSN;
-if (sentryDsn && !sentryDsn.startsWith('REPLACE_WITH_')) {
-  Sentry.init({
-    dsn: sentryDsn,
-    enableInExpoDevelopment: true,
-    debug: false
-  });
+// Import premium CSS for web only
+if (Platform.OS === 'web') {
+  try {
+    // @ts-ignore
+    require("./theme-premium.css");
+  } catch (error) {
+    console.error("Failed to load CSS theme:", error);
+    // Continue without CSS if it fails to load
+  }
+}
+
+// Global error handler component - catches JS errors and promise rejections
+function GlobalErrorHandler({ children }: { children: React.ReactNode }) {
+  const [err, setErr] = useState<Error | null>(null);
+  
+  useEffect(() => {
+    const handler = (e: Error) => setErr(e);
+    const rej = (e: any) => setErr(new Error(String(e)));
+    
+    // @ts-ignore
+    if (typeof ErrorUtils !== 'undefined' && ErrorUtils.setGlobalHandler) {
+      ErrorUtils.setGlobalHandler(handler as any);
+    }
+    
+    const up = (ev: PromiseRejectionEvent) => rej(ev.reason);
+    // @ts-ignore
+    if (typeof window !== 'undefined' && window?.addEventListener) {
+      window.addEventListener('unhandledrejection', up);
+      return () => window.removeEventListener('unhandledrejection', up);
+    }
+    
+    return () => {};
+  }, []);
+  
+  if (err) {
+    return <FallbackScreen message="Something went wrong. Please restart the app." />;
+  }
+  
+  return <>{children}</>;
 }
 
 export default function App() {
   useEffect(() => { 
-    analytics();
-    notifications.initialize();
+    // Wrap all initialization in try-catch to prevent crashes
+    try {
+      analytics();
+    } catch (error) {
+      console.error("Failed to initialize analytics:", error);
+    }
+
+    (async () => {
+      try {
+        await notifications.initialize();
+      } catch (error) {
+        console.error("Failed to initialize notifications:", error);
+      }
+    })();
+
+    (async () => {
+      try {
+        await initAudioMode();
+      } catch (error) {
+        console.error("Failed to initialize audio mode:", error);
+      }
+    })();
+
+    (async () => {
+      try {
+        await loadPrefs();
+      } catch (error) {
+        console.error("Failed to load preferences:", error);
+      }
+    })();
   }, []);
+
   return (
-    <SettingsProvider>
-      <SafeAreaView style={{ flex:1, backgroundColor:"#0B1016" }}>
-        <StatusBar barStyle="light-content" />
-        <RootNav />
-      </SafeAreaView>
-    </SettingsProvider>
+    <GlobalErrorHandler>
+      <AppErrorBoundary>
+        <SettingsProvider>
+          <SafeAreaView style={{ flex:1, backgroundColor:"#0B1016" }}>
+            <StatusBar barStyle="light-content" />
+            <SplashGate />
+          </SafeAreaView>
+        </SettingsProvider>
+      </AppErrorBoundary>
+    </GlobalErrorHandler>
   );
 }

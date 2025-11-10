@@ -1,59 +1,278 @@
-import React, { useState } from "react";
-import { ImageBackground, View, Text, Pressable } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, Pressable, Animated, ScrollView, Image, useWindowDimensions } from "react-native";
+import { Text } from "@/ux/ScaledText";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import ReflectionCard from "../components/ReflectionCard";
 import ModeToggle from "../components/ModeToggle";
+import AtmosphericBackground from "../components/AtmosphericBackground";
+import OnboardingModal from "../components/OnboardingModal";
+import FeedbackModal from "../components/FeedbackModal";
+import FeedbackButton from "../components/FeedbackButton";
 
-const backgrounds = {
-  conversational: require("../../assets/images/hero-ocean.png"),
-  biblical: require("../../assets/images/hero-mountain.png"),
-  reflective: require("../../assets/images/hero-ocean.png"),
-};
+const logoImage = require("../../assets/Bible Circle Daily Peace Logo.png");
 
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
+  const { width } = useWindowDimensions();
+  const isMobile = width < 768;
+  const isDesktop = width >= 1024;
+  const showDesktopLogo = width >= 768; // Show decorative logo on tablet/desktop
+  
   const [mode, setMode] = useState<"conversational" | "biblical" | "reflective">("conversational");
+  
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const translateYAnim = useRef(new Animated.Value(-20)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateYAnim, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const introSeen = await AsyncStorage.getItem("@dp/intro_seen");
+        const onboardingDone = await AsyncStorage.getItem("@dp/onboarding_done");
+        // Only show onboarding if intro was seen but onboarding wasn't done
+        setShowOnboarding(introSeen === "1" && onboardingDone !== "1");
+      } catch {
+        setShowOnboarding(false);
+      }
+    })();
+  }, []);
 
   return (
-    <ImageBackground
-      source={backgrounds[mode]}
-      resizeMode="cover"
-      style={{ flex: 1, backgroundColor: "#0B1016" }}
+    <AtmosphericBackground 
+      mode={mode} 
+      rotationInterval={40000}
+      enableTimeRotation={true}
+      enableModeRotation={true}
     >
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20, backgroundColor: "rgba(0,0,0,0.3)" }}>
-        <Text style={{ fontSize: 36, fontWeight: "bold", color: "#FFFFFF", marginBottom: 8 }}>Daily Peace</Text>
-        <Text style={{ fontSize: 16, color: "#9FB0C3", marginBottom: 24 }}>
-          Find peace and hope from scripture ✨
-        </Text>
-
-        <ModeToggle value={mode} onChange={setMode} />
-
-        <View style={{ marginTop: 32, width: "100%", maxWidth: 400 }}>
-          <ReflectionCard
-            title="A Moment of Peace"
-            message="Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid."
-            verses={["John 14:27"]}
-          />
+      <ScrollView 
+        style={{ flex: 1 }} 
+        contentContainerStyle={{ alignItems: "center", paddingTop: 60, paddingBottom: 40, paddingHorizontal: 20 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <OnboardingModal visible={showOnboarding} onDone={() => setShowOnboarding(false)} />
+        {/* Top-right quick actions */}
+        <View style={{ position: 'absolute', right: 12, top: 16, flexDirection: 'row', gap: 8 }}>
+          <Pressable
+            onPress={() => navigation.navigate('Collections')}
+            style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}
+          >
+            <Text style={{ color: '#EAF2FF', fontWeight: '600' }}>Collections</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => navigation.navigate('Favorites')}
+            style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}
+          >
+            <Text style={{ color: '#EAF2FF', fontWeight: '600' }}>Favorites</Text>
+          </Pressable>
         </View>
 
-        <Pressable
-          style={{
-            marginTop: 24,
-            paddingHorizontal: 20,
-            paddingVertical: 12,
-            backgroundColor: "#3B82F6",
-            borderRadius: 16,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 8,
-            elevation: 5
-          }}
-          onPress={() => navigation.navigate("Chat")}
-        >
-          <Text style={{ color: "#FFFFFF", fontSize: 18, fontWeight: "600" }}>Start a Conversation 🙏</Text>
-        </Pressable>
-      </View>
-    </ImageBackground>
+        {/* Content layer */}
+        <View style={{ zIndex: 10, width: '100%', alignItems: 'center' }}>
+          {/* Mobile: Small logo badge + title in header row */}
+          {isMobile && (
+            <Animated.View
+              style={{
+                opacity: fadeAnim,
+                transform: [{ translateY: translateYAnim }],
+                marginBottom: 8,
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 12,
+              }}
+            >
+              <Image
+                source={logoImage}
+                style={{ width: 32, height: 32, borderRadius: 16 }}
+                resizeMode="cover"
+              />
+              <Text style={{ 
+                fontSize: 28, 
+                fontWeight: "900", 
+                color: "#FFFFFF",
+                textShadowColor: "rgba(0, 0, 0, 0.6)",
+                textShadowOffset: { width: 0, height: 2 },
+                textShadowRadius: 4,
+                letterSpacing: 0.5
+              }}>Daily Peace</Text>
+            </Animated.View>
+          )}
+
+          {/* Desktop: Large centered title + subtitle */}
+          {isDesktop && (
+            <>
+              <Animated.View
+                style={{
+                  opacity: fadeAnim,
+                  transform: [{ translateY: translateYAnim }],
+                  marginBottom: 12,
+                  marginTop: 24, // Extra space on desktop
+                }}
+              >
+                <Text style={{ 
+                  fontSize: 52, 
+                  fontWeight: "900", 
+                  color: "#FFFFFF", 
+                  marginBottom: 8, 
+                  textAlign: "center",
+                  textShadowColor: "rgba(0, 0, 0, 0.6)",
+                  textShadowOffset: { width: 0, height: 3 },
+                  textShadowRadius: 6,
+                  letterSpacing: 1
+                }}>Daily Peace</Text>
+              </Animated.View>
+              
+              <Animated.View
+                style={{
+                  opacity: fadeAnim,
+                  transform: [{ translateY: translateYAnim }],
+                  marginBottom: 20,
+                }}
+              >
+                <Text style={{ 
+                  fontSize: 24, 
+                  color: "#FFFFFF", 
+                  marginBottom: 24, 
+                  textAlign: "center", 
+                  fontWeight: "600",
+                  textShadowColor: "rgba(0, 0, 0, 0.6)",
+                  textShadowOffset: { width: 0, height: 2 },
+                  textShadowRadius: 4,
+                  letterSpacing: 0.3
+                }}>find strength, peace and hope from scripture</Text>
+              </Animated.View>
+            </>
+          )}
+
+          <Animated.View
+            style={{
+              opacity: fadeAnim,
+              transform: [{ scale: fadeAnim }],
+              marginBottom: 20,
+            }}
+          >
+            <ModeToggle value={mode} onChange={setMode} />
+          </Animated.View>
+
+          <Animated.View
+            style={{
+              opacity: fadeAnim,
+              transform: [{ translateY: fadeAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [20, 0]
+              })}],
+            }}
+          >
+            <View style={{ 
+              marginTop: isMobile ? 12 : 24,
+              width: "100%", 
+              maxWidth: 820, // Increased for better desktop layout
+              zIndex: 10 
+            }}>
+              <ReflectionCard
+                title="A Moment of Peace"
+                message="Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid."
+                verses={["John 14:27"]}
+              />
+            </View>
+          </Animated.View>
+
+          <Animated.View
+            style={{
+              opacity: fadeAnim,
+              transform: [{ translateY: fadeAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [20, 0]
+              })}],
+            }}
+          >
+            <Pressable 
+              style={{
+                marginTop: 24,
+                paddingHorizontal: 20,
+                paddingVertical: 12,
+                backgroundColor: "#3B82F6",
+                borderRadius: 16,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.3,
+                shadowRadius: 8,
+                elevation: 5
+              }}
+              onPress={() => navigation.navigate("Chat")}
+            >
+              <Text style={{ 
+                color: "#FFFFFF", 
+                fontSize: 22, 
+                fontWeight: "800",
+                textShadowColor: "rgba(0, 0, 0, 0.4)",
+                textShadowOffset: { width: 0, height: 2 },
+                textShadowRadius: 4,
+                letterSpacing: 0.5
+              }}>Start a Conversation 🙏</Text>
+            </Pressable>
+          </Animated.View>
+        </View>
+        
+        {/* Premium Footer */}
+        <View style={{ 
+          marginTop: 60,
+          paddingVertical: 32,
+          paddingHorizontal: 20,
+          alignItems: 'center',
+          borderTopWidth: 1,
+          borderTopColor: 'rgba(255,255,255,0.1)',
+          width: '100%',
+          zIndex: 10
+        }}>
+          <View style={{ alignItems: 'center', marginBottom: 16 }}>
+            <Text style={{ 
+              color: '#EAF2FF', 
+              fontSize: 20,
+              fontWeight: '700',
+              textAlign: 'center',
+              marginBottom: 8
+            }}>
+              Daily Peace
+            </Text>
+            <Text style={{ 
+              color: '#9FB0C3', 
+              fontSize: 14,
+              textAlign: 'center',
+              marginBottom: 20
+            }}>
+              Find peace and hope from Scripture
+            </Text>
+          </View>
+          
+          <Text style={{ 
+            color: '#6B7280', 
+            fontSize: 12,
+            textAlign: 'center'
+          }}>
+            © 2025 Daily Peace. Bringing Scripture into your daily life.
+          </Text>
+        </View>
+      </ScrollView>
+      <FeedbackButton onPress={() => setShowFeedback(true)} />
+      <FeedbackModal visible={showFeedback} onClose={() => setShowFeedback(false)} />
+    </AtmosphericBackground>
   );
 }

@@ -14,8 +14,45 @@ Notifications.setNotificationHandler({
 });
 
 export const notifications = {
-  // Request permission and get push token
+  // Initialize notification channel (Android) - does NOT request permissions
   async initialize() {
+    try {
+      // Only set up Android channel, don't request permissions at startup
+      if (Platform.OS === 'android') {
+        try {
+          await Notifications.setNotificationChannelAsync('daily-peace', {
+            name: 'Daily Peace',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#2F80ED',
+          });
+        } catch (error) {
+          console.warn("Failed to set notification channel:", error);
+        }
+      }
+
+      // Check existing permissions but don't request
+      try {
+        const { status } = await Notifications.getPermissionsAsync();
+        if (status === 'granted') {
+          // Only get token if permission already granted
+          const token = await Notifications.getExpoPushTokenAsync();
+          await AsyncStorage.setItem('push_token', token.data);
+          return token.data;
+        }
+      } catch (error) {
+        // Silently fail - permissions will be requested when user needs them
+      }
+      
+      return null;
+    } catch (error) {
+      // Don't track errors at startup - this is expected
+      return null;
+    }
+  },
+
+  // Request permissions (call this when user explicitly wants notifications)
+  async requestPermissions() {
     try {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
@@ -27,32 +64,45 @@ export const notifications = {
       
       if (finalStatus !== 'granted') {
         track('notification_permission_denied');
-        return null;
+        return false;
       }
 
+      // Set up Android channel if needed
       if (Platform.OS === 'android') {
-        await Notifications.setNotificationChannelAsync('daily-peace', {
-          name: 'Daily Peace',
-          importance: Notifications.AndroidImportance.MAX,
-          vibrationPattern: [0, 250, 250, 250],
-          lightColor: '#2F80ED',
-        });
+        try {
+          await Notifications.setNotificationChannelAsync('daily-peace', {
+            name: 'Daily Peace',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#2F80ED',
+          });
+        } catch (error) {
+          console.warn("Failed to set notification channel:", error);
+        }
       }
 
       const token = await Notifications.getExpoPushTokenAsync();
       await AsyncStorage.setItem('push_token', token.data);
       
       track('notification_permission_granted', { token: token.data });
-      return token.data;
+      return true;
     } catch (error) {
       track('notification_init_error', { error: (error as Error).message });
-      return null;
+      return false;
     }
   },
 
   // Schedule daily verse notification
   async scheduleDailyVerse(hour: number = 8, minute: number = 0) {
     try {
+      // Ensure permissions are granted before scheduling
+      const { status } = await Notifications.getPermissionsAsync();
+      if (status !== 'granted') {
+        // Don't request automatically - caller should request permissions first
+        console.warn("Cannot schedule notifications: permissions not granted");
+        return false;
+      }
+
       await Notifications.cancelAllScheduledNotificationsAsync();
       
       // Load the rotating reflections
@@ -101,19 +151,19 @@ export const notifications = {
       await AsyncStorage.setItem('daily_notification_time', JSON.stringify({ hour, minute, enabled: true }));
       
       track('daily_notification_scheduled', { hour, minute });
+      return true;
     } catch (error) {
       track('schedule_notification_error', { error: (error as Error).message });
+      return false;
     }
   },
 
   // Get current notification schedule
   async getNotificationSchedule() {
     try {
+      const { safeParse } = await import('./storage');
       const stored = await AsyncStorage.getItem('daily_notification_time');
-      if (stored) {
-        return JSON.parse(stored);
-      }
-      return { hour: 8, minute: 0, enabled: false };
+      return safeParse(stored, { hour: 8, minute: 0, enabled: false });
     } catch {
       return { hour: 8, minute: 0, enabled: false };
     }

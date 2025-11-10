@@ -11,7 +11,7 @@ type Settings = {
 const DEFAULTS: Settings = {
   defaultMode: "conversational",
   ttsEnabled: false,
-  storeVoiceRecordings: false
+  storeVoiceRecordings: false,
 };
 
 const KEY = "@dailypeace/settings/v1";
@@ -29,8 +29,13 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     (async () => {
       try {
+        const { safeParse } = await import('./storage');
         const raw = await AsyncStorage.getItem(KEY);
-        if (raw) setSettings(JSON.parse(raw));
+        const parsed = safeParse(raw, DEFAULTS);
+        setSettings(parsed);
+      } catch (error) {
+        console.error("Failed to load settings, using defaults:", error);
+        // Continue with defaults if storage fails
       } finally {
         setHydrated(true);
       }

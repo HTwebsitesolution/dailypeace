@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { View, ScrollView, Pressable } from "react-native";
+import { Text } from "@/ux/ScaledText";
 import { useNavigation } from "@react-navigation/native";
 
 export default function DisclaimerScreen() {
