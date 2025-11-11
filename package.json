@@ -20,6 +20,7 @@
     "@react-navigation/native-stack": "^6.11.0",
     "expo": "^51.0.0",
     "expo-asset": "~10.0.10",
+    "expo-blur": "~13.0.2",
     "expo-av": "~14.0.5",
     "expo-file-system": "~17.0.1",
     "expo-haptics": "~13.0.1",

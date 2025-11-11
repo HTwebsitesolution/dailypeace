@@ -1,13 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, Pressable, Animated, ScrollView, Image, useWindowDimensions } from "react-native";
+import {
+  View,
+  Pressable,
+  Animated,
+  ScrollView,
+  Image,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
 import ReflectionCard from "../components/ReflectionCard";
 import ModeToggle from "../components/ModeToggle";
 import AtmosphericBackground from "../components/AtmosphericBackground";
 import OnboardingModal from "../components/OnboardingModal";
 import FeedbackModal from "../components/FeedbackModal";
 import FeedbackButton from "../components/FeedbackButton";
+import PremiumCTA from "../components/PremiumCTA";
+import TodayCard from "../components/TodayCard";
+import { Text } from "@/ux/ScaledText";
 
 const logoImage = require("../../assets/Bible Circle Daily Peace Logo.png");
 
@@ -16,10 +29,11 @@ export default function HomeScreen() {
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const isDesktop = width >= 1024;
-  const showDesktopLogo = width >= 768; // Show decorative logo on tablet/desktop
-  
+
   const [mode, setMode] = useState<"conversational" | "biblical" | "reflective">("conversational");
-  
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const translateYAnim = useRef(new Animated.Value(-20)).current;
 
@@ -27,26 +41,22 @@ export default function HomeScreen() {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 1000,
+        duration: 900,
         useNativeDriver: true,
       }),
       Animated.timing(translateYAnim, {
         toValue: 0,
-        duration: 1000,
+        duration: 900,
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
-
-  const [showOnboarding, setShowOnboarding] = useState(false);
-  const [showFeedback, setShowFeedback] = useState(false);
+  }, [fadeAnim, translateYAnim]);
 
   useEffect(() => {
     (async () => {
       try {
         const introSeen = await AsyncStorage.getItem("@dp/intro_seen");
         const onboardingDone = await AsyncStorage.getItem("@dp/onboarding_done");
-        // Only show onboarding if intro was seen but onboarding wasn't done
         setShowOnboarding(introSeen === "1" && onboardingDone !== "1");
       } catch {
         setShowOnboarding(false);
@@ -55,217 +65,142 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <AtmosphericBackground 
-      mode={mode} 
+    <AtmosphericBackground
+      mode={mode}
       rotationInterval={40000}
-      enableTimeRotation={true}
-      enableModeRotation={true}
+      enableTimeRotation
+      enableModeRotation
     >
-      <ScrollView 
-        style={{ flex: 1 }} 
-        contentContainerStyle={{ alignItems: "center", paddingTop: 60, paddingBottom: 40, paddingHorizontal: 20 }}
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <OnboardingModal visible={showOnboarding} onDone={() => setShowOnboarding(false)} />
-        {/* Top-right quick actions */}
-        <View style={{ position: 'absolute', right: 12, top: 16, flexDirection: 'row', gap: 8 }}>
-          <Pressable
-            onPress={() => navigation.navigate('Collections')}
-            style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}
-          >
-            <Text style={{ color: '#EAF2FF', fontWeight: '600' }}>Collections</Text>
-          </Pressable>
-          <Pressable
-            onPress={() => navigation.navigate('Favorites')}
-            style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.12)' }}
-          >
-            <Text style={{ color: '#EAF2FF', fontWeight: '600' }}>Favorites</Text>
-          </Pressable>
-        </View>
 
-        {/* Content layer */}
-        <View style={{ zIndex: 10, width: '100%', alignItems: 'center' }}>
-          {/* Mobile: Small logo badge + title in header row */}
-          {isMobile && (
-            <Animated.View
-              style={{
+        <View style={styles.content}>
+          <Animated.View
+            style={[
+              styles.headerWrap,
+              {
                 opacity: fadeAnim,
                 transform: [{ translateY: translateYAnim }],
-                marginBottom: 8,
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 12,
-              }}
-            >
-              <Image
-                source={logoImage}
-                style={{ width: 32, height: 32, borderRadius: 16 }}
-                resizeMode="cover"
-              />
-              <Text style={{ 
-                fontSize: 28, 
-                fontWeight: "900", 
-                color: "#FFFFFF",
-                textShadowColor: "rgba(0, 0, 0, 0.6)",
-                textShadowOffset: { width: 0, height: 2 },
-                textShadowRadius: 4,
-                letterSpacing: 0.5
-              }}>Daily Peace</Text>
-            </Animated.View>
-          )}
-
-          {/* Desktop: Large centered title + subtitle */}
-          {isDesktop && (
-            <>
-              <Animated.View
-                style={{
-                  opacity: fadeAnim,
-                  transform: [{ translateY: translateYAnim }],
-                  marginBottom: 12,
-                  marginTop: 24, // Extra space on desktop
-                }}
-              >
-                <Text style={{ 
-                  fontSize: 52, 
-                  fontWeight: "900", 
-                  color: "#FFFFFF", 
-                  marginBottom: 8, 
-                  textAlign: "center",
-                  textShadowColor: "rgba(0, 0, 0, 0.6)",
-                  textShadowOffset: { width: 0, height: 3 },
-                  textShadowRadius: 6,
-                  letterSpacing: 1
-                }}>Daily Peace</Text>
-              </Animated.View>
-              
-              <Animated.View
-                style={{
-                  opacity: fadeAnim,
-                  transform: [{ translateY: translateYAnim }],
-                  marginBottom: 20,
-                }}
-              >
-                <Text style={{ 
-                  fontSize: 24, 
-                  color: "#FFFFFF", 
-                  marginBottom: 24, 
-                  textAlign: "center", 
-                  fontWeight: "600",
-                  textShadowColor: "rgba(0, 0, 0, 0.6)",
-                  textShadowOffset: { width: 0, height: 2 },
-                  textShadowRadius: 4,
-                  letterSpacing: 0.3
-                }}>find strength, peace and hope from scripture</Text>
-              </Animated.View>
-            </>
-          )}
-
-          <Animated.View
-            style={{
-              opacity: fadeAnim,
-              transform: [{ scale: fadeAnim }],
-              marginBottom: 20,
-            }}
+              },
+            ]}
           >
+            <View style={styles.titleRow}>
+              <Image source={logoImage} style={styles.logoBadge} resizeMode="cover" />
+              <Text baseSize={isMobile ? 30 : 42} style={styles.title}>
+                Daily Peace
+              </Text>
+            </View>
+
+            <Text
+              baseSize={isDesktop ? 20 : 16}
+              style={[styles.subtitle, { textAlign: isDesktop ? "center" : "left" }]}
+            >
+              find strength, peace and hope from scripture
+            </Text>
+          </Animated.View>
+
+          <Animated.View style={[styles.modeWrap, { opacity: fadeAnim }]}>
             <ModeToggle value={mode} onChange={setMode} />
           </Animated.View>
 
-          <Animated.View
-            style={{
-              opacity: fadeAnim,
-              transform: [{ translateY: fadeAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: [20, 0]
-              })}],
-            }}
-          >
-            <View style={{ 
-              marginTop: isMobile ? 12 : 24,
-              width: "100%", 
-              maxWidth: 820, // Increased for better desktop layout
-              zIndex: 10 
-            }}>
-              <ReflectionCard
-                title="A Moment of Peace"
-                message="Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid."
-                verses={["John 14:27"]}
-              />
-            </View>
+          <Animated.View style={[styles.quickLinksRow, { opacity: fadeAnim }]}>
+            <Pressable
+              onPress={() => navigation.navigate("Collections")}
+              style={styles.quickLinkPressable}
+              accessibilityRole="button"
+              accessibilityLabel="View collections"
+            >
+              <LinearGradient
+                colors={["rgba(59,130,246,0.35)", "rgba(59,130,246,0.12)"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.quickLinkCard}
+              >
+                <View style={styles.quickLinkIconWrap}>
+                  <Ionicons name="albums" size={22} color="#E3EEFF" />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text baseSize={18} style={styles.quickLinkTitle} numberOfLines={1}>
+                    Collections
+                  </Text>
+                  <Text baseSize={13} style={styles.quickLinkMeta} numberOfLines={1}>
+                    Guided topics for every season
+                  </Text>
+                </View>
+              </LinearGradient>
+            </Pressable>
+
+            <Pressable
+              onPress={() => navigation.navigate("Favorites")}
+              style={styles.quickLinkPressable}
+              accessibilityRole="button"
+              accessibilityLabel="View favorites"
+            >
+              <LinearGradient
+                colors={["rgba(255,255,255,0.18)", "rgba(255,255,255,0.05)"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.quickLinkCard}
+              >
+                <View style={styles.quickLinkIconWrapAlt}>
+                  <Ionicons name="heart" size={22} color="#FFCDD2" />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text baseSize={18} style={styles.quickLinkTitle} numberOfLines={1}>
+                    Favorites
+                  </Text>
+                  <Text baseSize={13} style={styles.quickLinkMeta} numberOfLines={1}>
+                    Scriptures you’ve saved with love
+                  </Text>
+                </View>
+              </LinearGradient>
+            </Pressable>
+          </Animated.View>
+
+          <Animated.View style={{ opacity: fadeAnim, width: "100%" }}>
+            <TodayCard verse="Peace I leave with you; my peace I give you." refText="John 14:27" />
           </Animated.View>
 
           <Animated.View
-            style={{
-              opacity: fadeAnim,
-              transform: [{ translateY: fadeAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: [20, 0]
-              })}],
-            }}
+            style={[
+              styles.reflectionWrap,
+              {
+                opacity: fadeAnim,
+                transform: [
+                  {
+                    translateY: fadeAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [18, 0],
+                    }),
+                  },
+                ],
+              },
+            ]}
           >
-            <Pressable 
-              style={{
-                marginTop: 24,
-                paddingHorizontal: 20,
-                paddingVertical: 12,
-                backgroundColor: "#3B82F6",
-                borderRadius: 16,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.3,
-                shadowRadius: 8,
-                elevation: 5
-              }}
-              onPress={() => navigation.navigate("Chat")}
-            >
-              <Text style={{ 
-                color: "#FFFFFF", 
-                fontSize: 22, 
-                fontWeight: "800",
-                textShadowColor: "rgba(0, 0, 0, 0.4)",
-                textShadowOffset: { width: 0, height: 2 },
-                textShadowRadius: 4,
-                letterSpacing: 0.5
-              }}>Start a Conversation 🙏</Text>
-            </Pressable>
+            <ReflectionCard
+              title="A Moment of Peace"
+              message="Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid."
+              verses={["John 14:27"]}
+            />
+          </Animated.View>
+
+          <Animated.View style={{ opacity: fadeAnim, width: "100%", marginTop: 22 }}>
+            <PremiumCTA onPress={() => navigation.navigate("Chat")} />
           </Animated.View>
         </View>
-        
-        {/* Premium Footer */}
-        <View style={{ 
-          marginTop: 60,
-          paddingVertical: 32,
-          paddingHorizontal: 20,
-          alignItems: 'center',
-          borderTopWidth: 1,
-          borderTopColor: 'rgba(255,255,255,0.1)',
-          width: '100%',
-          zIndex: 10
-        }}>
-          <View style={{ alignItems: 'center', marginBottom: 16 }}>
-            <Text style={{ 
-              color: '#EAF2FF', 
-              fontSize: 20,
-              fontWeight: '700',
-              textAlign: 'center',
-              marginBottom: 8
-            }}>
-              Daily Peace
-            </Text>
-            <Text style={{ 
-              color: '#9FB0C3', 
-              fontSize: 14,
-              textAlign: 'center',
-              marginBottom: 20
-            }}>
-              Find peace and hope from Scripture
-            </Text>
-          </View>
-          
-          <Text style={{ 
-            color: '#6B7280', 
-            fontSize: 12,
-            textAlign: 'center'
-          }}>
+
+        <View style={styles.footer}>
+          <Text baseSize={18} style={styles.footerTitle}>
+            Daily Peace
+          </Text>
+          <Text baseSize={14} style={styles.footerSubtitle}>
+            Find peace and hope from Scripture
+          </Text>
+          <Text baseSize={12} style={styles.footerMeta}>
             © 2025 Daily Peace. Bringing Scripture into your daily life.
           </Text>
         </View>
@@ -275,3 +210,113 @@ export default function HomeScreen() {
     </AtmosphericBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  scrollContent: {
+    paddingTop: 56,
+    paddingBottom: 48,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    gap: 28,
+  },
+  content: {
+    width: "100%",
+    maxWidth: 860,
+    alignItems: "center",
+    gap: 22,
+  },
+  headerWrap: {
+    width: "100%",
+    gap: 14,
+  },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  logoBadge: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+  },
+  title: {
+    fontWeight: "900",
+    letterSpacing: 0.4,
+  },
+  subtitle: {
+    opacity: 0.85,
+    maxWidth: 420,
+  },
+  modeWrap: {
+    alignSelf: "center",
+  },
+  quickLinksRow: {
+    width: "100%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 16,
+    justifyContent: "center",
+  },
+  quickLinkPressable: {
+    borderRadius: 22,
+    overflow: "hidden",
+    minWidth: 260,
+    maxWidth: 340,
+  },
+  quickLinkCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.18)",
+  },
+  quickLinkIconWrap: {
+    width: 46,
+    height: 46,
+    borderRadius: 16,
+    backgroundColor: "rgba(59,130,246,0.25)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  quickLinkIconWrapAlt: {
+    width: 46,
+    height: 46,
+    borderRadius: 16,
+    backgroundColor: "rgba(255,255,255,0.18)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  quickLinkTitle: {
+    fontWeight: "700",
+    color: "#EAF2FF",
+  },
+  quickLinkMeta: {
+    opacity: 0.7,
+    color: "#C7D7FF",
+    marginTop: 2,
+  },
+  reflectionWrap: {
+    width: "100%",
+  },
+  footer: {
+    marginTop: 16,
+    alignItems: "center",
+    gap: 8,
+    borderTopWidth: 1,
+    borderColor: "rgba(255,255,255,0.08)",
+    paddingTop: 24,
+    width: "100%",
+  },
+  footerTitle: {
+    fontWeight: "700",
+  },
+  footerSubtitle: {
+    opacity: 0.75,
+  },
+  footerMeta: {
+    opacity: 0.45,
+  },
+});
