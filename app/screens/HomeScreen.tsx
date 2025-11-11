@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
   useWindowDimensions,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -36,6 +37,7 @@ export default function HomeScreen() {
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const translateYAnim = useRef(new Animated.Value(-20)).current;
+  const haloAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.parallel([
@@ -51,6 +53,32 @@ export default function HomeScreen() {
       }),
     ]).start();
   }, [fadeAnim, translateYAnim]);
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(haloAnim, {
+          toValue: 1,
+          duration: 1200,
+          useNativeDriver: false,
+        }),
+        Animated.timing(haloAnim, {
+          toValue: 0,
+          duration: 1200,
+          useNativeDriver: false,
+        }),
+      ])
+    ).start();
+  }, [haloAnim]);
+
+  const haloSize = haloAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [150, 210],
+  });
+  const haloOpacity = haloAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.18, 0.35],
+  });
 
   useEffect(() => {
     (async () => {
@@ -89,10 +117,16 @@ export default function HomeScreen() {
             ]}
           >
             <View style={styles.titleRow}>
-              <Image source={logoImage} style={styles.logoBadge} resizeMode="cover" />
-              <Text baseSize={isMobile ? 30 : 42} style={styles.title}>
-                Daily Peace
-              </Text>
+              <View style={styles.logoWrap}>
+                <Animated.View
+                  pointerEvents="none"
+                  style={[
+                    styles.logoHalo,
+                    { width: haloSize as any, height: haloSize as any, opacity: haloOpacity as any },
+                  ]}
+                />
+                <Image source={logoImage} style={styles.logoBadge} resizeMode="cover" />
+              </View>
             </View>
 
             <Text
@@ -234,14 +268,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
-  logoBadge: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+  logoWrap: {
+    alignItems: "center",
+    justifyContent: "center",
   },
-  title: {
-    fontWeight: "900",
-    letterSpacing: 0.4,
+  logoHalo: {
+    position: "absolute",
+    borderRadius: 999,
+    backgroundColor: "#FFFFFF",
+    ...Platform.select({
+      web: { filter: "blur(32px)" },
+      default: {
+        shadowColor: "rgba(255,255,255,0.9)",
+        shadowOpacity: 0.9,
+        shadowRadius: 28,
+        shadowOffset: { width: 0, height: 0 },
+      },
+    }),
+  } as any,
+  logoBadge: {
+    width: 76,
+    height: 76,
+    borderRadius: 38,
+    borderWidth: 2,
+    borderColor: "rgba(255,255,255,0.18)",
   },
   subtitle: {
     opacity: 0.85,
