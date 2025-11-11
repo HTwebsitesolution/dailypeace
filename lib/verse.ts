@@ -44,19 +44,112 @@ function fetchText(refOrUnit: string, idx: Record<string,string>) {
   return parts.join(" ");
 }
 
-export async function selectVerses(mode: Mode, needSeeds: any, kjvIdx: Record<string,string>, needIds: string[]): Promise<Verse[]> {
-  // Payload size safeguard: limit to 6 verses max for API stability
-  const count = Math.min(mode === "biblical" ? 5 : mode === "reflective" ? 2 : 3, 6);
-  const preferUnit = mode !== "reflective";
-  const verses: Verse[] = [];
-  for (const needId of needIds) {
-    const cands = [...needSeeds[needId].candidates].sort((a: any,b: any)=> b.priority - a.priority);
-    for (const c of cands) {
-      const text = fetchText(preferUnit ? c.unit : c.ref, kjvIdx);
-      verses.push({ ref: c.ref, text });
-      if (verses.length >= count) break;
-    }
-    if (verses.length >= count) break;
+const DEFAULT_NEED_ID = "fear_anxiety";
+
+function normaliseNeedId(value: string) {
+  return value.replace(/[^a-z0-9]/gi, "").toLowerCase();
+}
+
+export function resolveNeedIds(
+  needSeeds: Record<string, any>,
+  requestedIds: string[] = [],
+  includeFallback: boolean = true
+): string[] {
+  if (!needSeeds) return [];
+
+  const seedsKeys = Object.keys(needSeeds ?? {});
+  if (seedsKeys.length === 0) return [];
+
+  const normalisedIndex = new Map<string, string>();
+  for (const key of seedsKeys) {
+    normalisedIndex.set(normaliseNeedId(key), key);
   }
+
+  const resolvedIds: string[] = [];
+  const enqueueId = (id: string | undefined) => {
+    if (!id) return;
+    if (!resolvedIds.includes(id)) resolvedIds.push(id);
+  };
+
+  for (const rawNeedId of requestedIds ?? []) {
+    if (!rawNeedId) continue;
+    if (needSeeds[rawNeedId]) {
+      enqueueId(rawNeedId);
+      continue;
+    }
+
+    const normalised = normaliseNeedId(rawNeedId);
+    const directMatch = normalisedIndex.get(normalised);
+    if (directMatch) {
+      enqueueId(directMatch);
+      continue;
+    }
+
+    const fuzzyMatch = seedsKeys.find((key) =>
+      normaliseNeedId(key).includes(normalised)
+    );
+    if (fuzzyMatch) enqueueId(fuzzyMatch);
+  }
+
+  if (includeFallback && !resolvedIds.length) {
+    const fallbackKey =
+      needSeeds[DEFAULT_NEED_ID] ? DEFAULT_NEED_ID : seedsKeys.find(Boolean);
+    if (fallbackKey) enqueueId(fallbackKey);
+  }
+
+  return resolvedIds;
+}
+
+export async function selectVerses(
+  mode: Mode,
+  needSeeds: Record<string, any>,
+  kjvIdx: Record<string, string>,
+  needIds: string[]
+): Promise<Verse[]> {
+  if (!needSeeds || !kjvIdx) return [];
+
+  const preferUnit = mode !== "reflective";
+  const globalLimit = Math.min(mode === "biblical" ? 5 : mode === "reflective" ? 2 : 3, 6);
+
+  const resolvedIds = resolveNeedIds(needSeeds, needIds);
+
+  const verses: Verse[] = [];
+  const usedRefs = new Set<string>();
+
+  for (const needId of resolvedIds) {
+    const seed = needSeeds[needId];
+    if (!seed || !Array.isArray(seed.candidates) || !seed.candidates.length) {
+      continue;
+    }
+
+    const policyMax =
+      typeof seed.policy?.max_verses === "number" && seed.policy.max_verses > 0
+        ? seed.policy.max_verses
+        : undefined;
+    const needLimit = Math.min(globalLimit, policyMax ?? globalLimit);
+
+    const candidates = [...seed.candidates].sort(
+      (a: any, b: any) => (b.priority ?? 0) - (a.priority ?? 0)
+    );
+
+    let addedForNeed = 0;
+    for (const candidate of candidates) {
+      const ref = candidate.ref ?? candidate.unit;
+      const unit = candidate.unit ?? candidate.ref;
+      if (!ref || !unit) continue;
+      if (usedRefs.has(ref)) continue;
+
+      const text = fetchText(preferUnit ? unit : ref, kjvIdx);
+      verses.push({ ref, text });
+      usedRefs.add(ref);
+      addedForNeed += 1;
+
+      if (addedForNeed >= needLimit) break;
+      if (verses.length >= globalLimit) break;
+    }
+
+    if (verses.length >= globalLimit) break;
+  }
+
   return verses;
 }

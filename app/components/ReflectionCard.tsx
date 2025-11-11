@@ -99,7 +99,7 @@ export default function ReflectionCard({
           baseSize={isMobile ? 16 : 18}
           style={{ fontWeight: "700", letterSpacing: 0.4 }}
         >
-          A Moment of Peace 🙏
+          {title ?? "A Moment of Peace 🙏"}
         </Text>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
           {/* Daily Peace logo for branding in shared images */}
