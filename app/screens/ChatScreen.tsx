@@ -34,6 +34,7 @@ import { stop as stopTTS } from "../../lib/tts";
 import { APP_LINK } from "../../lib/config";
 import { Text } from "@/ux/ScaledText";
 import MessageCard from "@/components/MessageCard";
+import { t } from "@/ux/transform";
 
 const logo = require("../../assets/Bible Circle Daily Peace Logo.png");
 const HERO_KEY = "@dp/show_home_reflection";
@@ -604,14 +605,12 @@ export default function ChatScreen() {
                       <Animated.View
                         style={{
                           opacity: fadeAnim,
-                          transform: [
-                            {
-                              translateY: fadeAnim.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [-20, 0],
-                              }),
-                            },
-                          ],
+                          transform: t.translateYAnimated(
+                            fadeAnim.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [-20, 0],
+                            })
+                          ),
                         }}
                       >
                         <Text
@@ -630,14 +629,12 @@ export default function ChatScreen() {
                       <Animated.View
                         style={{
                           opacity: fadeAnim,
-                          transform: [
-                            {
-                              translateY: fadeAnim.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [-10, 0],
-                              }),
-                            },
-                          ],
+                          transform: t.translateYAnimated(
+                            fadeAnim.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [-10, 0],
+                            })
+                          ),
                         }}
                       >
                         <Text
@@ -659,7 +656,7 @@ export default function ChatScreen() {
                       <Animated.View
                         style={{
                           opacity: 1,
-                          transform: [{ scale: logoAnim }],
+                          transform: t.scaleAnimated(logoAnim),
                           shadowColor: "#EAF2FF",
                           shadowOffset: { width: 0, height: 0 },
                           shadowOpacity: logoAnim.interpolate({
@@ -681,7 +678,7 @@ export default function ChatScreen() {
                     <Animated.View
                       style={{
                         opacity: fadeAnim,
-                        transform: [{ scale: fadeAnim }],
+                        transform: t.scaleAnimated(fadeAnim),
                       }}
                     >
                       <ModeToggle value={mode} onChange={setMode} />
@@ -972,14 +969,12 @@ export default function ChatScreen() {
                       <Animated.View
                         style={{
                           opacity: fadeAnim,
-                          transform: [
-                            {
-                              translateY: fadeAnim.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [-20, 0],
-                              }),
-                            },
-                          ],
+                          transform: t.translateYAnimated(
+                            fadeAnim.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [-20, 0],
+                            })
+                          ),
                         }}
                       >
                         <Text
@@ -998,14 +993,12 @@ export default function ChatScreen() {
                       <Animated.View
                         style={{
                           opacity: fadeAnim,
-                          transform: [
-                            {
-                              translateY: fadeAnim.interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [-10, 0],
-                              }),
-                            },
-                          ],
+                          transform: t.translateYAnimated(
+                            fadeAnim.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [-10, 0],
+                            })
+                          ),
                         }}
                       >
                         <Text
@@ -1027,7 +1020,7 @@ export default function ChatScreen() {
                       <Animated.View
                         style={{
                           opacity: 1,
-                          transform: [{ scale: logoAnim }],
+                          transform: t.scaleAnimated(logoAnim),
                           shadowColor: "#EAF2FF",
                           shadowOffset: { width: 0, height: 0 },
                           shadowOpacity: logoAnim.interpolate({
@@ -1049,7 +1042,7 @@ export default function ChatScreen() {
                     <Animated.View
                       style={{
                         opacity: fadeAnim,
-                        transform: [{ scale: fadeAnim }],
+                        transform: t.scaleAnimated(fadeAnim),
                       }}
                     >
                       <ModeToggle value={mode} onChange={setMode} />

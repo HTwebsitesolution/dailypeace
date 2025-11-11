@@ -3,6 +3,7 @@ import { View, StyleSheet, Pressable, Share, Image, useColorScheme } from "react
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import { dp } from "@/ui/tokens";
+import { t } from "@/ux/transform";
 
 let T: any;
 try {
@@ -102,7 +103,7 @@ export default function MessageCard({
                 onPress={onSharePress ?? shareDefault}
                 style={({ pressed }) => [
                   styles.share,
-                  pressed && { transform: [{ scale: 0.98 }] },
+                  pressed ? { transform: t.scale(0.98) } : undefined,
                 ]}
                 accessibilityRole="button"
                 accessibilityLabel="Share"

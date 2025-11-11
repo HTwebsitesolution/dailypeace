@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { View, Image, Animated, Easing, Platform, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { t } from "@/ux/transform";
 
 const THEMES = {
   ocean: {
@@ -93,7 +94,7 @@ export default function AnimatedSplash({
         <Animated.Image
           source={require("../../assets/Bible Circle Daily Peace Logo.png")}
           resizeMode="contain"
-          style={{ width: 180, height: 180, transform: [{ scale }] }}
+          style={{ width: 180, height: 180, transform: t.scaleAnimated(scale) }}
         />
         <Text style={{ color: theme.text, opacity: 0.9, marginTop: 14 }}>
           Finding peace in every moment ✨

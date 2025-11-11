@@ -22,6 +22,7 @@ import FeedbackButton from "../components/FeedbackButton";
 import PremiumCTA from "../components/PremiumCTA";
 import TodayCard from "../components/TodayCard";
 import { Text } from "@/ux/ScaledText";
+import { t } from "@/ux/transform";
 
 const logoImage = require("../../assets/Bible Circle Daily Peace Logo.png");
 
@@ -112,7 +113,7 @@ export default function HomeScreen() {
               styles.headerWrap,
               {
                 opacity: fadeAnim,
-                transform: [{ translateY: translateYAnim }],
+                transform: t.translateYAnimated(translateYAnim),
               },
             ]}
           >
@@ -204,14 +205,12 @@ export default function HomeScreen() {
               styles.reflectionWrap,
               {
                 opacity: fadeAnim,
-                transform: [
-                  {
-                    translateY: fadeAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [18, 0],
-                    }),
-                  },
-                ],
+                transform: t.translateYAnimated(
+                  fadeAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [18, 0],
+                  })
+                ),
               },
             ]}
           >

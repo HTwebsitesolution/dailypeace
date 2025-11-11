@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, Animated } from "react-native";
 import ReadAloud from "./ReadAloud";
+import { t } from "@/ux/transform";
 
 export function MessageBubble({ role, children }:{ role:"user"|"app"; children: React.ReactNode }) {
   const isUser = role==="user";
@@ -31,7 +32,7 @@ export function MessageBubble({ role, children }:{ role:"user"|"app"; children: 
         paddingHorizontal: 6,
         justifyContent: isUser ? "flex-end" : "flex-start",
         opacity: fadeAnim,
-        transform: [{ translateX: slideAnim }],
+        transform: t.translateXAnimated(slideAnim),
       }}
     >
       <View style={{

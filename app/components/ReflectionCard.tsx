@@ -3,6 +3,7 @@ import { View, Text, Pressable, Animated, ScrollView, Platform, useWindowDimensi
 import { hapticConfirm } from "../../lib/haptics";
 import { getScrollPosition, saveScrollPosition, loadScrollPositions } from "../../lib/scrollPersistence";
 import ReadAloud from "./ReadAloud";
+import { t } from "@/ux/transform";
 
 const logo = require("../../assets/Bible Circle Daily Peace Logo.png");
 
@@ -77,7 +78,7 @@ export default function ReflectionCard({
         shadowRadius: 24,
         elevation: 16,
         opacity: fadeAnim,
-        transform: [{ scale: scaleAnim }],
+        transform: t.scaleAnimated(scaleAnim),
         maxHeight: maxCardHeight,
         overflow: 'hidden',
       }}
@@ -149,7 +150,7 @@ export default function ReflectionCard({
               key={v}
               style={{
                 opacity: fadeAnim,
-                transform: [{ scale: scaleAnim }],
+                transform: t.scaleAnimated(scaleAnim),
               }}
             >
               <Pressable onPress={() => onVersePress && onVersePress(v)} style={{
@@ -179,10 +180,12 @@ export default function ReflectionCard({
             <Animated.View
               style={{
                 opacity: fadeAnim,
-                transform: [{ translateX: fadeAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-20, 0]
-                })}],
+                transform: t.translateXAnimated(
+                  fadeAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [-20, 0],
+                  })
+                ),
               }}
             >
               <Pressable

@@ -6,6 +6,7 @@ import * as FileSystem from "expo-file-system";
 import { apiTranscribe } from "../../lib/api";
 import { useSettings } from "../../lib/settings";
 import { track } from "../../lib/analytics";
+import { t } from "@/ux/transform";
 
 export function MicButton({ onTranscribed }: { onTranscribed: (text: string)=>void }) {
   const recordingRef = useRef<Audio.Recording | null>(null);
@@ -108,7 +109,7 @@ export function MicButton({ onTranscribed }: { onTranscribed: (text: string)=>vo
   }
 
   return (
-    <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
+    <Animated.View style={{ transform: t.scaleAnimated(pulseAnim) }}>
       <Pressable
         onPressIn={start}
         onPressOut={stop}

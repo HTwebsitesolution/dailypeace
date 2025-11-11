@@ -9,6 +9,7 @@ import {
   resetBackgroundAnimation,
   getTimeOfDay
 } from "../../lib/backgrounds";
+import { t } from "@/ux/transform";
 
 interface AtmosphericBackgroundProps {
   mode: "conversational" | "biblical" | "reflective";
@@ -137,7 +138,7 @@ export default function AtmosphericBackground({
           imageStyle={{
             opacity: 0.75,
             transform: [
-              { scale: scaleAnim },
+              ...t.scaleAnimated(scaleAnim),
               { rotate: rotationTransform }
             ],
           }}
