@@ -33,7 +33,8 @@
           "color": "#2F80ED",
           "mode": "production"
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "extra": {
       "eas": {

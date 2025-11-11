@@ -282,7 +282,7 @@ export default function ChatScreen() {
           const header = focusLabel
             ? `Scripture Wisdom • ${focusLabel}`
             : "Scripture Wisdom — Verses for you:";
-          const versesText = verses.map((v) => `• ${v.ref}\n${v.text}`).join("\n\n");
+          const versesText = verses.map((v: Verse) => `• ${v.ref}\n${v.text}`).join("\n\n");
           const closing = "Which of these speaks to your situation?";
           addMessage("assistant", `${header}\n\n${versesText}\n\n${closing}`, {
             verses,
@@ -396,7 +396,7 @@ export default function ChatScreen() {
 
       if (uri) {
         const base64 = await FileSystem.readAsStringAsync(uri, {
-          encoding: FileSystem.EncodingType.Base64,
+          encoding: "base64",
         });
 
         const transcribedText = await apiTranscribe("voice.mp3", base64);
@@ -853,7 +853,7 @@ export default function ChatScreen() {
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => {
                     if (item.role === "assistant") {
-                      const verseRefs = item.verses?.map((v) => v.ref) ?? [];
+                      const verseRefs = item.verses?.map((v: Verse) => v.ref) ?? [];
                       return (
                         <MessageCard
                           title={item.title ?? "A Moment of Peace 🙏"}
@@ -866,7 +866,7 @@ export default function ChatScreen() {
                               `${item.content}${
                                 item.verses?.length
                                   ? `\n\n${item.verses
-                                      .map((v) => `${v.ref}${v.text ? `\n${v.text}` : ""}`)
+                                      .map((v: Verse) => `${v.ref}${v.text ? `\n${v.text}` : ""}`)
                                       .join("\n\n")}`
                                   : ""
                               }\n\n— Shared from Daily Peace • ${APP_LINK}`
@@ -1204,7 +1204,7 @@ export default function ChatScreen() {
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => {
                     if (item.role === "assistant") {
-                      const verseRefs = item.verses?.map((v) => v.ref) ?? [];
+                    const verseRefs = item.verses?.map((v: Verse) => v.ref) ?? [];
                       return (
                         <MessageCard
                           title={item.title ?? "A Moment of Peace 🙏"}
@@ -1216,9 +1216,9 @@ export default function ChatScreen() {
                             shareTextContent(
                               `${item.content}${
                                 item.verses?.length
-                                  ? `\n\n${item.verses
-                                      .map((v) => `${v.ref}${v.text ? `\n${v.text}` : ""}`)
-                                      .join("\n\n")}`
+                                ? `\n\n${item.verses
+                                    .map((v: Verse) => `${v.ref}${v.text ? `\n${v.text}` : ""}`)
+                                    .join("\n\n")}`
                                   : ""
                               }\n\n— Shared from Daily Peace • ${APP_LINK}`
                             )

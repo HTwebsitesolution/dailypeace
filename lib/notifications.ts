@@ -8,6 +8,8 @@ import { track } from './analytics';
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
   }),
@@ -77,6 +79,14 @@ export const notifications = {
         ? reflection.text.substring(0, 117) + "..." 
         : reflection.text;
 
+      const trigger: Notifications.CalendarTriggerInput = {
+        type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
+        hour,
+        minute,
+        repeats: true,
+        channelId: 'daily-peace',
+      };
+
       await Notifications.scheduleNotificationAsync({
         content: {
           title,
@@ -90,11 +100,7 @@ export const notifications = {
             verses: reflection.verses?.join(', ')
           }
         },
-        trigger: {
-          hour,
-          minute,
-          repeats: true,
-        },
+        trigger,
       });
 
       // Store the schedule settings
@@ -163,13 +169,22 @@ export const notifications = {
   // Send encouragement notification
   async sendEncouragement(title: string, message: string, delaySeconds: number = 0) {
     try {
+      const trigger: Notifications.NotificationTriggerInput =
+        delaySeconds > 0
+          ? {
+              type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+              seconds: delaySeconds,
+              repeats: false,
+            }
+          : null;
+
       await Notifications.scheduleNotificationAsync({
         content: {
           title,
           body: message,
           sound: 'default',
         },
-        trigger: delaySeconds > 0 ? { seconds: delaySeconds } : null,
+        trigger,
       });
 
       track('encouragement_sent', { title, delaySeconds });

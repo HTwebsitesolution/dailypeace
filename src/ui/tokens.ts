@@ -15,7 +15,7 @@ export const dp = {
     stroke: "rgba(255,255,255,0.12)",
   },
   gradient: {
-    border: ["#1E3A8A", "#3B82F6", "#60A5FA", "#F59E0B"],
+    border: ["#1E3A8A", "#3B82F6", "#60A5FA", "#F59E0B"] as const,
   },
   text: {
     title: "#EAF2FF",

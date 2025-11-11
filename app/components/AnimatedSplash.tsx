@@ -5,21 +5,21 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const THEMES = {
   ocean: {
-    colors: ["#0B1016", "#1A2330", "#254A7B"],
+    colors: ["#0B1016", "#1A2330", "#254A7B"] as const,
     halo: "#87BFFF",
     text: "#EAF2FF",
   },
   dove: {
-    colors: ["#0B1016", "#2C2E43", "#565D93"],
+    colors: ["#0B1016", "#2C2E43", "#565D93"] as const,
     halo: "#FCD34D",
     text: "#FFFFFF",
   },
   mountain: {
-    colors: ["#0B1016", "#1C2E3C", "#3A7CA5"],
+    colors: ["#0B1016", "#1C2E3C", "#3A7CA5"] as const,
     halo: "#9BD9FF",
     text: "#EAF2FF",
   },
-};
+} as const;
 
 export default function AnimatedSplash({
   onFinish,
@@ -31,7 +31,7 @@ export default function AnimatedSplash({
   const fade = useRef(new Animated.Value(1)).current;
   const scale = useRef(new Animated.Value(0.96)).current;
   const halo = useRef(new Animated.Value(0)).current;
-  const [theme, setTheme] = useState(THEMES.ocean); // default ocean
+  const [theme, setTheme] = useState<(typeof THEMES)[keyof typeof THEMES]>(THEMES.ocean); // default ocean
 
   useEffect(() => {
     (async () => {

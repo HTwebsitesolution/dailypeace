@@ -44,12 +44,20 @@ export default function ReadAloud({ text, lang = "en-US", autoCandidate = false 
   }, []);
 
   useEffect(() => {
-    if (autoCandidate && s.auto && text?.trim()) playAll();
-    return () => stopAll();
+    if (autoCandidate && s.auto && text?.trim()) {
+      playAll().catch(() => {});
+    }
+    return () => {
+      stopAll().catch(() => {});
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text, s.auto, s.voice, lang]);
 
-  useEffect(() => () => stopAll(), []);
+  useEffect(() => {
+    return () => {
+      stopAll().catch(() => {});
+    };
+  }, []);
 
   async function stopAll() {
     try {

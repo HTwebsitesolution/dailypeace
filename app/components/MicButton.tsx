@@ -80,7 +80,7 @@ export function MicButton({ onTranscribed }: { onTranscribed: (text: string)=>vo
     
     try {
       // Debug: Confirm base64 encoding is valid
-      const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+      const base64 = await FileSystem.readAsStringAsync(uri, { encoding: "base64" });
       if (!base64 || base64.length < 100) {
         console.warn("[MicButton] Invalid base64 recording:", base64?.length || 0, "chars");
         track("voice_transcribe_failed", { reason: "invalid_base64" });

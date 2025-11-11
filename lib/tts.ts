@@ -1,6 +1,6 @@
 // lib/tts.ts
 import { Platform } from "react-native";
-import { Audio } from "expo-av";
+import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from "expo-av";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type TTSState = {
@@ -48,9 +48,9 @@ export async function initAudioMode() {
       playsInSilentModeIOS: true,
       allowsRecordingIOS: false,
       staysActiveInBackground: false,
-      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      interruptionModeIOS: InterruptionModeIOS.DoNotMix,
       shouldDuckAndroid: true,
-      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+      interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
       playThroughEarpieceAndroid: false,
     });
   } catch {}
