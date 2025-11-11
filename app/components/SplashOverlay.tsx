@@ -10,7 +10,6 @@ export default function SplashOverlay({
 }) {
   const [visible, setVisible] = useState(true);
   const opacity = useRef(new Animated.Value(0)).current;
-  const scale = useRef(new Animated.Value(0.95)).current;
 
   useEffect(() => {
     // fade in with gentle pulse
@@ -21,30 +20,7 @@ export default function SplashOverlay({
         easing: Easing.out(Easing.cubic),
         useNativeDriver: true,
       }),
-      Animated.timing(scale, {
-        toValue: 1,
-        duration: 300,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(scale, {
-            toValue: 1.03,
-            duration: 700,
-            easing: Easing.inOut(Easing.ease),
-            useNativeDriver: true,
-          }),
-          Animated.timing(scale, {
-            toValue: 1,
-            duration: 700,
-            easing: Easing.inOut(Easing.ease),
-            useNativeDriver: true,
-          }),
-        ])
-      ).start();
-    });
+    ]).start();
 
     const t = setTimeout(() => {
       // fade out
@@ -56,7 +32,6 @@ export default function SplashOverlay({
     }, duration);
 
     return () => {
-      scale.stopAnimation();
       clearTimeout(t);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,7 +58,6 @@ export default function SplashOverlay({
         style={{
           width: 300,
           height: 300,
-          transform: [{ scale }],
           opacity: 0.96,
         }}
       />
