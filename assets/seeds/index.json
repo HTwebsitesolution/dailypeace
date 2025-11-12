@@ -490,5 +490,431 @@
         "tones": ["trust", "guidance", "paths"]
       }
     ]
+  },
+  "new_beginnings": {
+    "need_id": "new_beginnings",
+    "display_name": "New Beginnings",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "2 Corinthians 5:17",
+        "unit": "2 Corinthians 5:17",
+        "priority": 0.95,
+        "tones": ["new creation", "transformation", "fresh start"]
+      },
+      {
+        "ref": "Isaiah 43:19",
+        "unit": "Isaiah 43:18-19",
+        "priority": 0.93,
+        "tones": ["new thing", "path", "purpose"]
+      },
+      {
+        "ref": "Lamentations 3:22-23",
+        "unit": "Lamentations 3:22-23",
+        "priority": 0.90,
+        "tones": ["mercy", "faithfulness", "morning"]
+      },
+      {
+        "ref": "Philippians 3:13-14",
+        "unit": "Philippians 3:13-14",
+        "priority": 0.88,
+        "tones": ["press forward", "goal", "calling"]
+      }
+    ]
+  },
+  "healing": {
+    "need_id": "healing",
+    "display_name": "Healing",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 5,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Psalm 147:3",
+        "unit": "Psalm 147:3",
+        "priority": 0.95,
+        "tones": ["healing", "comfort", "restoration"]
+      },
+      {
+        "ref": "Jeremiah 30:17",
+        "unit": "Jeremiah 30:17",
+        "priority": 0.93,
+        "tones": ["restoration", "healing", "promise"]
+      },
+      {
+        "ref": "Isaiah 53:5",
+        "unit": "Isaiah 53:4-5",
+        "priority": 0.90,
+        "tones": ["healing", "peace", "wholeness"]
+      },
+      {
+        "ref": "Psalm 103:2-3",
+        "unit": "Psalm 103:1-5",
+        "priority": 0.88,
+        "tones": ["benefits", "forgiveness", "healing"]
+      }
+    ]
+  },
+  "transitions": {
+    "need_id": "transitions",
+    "display_name": "Life Transitions",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Proverbs 3:5-6",
+        "unit": "Proverbs 3:5-6",
+        "priority": 0.95,
+        "tones": ["trust", "guidance", "direction"]
+      },
+      {
+        "ref": "Isaiah 41:10",
+        "unit": "Isaiah 41:10",
+        "priority": 0.93,
+        "tones": ["strength", "presence", "support"]
+      },
+      {
+        "ref": "Psalm 32:8",
+        "unit": "Psalm 32:8",
+        "priority": 0.90,
+        "tones": ["instruction", "guidance", "watching"]
+      },
+      {
+        "ref": "Joshua 1:9",
+        "unit": "Joshua 1:8-9",
+        "priority": 0.88,
+        "tones": ["courage", "presence", "strength"]
+      }
+    ]
+  },
+  "love": {
+    "need_id": "love",
+    "display_name": "Love",
+    "policy": {
+      "min_verses": 3,
+      "max_verses": 5,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "1 Corinthians 13:4-7",
+        "unit": "1 Corinthians 13:4-8",
+        "priority": 0.95,
+        "tones": ["love", "patience", "kindness"]
+      },
+      {
+        "ref": "John 3:16",
+        "unit": "John 3:16-17",
+        "priority": 0.93,
+        "tones": ["God's love", "sacrifice", "eternal life"]
+      },
+      {
+        "ref": "Romans 8:38-39",
+        "unit": "Romans 8:38-39",
+        "priority": 0.90,
+        "tones": ["inseparable", "God's love", "assurance"]
+      },
+      {
+        "ref": "1 John 4:19",
+        "unit": "1 John 4:18-19",
+        "priority": 0.88,
+        "tones": ["love response", "first loved", "casting out fear"]
+      }
+    ]
+  },
+  "faith": {
+    "need_id": "faith",
+    "display_name": "Faith",
+    "policy": {
+      "min_verses": 3,
+      "max_verses": 5,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Hebrews 11:1",
+        "unit": "Hebrews 11:1",
+        "priority": 0.95,
+        "tones": ["faith defined", "substance", "evidence"]
+      },
+      {
+        "ref": "Mark 11:22-24",
+        "unit": "Mark 11:22-24",
+        "priority": 0.93,
+        "tones": ["faith in God", "prayer", "belief"]
+      },
+      {
+        "ref": "Romans 10:17",
+        "unit": "Romans 10:17",
+        "priority": 0.90,
+        "tones": ["hearing", "word", "faith"]
+      },
+      {
+        "ref": "James 2:17",
+        "unit": "James 2:17-18",
+        "priority": 0.88,
+        "tones": ["faith", "works", "action"]
+      }
+    ]
+  },
+  "forgiveness": {
+    "need_id": "forgiveness",
+    "display_name": "Forgiveness",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 5,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Ephesians 4:32",
+        "unit": "Ephesians 4:31-32",
+        "priority": 0.95,
+        "tones": ["kindness", "forgiveness", "grace"]
+      },
+      {
+        "ref": "Colossians 3:13",
+        "unit": "Colossians 3:12-13",
+        "priority": 0.93,
+        "tones": ["bearing with", "forgiveness", "as Christ"]
+      },
+      {
+        "ref": "Matthew 6:14-15",
+        "unit": "Matthew 6:14-15",
+        "priority": 0.90,
+        "tones": ["forgiving others", "forgiveness received", "Father's forgiveness"]
+      },
+      {
+        "ref": "1 John 1:9",
+        "unit": "1 John 1:9",
+        "priority": 0.88,
+        "tones": ["confession", "faithful", "cleansing"]
+      }
+    ]
+  },
+  "hope": {
+    "need_id": "hope",
+    "display_name": "Hope",
+    "policy": {
+      "min_verses": 3,
+      "max_verses": 5,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Romans 15:13",
+        "unit": "Romans 15:13",
+        "priority": 0.95,
+        "tones": ["joy", "peace", "hope"]
+      },
+      {
+        "ref": "Psalm 42:11",
+        "unit": "Psalm 42:11",
+        "priority": 0.93,
+        "tones": ["hope in God", "praise", "deliverance"]
+      },
+      {
+        "ref": "Jeremiah 29:11",
+        "unit": "Jeremiah 29:11",
+        "priority": 0.90,
+        "tones": ["plans", "future", "hope"]
+      },
+      {
+        "ref": "Hebrews 6:19",
+        "unit": "Hebrews 6:18-19",
+        "priority": 0.88,
+        "tones": ["anchor", "soul", "steadfast"]
+      }
+    ]
+  },
+  "patience": {
+    "need_id": "patience",
+    "display_name": "Patience",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Galatians 5:22-23",
+        "unit": "Galatians 5:22-23",
+        "priority": 0.95,
+        "tones": ["fruit of Spirit", "patience", "self-control"]
+      },
+      {
+        "ref": "James 5:7-8",
+        "unit": "James 5:7-8",
+        "priority": 0.93,
+        "tones": ["patience", "farmer", "coming"]
+      },
+      {
+        "ref": "Romans 12:12",
+        "unit": "Romans 12:12",
+        "priority": 0.90,
+        "tones": ["rejoicing", "patient", "prayer"]
+      },
+      {
+        "ref": "Psalm 27:14",
+        "unit": "Psalm 27:13-14",
+        "priority": 0.88,
+        "tones": ["wait", "courage", "heart"]
+      }
+    ]
+  },
+  "morning_prayer": {
+    "need_id": "morning_prayer",
+    "display_name": "Morning Prayer",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Psalm 5:3",
+        "unit": "Psalm 5:1-3",
+        "priority": 0.95,
+        "tones": ["morning", "prayer", "expectation"]
+      },
+      {
+        "ref": "Lamentations 3:22-23",
+        "unit": "Lamentations 3:22-23",
+        "priority": 0.93,
+        "tones": ["mercies", "new every morning", "faithfulness"]
+      },
+      {
+        "ref": "Psalm 143:8",
+        "unit": "Psalm 143:8",
+        "priority": 0.90,
+        "tones": ["morning", "lovingkindness", "trust"]
+      },
+      {
+        "ref": "Mark 1:35",
+        "unit": "Mark 1:35",
+        "priority": 0.88,
+        "tones": ["early", "prayer", "solitary place"]
+      }
+    ]
+  },
+  "evening_reflection": {
+    "need_id": "evening_reflection",
+    "display_name": "Evening Reflection",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Psalm 4:8",
+        "unit": "Psalm 4:8",
+        "priority": 0.95,
+        "tones": ["peace", "sleep", "safety"]
+      },
+      {
+        "ref": "Psalm 63:6",
+        "unit": "Psalm 63:5-6",
+        "priority": 0.93,
+        "tones": ["meditate", "night watches", "help"]
+      },
+      {
+        "ref": "Psalm 134:1",
+        "unit": "Psalm 134:1-2",
+        "priority": 0.90,
+        "tones": ["bless", "night", "sanctuary"]
+      },
+      {
+        "ref": "Psalm 91:1",
+        "unit": "Psalm 91:1-2",
+        "priority": 0.88,
+        "tones": ["dwelling", "shelter", "refuge"]
+      }
+    ]
+  },
+  "midday_peace": {
+    "need_id": "midday_peace",
+    "display_name": "Midday Peace",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 3,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Philippians 4:6-7",
+        "unit": "Philippians 4:6-7",
+        "priority": 0.95,
+        "tones": ["anxiety", "prayer", "peace"]
+      },
+      {
+        "ref": "Matthew 11:28-29",
+        "unit": "Matthew 11:28-30",
+        "priority": 0.93,
+        "tones": ["rest", "burden", "yoke"]
+      },
+      {
+        "ref": "Isaiah 26:3",
+        "unit": "Isaiah 26:3",
+        "priority": 0.90,
+        "tones": ["perfect peace", "mind", "trust"]
+      }
+    ]
+  },
+  "nighttime_rest": {
+    "need_id": "nighttime_rest",
+    "display_name": "Nighttime Rest",
+    "policy": {
+      "min_verses": 2,
+      "max_verses": 4,
+      "allow_cross_gospel": true,
+      "translation": "KJV"
+    },
+    "candidates": [
+      {
+        "ref": "Psalm 4:8",
+        "unit": "Psalm 4:8",
+        "priority": 0.95,
+        "tones": ["peace", "lie down", "sleep"]
+      },
+      {
+        "ref": "Proverbs 3:24",
+        "unit": "Proverbs 3:23-24",
+        "priority": 0.93,
+        "tones": ["lie down", "sleep sweet", "not afraid"]
+      },
+      {
+        "ref": "Psalm 121:4",
+        "unit": "Psalm 121:3-4",
+        "priority": 0.90,
+        "tones": ["keeper", "not slumber", "watches"]
+      },
+      {
+        "ref": "Matthew 11:28",
+        "unit": "Matthew 11:28",
+        "priority": 0.88,
+        "tones": ["rest", "weary", "burden"]
+      }
+    ]
   }
 }

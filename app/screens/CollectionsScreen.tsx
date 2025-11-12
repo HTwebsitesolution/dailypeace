@@ -29,6 +29,21 @@ const CATEGORY_LABEL: Record<string, string> = {
   grief_loss: "Peace in Grief",
   waiting_patience: "Strength in Waiting",
   gratitude_wonder: "Gratitude & Wonder",
+  // Life Situations
+  new_beginnings: "New Beginnings",
+  healing: "Healing",
+  transitions: "Life Transitions",
+  // Topical Studies
+  love: "Love",
+  faith: "Faith",
+  forgiveness: "Forgiveness",
+  hope: "Hope",
+  patience: "Patience",
+  // Daily Devotionals
+  morning_prayer: "Morning Prayer",
+  evening_reflection: "Evening Reflection",
+  midday_peace: "Midday Peace",
+  nighttime_rest: "Nighttime Rest",
 };
 
 export default function CollectionsScreen({ navigation }: any) {

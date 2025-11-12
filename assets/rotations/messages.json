@@ -448,5 +448,329 @@
       "Acts 14:17",
       "Romans 8:32"
     ]
+  },
+  {
+    "id": "new_beginnings_01",
+    "category": "new_beginnings",
+    "text": "Every ending holds the seed of a new beginning. I am already making a way in the wilderness of what was.",
+    "verses": [
+      "Isaiah 43:19",
+      "2 Corinthians 5:17"
+    ]
+  },
+  {
+    "id": "new_beginnings_02",
+    "category": "new_beginnings",
+    "text": "The past does not define your future—My grace does. Step forward with confidence; the old has gone.",
+    "verses": [
+      "Philippians 3:13-14",
+      "Lamentations 3:22-23"
+    ]
+  },
+  {
+    "id": "new_beginnings_03",
+    "category": "new_beginnings",
+    "text": "Do not fear the blank page before you. I am the Author, and your story is far from over.",
+    "verses": [
+      "Jeremiah 29:11",
+      "Revelation 21:5"
+    ]
+  },
+  {
+    "id": "healing_01",
+    "category": "healing",
+    "text": "Healing is not the absence of scars, but the presence of peace. I bind up your broken heart with tender care.",
+    "verses": [
+      "Psalm 147:3",
+      "Isaiah 53:5"
+    ]
+  },
+  {
+    "id": "healing_02",
+    "category": "healing",
+    "text": "What feels shattered in your hands is being made whole in Mine. Trust the process; restoration is underway.",
+    "verses": [
+      "Jeremiah 30:17",
+      "Psalm 103:2-3"
+    ]
+  },
+  {
+    "id": "healing_03",
+    "category": "healing",
+    "text": "Your wounds do not disqualify you—they become the very place where My light shines through.",
+    "verses": [
+      "2 Corinthians 12:9",
+      "Psalm 34:18"
+    ]
+  },
+  {
+    "id": "transitions_01",
+    "category": "transitions",
+    "text": "Transitions feel uncertain because you're between what was and what will be. I am with you in the middle.",
+    "verses": [
+      "Proverbs 3:5-6",
+      "Isaiah 41:10"
+    ]
+  },
+  {
+    "id": "transitions_02",
+    "category": "transitions",
+    "text": "Change is not abandonment. I am leading you to something better, even when you cannot yet see it.",
+    "verses": [
+      "Psalm 32:8",
+      "Deuteronomy 31:8"
+    ]
+  },
+  {
+    "id": "transitions_03",
+    "category": "transitions",
+    "text": "Let go of what no longer serves you. My plans for you require empty hands to receive new blessings.",
+    "verses": [
+      "Joshua 1:9",
+      "Philippians 1:6"
+    ]
+  },
+  {
+    "id": "love_01",
+    "category": "love",
+    "text": "Love is not a feeling to chase, but a choice to make—again and again, in the small and sacred moments.",
+    "verses": [
+      "1 Corinthians 13:4-7",
+      "1 John 4:19"
+    ]
+  },
+  {
+    "id": "love_02",
+    "category": "love",
+    "text": "My love for you is not based on what you do, but on who I am. Nothing can separate you from it.",
+    "verses": [
+      "Romans 8:38-39",
+      "John 3:16"
+    ]
+  },
+  {
+    "id": "love_03",
+    "category": "love",
+    "text": "The greatest love is sacrificial, not transactional. Give freely, as you have freely received.",
+    "verses": [
+      "John 15:13",
+      "Ephesians 5:2"
+    ]
+  },
+  {
+    "id": "faith_01",
+    "category": "faith",
+    "text": "Faith is not the absence of doubt, but the courage to trust Me anyway. One step is enough.",
+    "verses": [
+      "Hebrews 11:1",
+      "Mark 9:24"
+    ]
+  },
+  {
+    "id": "faith_02",
+    "category": "faith",
+    "text": "You do not need to see the entire staircase—just take the first step. I will light the way.",
+    "verses": [
+      "Proverbs 3:5-6",
+      "2 Corinthians 5:7"
+    ]
+  },
+  {
+    "id": "faith_03",
+    "category": "faith",
+    "text": "Faith grows not in certainty, but in surrender. Let go of control; I am holding everything together.",
+    "verses": [
+      "Mark 11:22-24",
+      "Colossians 1:17"
+    ]
+  },
+  {
+    "id": "forgiveness_01",
+    "category": "forgiveness",
+    "text": "Forgiveness is not forgetting—it is freeing yourself from the weight of what was done to you.",
+    "verses": [
+      "Ephesians 4:32",
+      "Colossians 3:13"
+    ]
+  },
+  {
+    "id": "forgiveness_02",
+    "category": "forgiveness",
+    "text": "When you forgive, you do not excuse the wrong—you release your right to hold it over them.",
+    "verses": [
+      "Matthew 6:14-15",
+      "Luke 6:37"
+    ]
+  },
+  {
+    "id": "forgiveness_03",
+    "category": "forgiveness",
+    "text": "I forgave you while you were still far off. Now extend that same grace to those who hurt you.",
+    "verses": [
+      "1 John 1:9",
+      "Romans 5:8"
+    ]
+  },
+  {
+    "id": "hope_01",
+    "category": "hope",
+    "text": "Hope is not wishful thinking—it is confident expectation rooted in My promises, not your circumstances.",
+    "verses": [
+      "Romans 15:13",
+      "Hebrews 6:19"
+    ]
+  },
+  {
+    "id": "hope_02",
+    "category": "hope",
+    "text": "Even in darkness, hope whispers: 'This is not the end.' Hold on; the dawn is coming.",
+    "verses": [
+      "Psalm 42:11",
+      "Lamentations 3:21-23"
+    ]
+  },
+  {
+    "id": "hope_03",
+    "category": "hope",
+    "text": "Hope anchors the soul when waves threaten to overwhelm. Fix your eyes on what is eternal.",
+    "verses": [
+      "Jeremiah 29:11",
+      "Hebrews 11:1"
+    ]
+  },
+  {
+    "id": "patience_01",
+    "category": "patience",
+    "text": "Patience is not passive waiting—it is active trust that I am working even when you cannot see it.",
+    "verses": [
+      "Psalm 27:14",
+      "Isaiah 40:31"
+    ]
+  },
+  {
+    "id": "patience_02",
+    "category": "patience",
+    "text": "The farmer waits for the harvest, knowing the season will come. So wait with hope; fruit is forming.",
+    "verses": [
+      "James 5:7-8",
+      "Galatians 6:9"
+    ]
+  },
+  {
+    "id": "patience_03",
+    "category": "patience",
+    "text": "Impatience reveals a lack of trust. Slow down. My timing is perfect, even when it feels painfully slow.",
+    "verses": [
+      "Ecclesiastes 3:1",
+      "Romans 12:12"
+    ]
+  },
+  {
+    "id": "morning_prayer_01",
+    "category": "morning_prayer",
+    "text": "Before the world wakes, meet Me here. This quiet moment sets the tone for everything ahead.",
+    "verses": [
+      "Psalm 5:3",
+      "Mark 1:35"
+    ]
+  },
+  {
+    "id": "morning_prayer_02",
+    "category": "morning_prayer",
+    "text": "Every morning is a fresh mercy, a new page, a second chance. Begin this day with gratitude and trust.",
+    "verses": [
+      "Lamentations 3:22-23",
+      "Psalm 143:8"
+    ]
+  },
+  {
+    "id": "morning_prayer_03",
+    "category": "morning_prayer",
+    "text": "Let your first thoughts be of Me, and I will order your steps throughout the day.",
+    "verses": [
+      "Psalm 63:1",
+      "Proverbs 3:6"
+    ]
+  },
+  {
+    "id": "evening_reflection_01",
+    "category": "evening_reflection",
+    "text": "As the day closes, bring Me your burdens. I will carry what you cannot, and give you rest.",
+    "verses": [
+      "Psalm 4:8",
+      "Matthew 11:28"
+    ]
+  },
+  {
+    "id": "evening_reflection_02",
+    "category": "evening_reflection",
+    "text": "Reflect on the day with grace, not judgment. I was present in every moment, even those you regret.",
+    "verses": [
+      "Psalm 63:6",
+      "Philippians 4:8"
+    ]
+  },
+  {
+    "id": "evening_reflection_03",
+    "category": "evening_reflection",
+    "text": "Night is not the absence of light, but the invitation to trust Me in the unseen. Sleep in peace.",
+    "verses": [
+      "Psalm 91:1",
+      "Psalm 134:1"
+    ]
+  },
+  {
+    "id": "midday_peace_01",
+    "category": "midday_peace",
+    "text": "Pause in the middle of your day. Breathe. I am here, renewing your strength for what remains.",
+    "verses": [
+      "Philippians 4:6-7",
+      "Isaiah 26:3"
+    ]
+  },
+  {
+    "id": "midday_peace_02",
+    "category": "midday_peace",
+    "text": "The world rushes, but I invite you to rest. Even a moment with Me restores what busyness drains.",
+    "verses": [
+      "Matthew 11:28-29",
+      "Psalm 46:10"
+    ]
+  },
+  {
+    "id": "midday_peace_03",
+    "category": "midday_peace",
+    "text": "You are not behind. You are not failing. You are exactly where you need to be. Find peace here.",
+    "verses": [
+      "Isaiah 30:15",
+      "Psalm 23:2"
+    ]
+  },
+  {
+    "id": "nighttime_rest_01",
+    "category": "nighttime_rest",
+    "text": "Lay down your worries with your head. Tomorrow's troubles belong to tomorrow; tonight, rest in Me.",
+    "verses": [
+      "Psalm 4:8",
+      "Matthew 6:34"
+    ]
+  },
+  {
+    "id": "nighttime_rest_02",
+    "category": "nighttime_rest",
+    "text": "Sleep is not wasted time—it is sacred trust. I watch over you while you rest, never slumbering.",
+    "verses": [
+      "Psalm 121:4",
+      "Proverbs 3:24"
+    ]
+  },
+  {
+    "id": "nighttime_rest_03",
+    "category": "nighttime_rest",
+    "text": "Let go of what you could not finish today. My grace is sufficient, and tomorrow begins with mercy.",
+    "verses": [
+      "Psalm 127:2",
+      "Matthew 11:28"
+    ]
   }
 ]
