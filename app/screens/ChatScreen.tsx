@@ -33,8 +33,9 @@ import AtmosphericBackground from "../components/AtmosphericBackground";
 import { stop as stopTTS } from "../../lib/tts";
 import { APP_LINK } from "../../lib/config";
 import { Text } from "@/ux/ScaledText";
-import MessageCard from "@/components/MessageCard";
+import BrandedMessageCard from "../components/BrandedMessageCard";
 import { t } from "@/ux/transform";
+import * as Speech from "expo-speech";
 
 const logo = require("../../assets/Bible Circle Daily Peace Logo.png");
 const HERO_KEY = "@dp/show_home_reflection";
@@ -47,6 +48,8 @@ interface Message {
   timestamp: Date;
   verses?: Verse[];
   title?: string;
+  shareUrl?: string;
+  autoRead?: boolean;
 }
 
 interface Reflection {
@@ -84,6 +87,7 @@ export default function ChatScreen() {
     MODE_FOCUS_DEFAULTS[settings.defaultMode] ?? ["fear_anxiety"]
   );
   const [favorites, setFavorites] = useState<{ ref: string; text?: string; addedAt: number }[]>([]);
+  const [autoReadEnabled, setAutoReadEnabled] = useState(false);
 
   const recordingRef = useRef<Audio.Recording | null>(null);
   const speechRecognitionRef = useRef<any>(null);
@@ -210,6 +214,8 @@ export default function ChatScreen() {
             timestamp: new Date(),
             verses: extras?.verses,
             title: extras?.title,
+            shareUrl: extras?.shareUrl ?? APP_LINK,
+            autoRead: extras?.autoRead ?? autoReadEnabled,
           },
         ];
       });
@@ -220,7 +226,7 @@ export default function ChatScreen() {
         flatListRef.current?.scrollToEnd({ animated: true });
       }, 80);
     },
-    []
+    [autoReadEnabled]
   );
 
   const handleSend = useCallback(async () => {
@@ -320,6 +326,19 @@ export default function ChatScreen() {
       setLoading(false);
     }
   }, [inputText, loading, addMessage, mode, activeNeedIds, kjvIndex, needSeeds, humanizeNeedId]);
+
+  const handleReadAloud = useCallback((text: string) => {
+    if (!text) return;
+    Speech.speak(text, {
+      language: "en-US",
+      pitch: 1.0,
+      rate: 0.9,
+    });
+  }, []);
+
+  const toggleAutoRead = useCallback(() => {
+    setAutoReadEnabled((prev) => !prev);
+  }, []);
 
   const startRecording = useCallback(async () => {
     try {
@@ -850,27 +869,21 @@ export default function ChatScreen() {
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => {
                     if (item.role === "assistant") {
-                      const verseRefs = item.verses?.map((v: Verse) => v.ref) ?? [];
+                      const verses = (item.verses ?? []).map((v: Verse) => ({ ref: v.ref }));
                       return (
-                        <MessageCard
-                          title={item.title ?? "A Moment of Peace 🙏"}
-                          body={item.content}
-                          verses={verseRefs}
-                          logoUri="https://dailypeace.life/logo-28.png"
-                          watermarkUri="https://dailypeace.life/dove-soft.png"
-                          onSharePress={() =>
-                            shareTextContent(
-                              `${item.content}${
-                                item.verses?.length
-                                  ? `\n\n${item.verses
-                                      .map((v: Verse) => `${v.ref}${v.text ? `\n${v.text}` : ""}`)
-                                      .join("\n\n")}`
-                                  : ""
-                              }\n\n— Shared from Daily Peace • ${APP_LINK}`
-                            )
-                          }
-                          onClose={() => dismissMessage(item.id)}
-                        />
+                        <View style={{ paddingHorizontal: 16, paddingVertical: 10 }}>
+                          <BrandedMessageCard
+                            title={item.title ?? "A Moment of Peace 🙏"}
+                            body={item.content}
+                            verses={verses}
+                            onReadAloud={item.content ? () => handleReadAloud(item.content) : undefined}
+                            autoReadEnabled={item.autoRead ?? autoReadEnabled}
+                            onToggleAutoRead={toggleAutoRead}
+                            onShareLink={item.shareUrl ?? APP_LINK}
+                            onClose={() => dismissMessage(item.id)}
+                            compact={width < 400}
+                          />
+                        </View>
                       );
                     }
                     return (
@@ -1197,27 +1210,21 @@ export default function ChatScreen() {
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => {
                     if (item.role === "assistant") {
-                    const verseRefs = item.verses?.map((v: Verse) => v.ref) ?? [];
+                      const verses = (item.verses ?? []).map((v: Verse) => ({ ref: v.ref }));
                       return (
-                        <MessageCard
-                          title={item.title ?? "A Moment of Peace 🙏"}
-                          body={item.content}
-                          verses={verseRefs}
-                          logoUri="https://dailypeace.life/logo-28.png"
-                          watermarkUri="https://dailypeace.life/dove-soft.png"
-                          onSharePress={() =>
-                            shareTextContent(
-                              `${item.content}${
-                                item.verses?.length
-                                ? `\n\n${item.verses
-                                    .map((v: Verse) => `${v.ref}${v.text ? `\n${v.text}` : ""}`)
-                                    .join("\n\n")}`
-                                  : ""
-                              }\n\n— Shared from Daily Peace • ${APP_LINK}`
-                            )
-                          }
-                          onClose={() => dismissMessage(item.id)}
-                        />
+                        <View style={{ paddingHorizontal: 16, paddingVertical: 10 }}>
+                          <BrandedMessageCard
+                            title={item.title ?? "A Moment of Peace 🙏"}
+                            body={item.content}
+                            verses={verses}
+                            onReadAloud={item.content ? () => handleReadAloud(item.content) : undefined}
+                            autoReadEnabled={item.autoRead ?? autoReadEnabled}
+                            onToggleAutoRead={toggleAutoRead}
+                            onShareLink={item.shareUrl ?? APP_LINK}
+                            onClose={() => dismissMessage(item.id)}
+                            compact={width < 400}
+                          />
+                        </View>
                       );
                     }
                     return (
