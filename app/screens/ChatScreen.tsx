@@ -34,6 +34,7 @@ import { stop as stopTTS } from "../../lib/tts";
 import { APP_LINK } from "../../lib/config";
 import { Text } from "@/ux/ScaledText";
 import BrandedMessageCard from "../components/BrandedMessageCard";
+import TypingIndicator from "../components/TypingIndicator";
 import { t } from "@/ux/transform";
 import * as Speech from "expo-speech";
 
@@ -930,6 +931,9 @@ export default function ChatScreen() {
                       </Text>
                     </View>
                   }
+                  ListFooterComponent={
+                    loading ? <TypingIndicator visible={true} /> : null
+                  }
                 />
 
                 <View
@@ -1263,6 +1267,9 @@ export default function ChatScreen() {
                         begin chatting
                       </Text>
                     </View>
+                  }
+                  ListFooterComponent={
+                    loading ? <TypingIndicator visible={true} /> : null
                   }
                 />
 
