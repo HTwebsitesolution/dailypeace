@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Pressable, Text } from "react-native";
+import { Pressable, Text, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { hapticPress } from "../../lib/haptics";
 
 interface FeedbackButtonProps {
@@ -7,6 +8,8 @@ interface FeedbackButtonProps {
 }
 
 export default function FeedbackButton({ onPress }: FeedbackButtonProps) {
+  const insets = useSafeAreaInsets();
+  
   return (
     <Pressable
       onPress={() => {
@@ -15,7 +18,7 @@ export default function FeedbackButton({ onPress }: FeedbackButtonProps) {
       }}
       style={{
         position: "absolute",
-        bottom: 80,
+        bottom: Platform.OS === "ios" ? insets.bottom + 16 : 16,
         right: 20,
         backgroundColor: "#3B82F6",
         width: 56,

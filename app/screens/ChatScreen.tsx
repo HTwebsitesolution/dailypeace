@@ -35,6 +35,8 @@ import { APP_LINK } from "../../lib/config";
 import { Text } from "@/ux/ScaledText";
 import BrandedMessageCard from "../components/BrandedMessageCard";
 import TypingIndicator from "../components/TypingIndicator";
+import FeedbackButton from "../components/FeedbackButton";
+import FeedbackModal from "../components/FeedbackModal";
 import { t } from "@/ux/transform";
 import * as Speech from "expo-speech";
 
@@ -89,6 +91,7 @@ export default function ChatScreen() {
   );
   const [favorites, setFavorites] = useState<{ ref: string; text?: string; addedAt: number }[]>([]);
   const [autoReadEnabled, setAutoReadEnabled] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   const recordingRef = useRef<Audio.Recording | null>(null);
   const speechRecognitionRef = useRef<any>(null);
@@ -1305,6 +1308,8 @@ export default function ChatScreen() {
           </View>
         </Animated.View>
       </SafeAreaView>
+      <FeedbackButton onPress={() => setShowFeedback(true)} />
+      <FeedbackModal visible={showFeedback} onClose={() => setShowFeedback(false)} />
     </AtmosphericBackground>
   );
 }
