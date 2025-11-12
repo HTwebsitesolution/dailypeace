@@ -38,7 +38,7 @@ export default function HomeScreen() {
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const translateYAnim = useRef(new Animated.Value(-20)).current;
-  const haloAnim = useRef(new Animated.Value(0)).current;
+  const haloPulse = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     Animated.parallel([
@@ -58,28 +58,19 @@ export default function HomeScreen() {
   useEffect(() => {
     Animated.loop(
       Animated.sequence([
-        Animated.timing(haloAnim, {
-          toValue: 1,
-          duration: 1200,
-          useNativeDriver: false,
+        Animated.timing(haloPulse, {
+          toValue: 1.08,
+          duration: 1400,
+          useNativeDriver: true,
         }),
-        Animated.timing(haloAnim, {
-          toValue: 0,
-          duration: 1200,
-          useNativeDriver: false,
+        Animated.timing(haloPulse, {
+          toValue: 1,
+          duration: 1400,
+          useNativeDriver: true,
         }),
       ])
     ).start();
-  }, [haloAnim]);
-
-  const haloSize = haloAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [150, 210],
-  });
-  const haloOpacity = haloAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.18, 0.35],
-  });
+  }, [haloPulse]);
 
   useEffect(() => {
     (async () => {
@@ -119,27 +110,15 @@ export default function HomeScreen() {
           >
             <View style={styles.titleRow}>
               <View style={styles.logoWrap}>
-                <Animated.View
-                  pointerEvents="none"
-                  style={[
-                    styles.logoHalo,
-                    { width: haloSize as any, height: haloSize as any, opacity: haloOpacity as any },
-                  ]}
-                />
-                <Image source={logoImage} style={styles.logoBadge} resizeMode="cover" />
+                <Animated.View style={[styles.logoBackground, { transform: t.scaleAnimated(haloPulse) }]}>
+                  <Image source={logoImage} style={styles.logoBadge} resizeMode="cover" />
+                </Animated.View>
               </View>
             </View>
 
-            <Text
-              baseSize={isDesktop ? 20 : 16}
-              style={[styles.subtitle, { textAlign: isDesktop ? "center" : "left" }]}
-            >
+            <Text baseSize={isDesktop ? 20 : 16} style={styles.subtitle}>
               find strength, peace and hope from scripture
             </Text>
-          </Animated.View>
-
-          <Animated.View style={[styles.modeWrap, { opacity: fadeAnim }]}>
-            <ModeToggle value={mode} onChange={setMode} />
           </Animated.View>
 
           <Animated.View style={[styles.quickLinksRow, { opacity: fadeAnim }]}>
@@ -265,26 +244,22 @@ const styles = StyleSheet.create({
   titleRow: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
     gap: 12,
   },
   logoWrap: {
     alignItems: "center",
     justifyContent: "center",
   },
-  logoHalo: {
-    position: "absolute",
-    borderRadius: 999,
+  logoBackground: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
     backgroundColor: "#FFFFFF",
-    ...Platform.select({
-      web: { filter: "blur(32px)" },
-      default: {
-        shadowColor: "rgba(255,255,255,0.9)",
-        shadowOpacity: 0.9,
-        shadowRadius: 28,
-        shadowOffset: { width: 0, height: 0 },
-      },
-    }),
-  } as any,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   logoBadge: {
     width: 76,
     height: 76,
@@ -295,6 +270,8 @@ const styles = StyleSheet.create({
   subtitle: {
     opacity: 0.85,
     maxWidth: 420,
+    textAlign: "center",
+    alignSelf: "center",
   },
   modeWrap: {
     alignSelf: "center",
