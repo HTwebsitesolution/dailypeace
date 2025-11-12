@@ -201,10 +201,10 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.footer}>
-          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-            <Text baseSize={18} style={styles.footerTitle}>
-              Daily Peace
-            </Text>
+          <Text baseSize={18} style={styles.footerTitle}>
+            Daily Peace
+          </Text>
+          <View style={{ position: "absolute", right: 0, top: 0 }}>
             <Pressable
               onPress={() => setShowFeedback(true)}
               style={{
