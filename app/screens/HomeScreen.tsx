@@ -22,6 +22,7 @@ import FeedbackButton from "../components/FeedbackButton";
 import PremiumCTA from "../components/PremiumCTA";
 import { Text } from "@/ux/ScaledText";
 import { t } from "@/ux/transform";
+import { hapticPress } from "../../lib/haptics";
 
 const logoImage = require("../../assets/Bible Circle Daily Peace Logo.png");
 
@@ -122,7 +123,10 @@ export default function HomeScreen() {
 
           <Animated.View style={[styles.quickLinksRow, { opacity: fadeAnim }]}>
             <Pressable
-              onPress={() => navigation.navigate("Collections")}
+              onPress={() => {
+                hapticPress();
+                navigation.navigate("Collections");
+              }}
               style={styles.quickLinkPressable}
               accessibilityRole="button"
               accessibilityLabel="View collections"
@@ -148,7 +152,10 @@ export default function HomeScreen() {
             </Pressable>
 
             <Pressable
-              onPress={() => navigation.navigate("Favorites")}
+              onPress={() => {
+                hapticPress();
+                navigation.navigate("Favorites");
+              }}
               style={styles.quickLinkPressable}
               accessibilityRole="button"
               accessibilityLabel="View favorites"
@@ -206,7 +213,10 @@ export default function HomeScreen() {
           </Text>
           <View style={{ position: "absolute", right: 0, top: 0 }}>
             <Pressable
-              onPress={() => setShowFeedback(true)}
+              onPress={() => {
+                hapticPress();
+                setShowFeedback(true);
+              }}
               style={{
                 backgroundColor: "#3B82F6",
                 width: 48,

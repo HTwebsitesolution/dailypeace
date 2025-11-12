@@ -10,6 +10,7 @@ import {
   Animated,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { hapticPress, hapticSuccess } from "../../lib/haptics";
 
 type Verse = { ref: string; url?: string };
 type Props = {
@@ -86,6 +87,7 @@ export default function BrandedMessageCard({
   }, [fadeAnim, scaleAnim]);
 
   const share = async () => {
+    hapticPress();
     const shareUrlWithUTM = onShareLink 
       ? `${onShareLink}?utm_source=app&utm_medium=share&utm_campaign=blessing`
       : "https://dailypeace.life?utm_source=app&utm_medium=share&utm_campaign=blessing";
@@ -101,6 +103,7 @@ export default function BrandedMessageCard({
           default: { message },
         }) as any
       );
+      hapticSuccess();
     } catch {}
   };
 
@@ -143,7 +146,10 @@ export default function BrandedMessageCard({
         <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
           <LogoBadge />
 
-          <Pressable onPress={onClose} hitSlop={10} style={styles.closeBtn}>
+          <Pressable onPress={() => {
+            hapticPress();
+            onClose?.();
+          }} hitSlop={10} style={styles.closeBtn}>
             <Text style={styles.closeX}>×</Text>
           </Pressable>
         </View>
@@ -161,13 +167,19 @@ export default function BrandedMessageCard({
 
       <View style={styles.actionsRow}>
         {!!onReadAloud && (
-          <Pressable style={[styles.secondaryBtn]} onPress={onReadAloud}>
+          <Pressable style={[styles.secondaryBtn]} onPress={() => {
+            hapticPress();
+            onReadAloud();
+          }}>
             <Text style={styles.secondaryText}>Read to me</Text>
           </Pressable>
         )}
 
         {typeof autoReadEnabled === "boolean" && !!onToggleAutoRead && (
-          <Pressable style={styles.secondaryBtn} onPress={onToggleAutoRead}>
+          <Pressable style={styles.secondaryBtn} onPress={() => {
+            hapticPress();
+            onToggleAutoRead();
+          }}>
             <Text style={styles.secondaryText}>
               Auto-read: {autoReadEnabled ? "On" : "Off"}
             </Text>

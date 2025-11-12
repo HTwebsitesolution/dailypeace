@@ -37,6 +37,7 @@ import BrandedMessageCard from "../components/BrandedMessageCard";
 import TypingIndicator from "../components/TypingIndicator";
 import { t } from "@/ux/transform";
 import * as Speech from "expo-speech";
+import { hapticPress, hapticSuccess } from "../../lib/haptics";
 
 const logo = require("../../assets/Bible Circle Daily Peace Logo.png");
 const HERO_KEY = "@dp/show_home_reflection";
@@ -590,6 +591,7 @@ export default function ChatScreen() {
   );
 
   const dismissMessage = useCallback((id: string) => {
+    hapticPress();
     setMessages((prev) => prev.filter((m) => m.id !== id));
   }, []);
 
@@ -958,7 +960,10 @@ export default function ChatScreen() {
 
                 <View style={{ position: "absolute", right: isMobile ? 12 : -40, top: isMobile ? 20 : 56 }}>
                   <Pressable
-                    onPress={() => nav.navigate("Settings")}
+                    onPress={() => {
+                      hapticPress();
+                      nav.navigate("Settings");
+                    }}
                     style={{ padding: 8, borderRadius: 8 }}
                     android_ripple={{ color: "rgba(255,255,255,0.1)" }}
                   >
@@ -1294,7 +1299,10 @@ export default function ChatScreen() {
                 </View>
 
                 <View style={{ position: "absolute", right: isMobile ? 12 : -40, top: isMobile ? 20 : 56 }}>
-                  <Pressable onPress={() => nav.navigate("Settings")} style={{ padding: 8, borderRadius: 8 }}>
+                  <Pressable onPress={() => {
+                    hapticPress();
+                    nav.navigate("Settings");
+                  }} style={{ padding: 8, borderRadius: 8 }}>
                     <Text baseSize={18} style={{ color: "#9FB0C3" }}>
                       ⚙️
                     </Text>
