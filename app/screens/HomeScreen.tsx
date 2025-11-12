@@ -20,7 +20,6 @@ import OnboardingModal from "../components/OnboardingModal";
 import FeedbackModal from "../components/FeedbackModal";
 import FeedbackButton from "../components/FeedbackButton";
 import PremiumCTA from "../components/PremiumCTA";
-import TodayCard from "../components/TodayCard";
 import { Text } from "@/ux/ScaledText";
 import { t } from "@/ux/transform";
 
@@ -173,10 +172,6 @@ export default function HomeScreen() {
                 </View>
               </LinearGradient>
             </Pressable>
-          </Animated.View>
-
-          <Animated.View style={{ opacity: fadeAnim, width: "100%" }}>
-            <TodayCard verse="Peace I leave with you; my peace I give you." refText="John 14:27" />
           </Animated.View>
 
           <Animated.View
