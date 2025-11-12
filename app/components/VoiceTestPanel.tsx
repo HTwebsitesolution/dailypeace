@@ -4,10 +4,21 @@ import { Audio } from "expo-av";
 
 const TTS_ENDPOINT = "/.netlify/functions/tts";
 
+const VOICE_NAMES: Record<string, string> = {
+  alloy: "Esther",
+  echo: "Joseph",
+  fable: "Matthew",
+  onyx: "Paul",
+  nova: "Becky",
+  shimmer: "Anna",
+};
+
 export default function VoiceTestPanel({ voice = "alloy" }: { voice?: string }) {
   const [loading, setLoading] = useState(false);
   const [playing, setPlaying] = useState(false);
   const animValues = Array.from({ length: 12 }, () => new Animated.Value(0.25));
+
+  const voiceName = VOICE_NAMES[voice] || voice;
 
   // Animate the waveform shimmer
   useEffect(() => {
@@ -83,7 +94,7 @@ export default function VoiceTestPanel({ voice = "alloy" }: { voice?: string }) 
       <Text style={{ color: "#FFFFFF", fontWeight: "600", fontSize: 18, marginBottom: 4 }}>Voice Test</Text>
       <Text style={{ color: "#9FB0C3", marginBottom: 20, fontSize: 14 }}>
         Hear a preview of the current voice:{" "}
-        <Text style={{ color: "#FFFFFF", fontWeight: "500" }}>{voice}</Text>
+        <Text style={{ color: "#FFFFFF", fontWeight: "500" }}>{voiceName}</Text>
       </Text>
 
       {/* Waveform shimmer */}
