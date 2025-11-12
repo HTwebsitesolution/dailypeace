@@ -287,8 +287,8 @@ export default function ChatScreen() {
       if (mode === "biblical") {
         if (verses.length > 0) {
           const header = focusLabel
-            ? `Scripture Wisdom • ${focusLabel}`
-            : "Scripture Wisdom — Verses for you:";
+            ? `A Moment of Peace 🙏 • ${focusLabel}`
+            : "A Moment of Peace 🙏";
           const versesText = verses.map((v: Verse) => `• ${v.ref}\n${v.text}`).join("\n\n");
           const closing = "Which of these speaks to your situation?";
           addMessage("assistant", `${header}\n\n${versesText}\n\n${closing}`, {
@@ -299,20 +299,20 @@ export default function ChatScreen() {
           addMessage(
             "assistant",
             "Let's reflect on Scripture together. What’s on your heart today?",
-            { title: "Scripture Wisdom" }
+            { title: "A Moment of Peace 🙏" }
           );
         }
       } else if (result.inspired_message) {
         const response = result.inspired_message;
         addMessage("assistant", response.text, {
           verses: response.citations?.map((ref) => ({ ref, text: "" })) ?? [],
-          title: focusDisplay ? `Daily Peace • ${focusDisplay}` : "Daily Peace",
+          title: "A Moment of Peace 🙏",
         });
       } else {
         addMessage(
           "assistant",
           "I'm here to listen and share wisdom from Scripture. How are you feeling today?",
-          { title: "Daily Peace" }
+          { title: "A Moment of Peace 🙏" }
         );
       }
     } catch (error: any) {
@@ -320,7 +320,7 @@ export default function ChatScreen() {
       addMessage(
         "assistant",
         "I'm having a little trouble right now. Let's try again in a moment, okay?",
-        { title: "Daily Peace" }
+        { title: "A Moment of Peace 🙏" }
       );
     } finally {
       setLoading(false);
