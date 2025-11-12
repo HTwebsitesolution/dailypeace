@@ -201,9 +201,30 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.footer}>
-          <Text baseSize={18} style={styles.footerTitle}>
-            Daily Peace
-          </Text>
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+            <Text baseSize={18} style={styles.footerTitle}>
+              Daily Peace
+            </Text>
+            <Pressable
+              onPress={() => setShowFeedback(true)}
+              style={{
+                backgroundColor: "#3B82F6",
+                width: 48,
+                height: 48,
+                borderRadius: 24,
+                alignItems: "center",
+                justifyContent: "center",
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.25,
+                shadowRadius: 4,
+                elevation: 4,
+              }}
+              android_ripple={{ color: "rgba(255, 255, 255, 0.3)" }}
+            >
+              <Text style={{ fontSize: 24 }}>💬</Text>
+            </Pressable>
+          </View>
           <Text baseSize={14} style={styles.footerSubtitle}>
             Find peace and hope from Scripture
           </Text>
@@ -212,7 +233,6 @@ export default function HomeScreen() {
           </Text>
         </View>
       </ScrollView>
-      <FeedbackButton onPress={() => setShowFeedback(true)} />
       <FeedbackModal visible={showFeedback} onClose={() => setShowFeedback(false)} />
     </AtmosphericBackground>
   );
